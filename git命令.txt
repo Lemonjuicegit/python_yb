@@ -41,5 +41,7 @@ git branch branch_name		#  创建分支
 
 git checkout branch_name	#  切换分支
 
+git branch -d			#  删除分支
+
 git push  --set-upstream Lemonjuice python_yb	#  在远程仓库上创建分支并更新仓库
 
