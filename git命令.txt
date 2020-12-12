@@ -1,0 +1,38 @@
+﻿git config --global  user.name  'name'	# 添加git用户
+
+git config --global  user.name  '***@**.con'	# 添加git邮箱
+
+git init	# 初始化仓库
+
+git add filename 	#  将文件添加到暂存区
+
+git commit -m 'add filename'	#  将文件从暂存区提交到仓库
+
+git status 	# 查看状态
+
+git config --global gui.encoding utf-8 	#  设置编码
+
+git config --global i18n.commitencoding utf-8	# 设置提交文件的编码
+
+git log		#  查看提交日志
+	--pretty=oneline	#  查看提交编号
+
+git pull origin master --allow-unrelated-histories 	# 上传到远程仓库
+
+git remote -v		#  查看远程仓库链接信息
+
+ssh-keygen -t rsa -C "582621825@qq.com"  
+
+路径：/c/Users/Administrator/.ssh/ 
+
+ssh -T git@github.com   
+
+git remote add origin git@github.com:Lemonjuicegit/LemonJuice.git  	#  添加远程仓库
+
+git clone git@github.com:Lemonjuicegit/LemonJuice.git	# 克隆
+
+git remote set-url origin <remote-url>	# 修改远程仓库地址
+
+git remote rm origin	#  删除远程仓库
+
+git push Lemonjuice master  	#   提交代码
