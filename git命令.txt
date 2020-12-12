@@ -36,3 +36,10 @@ git remote set-url origin <remote-url>	# 修改远程仓库地址
 git remote rm origin	#  删除远程仓库
 
 git push Lemonjuice master  	#   提交代码
+
+git branch branch_name		#  创建分支
+
+git checkout branch_name	#  切换分支
+
+git push  pythonProject_yb
+
