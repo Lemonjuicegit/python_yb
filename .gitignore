@@ -4,3 +4,6 @@ README.en.md
 README.md
 .gitee/
 .idea/
+yb/pk/__pycache__/*
+
+yb/bin/*

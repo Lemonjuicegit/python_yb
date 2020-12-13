@@ -55,6 +55,7 @@ def main():
 
 
 if __name__ == '__main__':
+
     main()
     # img_path = r'./ym.jpg'
     # compress = Compress_img(img_path)
