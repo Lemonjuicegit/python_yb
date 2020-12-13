@@ -5,5 +5,5 @@ README.md
 .gitee/
 .idea/
 yb/pk/__pycache__/*
-
+yb/WinUI/__pycache__/*
 yb/bin/*
