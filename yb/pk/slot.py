@@ -20,7 +20,7 @@ class Slot():
                 n += 1
             except IndexError:
                 break
-        return k != 18670669457275772673
+        return k != 18670669457275772672
 
     def setgjb_path(self, txet):
         self.iof.gjb_path = txet

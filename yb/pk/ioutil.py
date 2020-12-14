@@ -71,7 +71,7 @@ class IoUtil:
 
     def row_excel(self, row, sheet="Sheet1"):
         try:
-            exc = read_excel(self.gjb_path, sheet_name=sheet,dtype=str)
+            exc = read_excel(self.gjb_path, sheet_name=sheet, dtype=str)
             liste = list(exc.loc[row])
         except OSError:
             print("请检查文件路径是否正确")
@@ -244,7 +244,7 @@ class IoUtil:
                 list_exf.insert(z, z_z[n2])
                 z += 1
                 n2 += 1
-            self.new_file_str(self.save_path + "\\" + list_zddm[while_x] + list_xm[while_x] + r"上传.exf", list_exf)
+            self.new_file_str(r"%s\%s%s上传.exf" % (self.save_path, list_zddm[while_x], list_xm[while_x]), list_exf)
 
             # 删除坐标数据还原模板文件
             l = 1
@@ -280,14 +280,14 @@ class IoUtil:
             except KeyError:
                 print(e + "没找到这个表")
                 continue
-            if self.save_path!='':
+            if self.save_path != '':
                 zd.save(self.save_path + "\\" + e + "界址点成果表.xlsx")
                 zd2 = load_workbook(self.save_path + "\\" + e + "界址点成果表.xlsx", data_only=True)
             else:
                 zd.save(e + "界址点成果表.xlsx")
                 zd2 = load_workbook(e + "界址点成果表.xlsx", data_only=True)
 
-            #将复制出来的表多余的删除
+            # 将复制出来的表多余的删除
             for i in zddm:
                 if i != e:
                     zd2.remove(zd2[i])

@@ -1,0 +1,1 @@
+pyinstaller -F ¹¤¾ß.py --noconsole --hidden-import PySide2.QtXml

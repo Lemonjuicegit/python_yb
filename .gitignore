@@ -2,8 +2,14 @@ git.txt
 keys.txt
 README.en.md
 README.md
+*.exe
+*.spec
 .gitee/
 .idea/
+
+yb/build/*
+yb/dist/*
+yb/__pycache__/*
 yb/pk/__pycache__/*
 yb/WinUI/__pycache__/*
 yb/bin/*
