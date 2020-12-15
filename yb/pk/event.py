@@ -1,8 +1,8 @@
+import socket
+
+from openpyxl import load_workbook
 from pandas import *
 from xlrd import *
-import socket
-from openpyxl import load_workbook,Workbook
-
 
 
 class IoFile:

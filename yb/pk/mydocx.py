@@ -1,6 +1,6 @@
+import pk.ioutil
 from docx import Document
 from docx.shared import Cm
-import pk.ioutil
 
 
 class DocxUtil():

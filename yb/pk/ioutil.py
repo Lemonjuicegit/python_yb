@@ -1,7 +1,7 @@
-﻿from pandas import *
+﻿from openpyxl import load_workbook
+from pandas import read_excel, DataFrame, concat
 from xlrd import *
-from openpyxl import load_workbook
-
+import decoratorsFunc as dec
 
 class IoUtil:
 
@@ -81,19 +81,11 @@ class IoUtil:
     def x(self, temp_excel):
 
         j = 0
-        for t in temp_excel:
-            if len(str(t)) == 7:
-                temp_excel[j] = str(t) + ".000000"
-            elif len(str(t)) == 9:
-                temp_excel[j] = str(t) + "00000"
-            elif len(str(t)) == 10:
-                temp_excel[j] = str(t) + "0000"
-            elif len(str(t)) == 11:
-                temp_excel[j] = str(t) + "000"
-            elif len(str(t)) == 12:
-                temp_excel[j] = str(t) + "00"
-            elif len(str(t)) == 13:
-                temp_excel[j] = str(t) + "0"
+        for s in temp_excel:
+            if len(str(s)) == 7:
+                temp_excel[j] = str(s) + ".000000"
+            else:
+                temp_excel[j] = str(s) + "0"*(14-len(str(s)))
             j += 1
         return temp_excel
 
@@ -101,19 +93,11 @@ class IoUtil:
     def y(self, temp_excel):
 
         j = 0
-        for t in temp_excel:
-            if len(str(t)) == 8:
-                temp_excel[j] = str(t) + ".000000"
-            elif len(str(t)) == 10:
-                temp_excel[j] = str(t) + "00000"
-            elif len(str(t)) == 11:
-                temp_excel[j] = str(t) + "0000"
-            elif len(str(t)) == 12:
-                temp_excel[j] = str(t) + "000"
-            elif len(str(t)) == 13:
-                temp_excel[j] = str(t) + "00"
-            elif len(str(t)) == 14:
-                temp_excel[j] = str(t) + "0"
+        for s in temp_excel:
+            if len(str(s)) == 8:
+                temp_excel[j] = str(s) + ".000000"
+            else:
+                temp_excel[j] = str(s) + "0" * (15 - len(str(s)))
             j += 1
         return temp_excel
 
@@ -153,6 +137,7 @@ class IoUtil:
         return field
 
     # 汇总表
+    @dec.getexceptionreturn
     def hzb(self):
         try:
             data = read_excel(self.gjb_path, dtype="str")
@@ -171,10 +156,10 @@ class IoUtil:
             iof.to_excel(self.save_path + "\\" + "新增统计表.xlsx")
         else:
             iof.to_excel("新增统计表.xlsx")
-        print("\n汇总表生成成功！")
+        return  "汇总表生成成功！"
 
+    @dec.getexceptionreturn
     def exf(self):
-
         op = open(r"templet\exftemplet.exf")
         list_exf = list(op)
         op.close()
@@ -264,8 +249,9 @@ class IoUtil:
 
         create = "    生成：" + str(sc) + "个"  # create产生
         not_create = "    未生成：" + str(err) + "个"  # not_create未产生
-        print(create + not_create)
+        return create + not_create
 
+    @dec.getexceptionreturn
     def jzb(self):
         zddm = self.excel_field("A", "Sheet1")
         zdmj = self.excel_field("P", "Sheet1")
@@ -296,4 +282,4 @@ class IoUtil:
                 zd2.save(self.save_path + "\\" + e + "界址点成果表.xlsx")
             else:
                 zd2.save(e + "界址点成果表.xlsx")
-        print("导出：" + str(n) + "个")
+        return "导出：" + str(n) + "个"

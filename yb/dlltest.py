@@ -1,11 +1,11 @@
 import ctypes
 import os
-from pk import decoratorsFunc
+import pk.decoratorsFunc as decorators
 
 dllpath = {"testdll": r"D:\program_c++\Dllpk\x64\Release"}
 
 
-@decoratorsFunc.runtime
+@decorators.runtime
 def dll(path, dllfilename, funcname):
     dllpk = ctypes.cdll.LoadLibrary(os.path.join(dllpath[path], dllfilename))
 
@@ -14,16 +14,17 @@ def dll(path, dllfilename, funcname):
     return func(2, 6)
 
 
-@decoratorsFunc.runtime
+@decorators.getexceptionreturn
+@decorators.runtimereturn
 def d():
-    a=0
-    for i in range(0, 100000001):
+    a = 0
+    for i in range(0, 1000):
         a += i
-
-    print(a)
+    return a
 
 
 if __name__ == '__main__':
-    a = dll("testdll", "Dllpk.dll", "dlltest")
-    d()
-    print("--------------")
+    # a = dll("testdll", "Dllpk.dll", "dlltest")
+    g=d("sasf")
+    print(g)
+    # print("--------------")
