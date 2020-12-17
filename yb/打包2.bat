@@ -1,1 +1,1 @@
-pyinstaller -F 工具.py --noconsole --hidden-import PySide2.QtXml
+pyinstaller -w 工具.py

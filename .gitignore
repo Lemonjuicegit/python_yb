@@ -1,4 +1,8 @@
 python常用模块.xlsx
+*.pyc
+第三方依赖清华大学镜像安装.bat
+*.exe
+pythonmod.xlsx
 git.txt
 keys.txt
 README.en.md
@@ -7,7 +11,8 @@ README.md
 *.spec
 .gitee
 .idea
-
+README.en.md
+README.md
 build
 dist
 __pycache__

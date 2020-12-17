@@ -1,17 +1,27 @@
 # import tkinter as tk
 import socket
-def getkey():
-    name = socket.gethostname()
-    ip = socket.gethostbyname(name)
-    k = 1
-    n = 0
-    while n < len(ip):
-        try:
-            k = k * ord(name[n]) + ord(ip[n])
-            n += 1
-        except IndexError:
-            break
-    return k
+
+
+class licKey:
+
+    def __init__(self):
+        name = socket.gethostname()
+        ip = socket.gethostbyname(name)
+        self.k = 1
+        for n in range(0, len(ip)):
+            try:
+                self.k = self.k * ord(name[n]) + ord(ip[n])
+            except IndexError:
+                break
+
+    def lic(self):
+        return self.k != 18670669457275772673
+
+
+if __name__ == '__main__':
+    lic = licKey()
+    print(lic.k)
+    print(lic.lic())
 
 # integer = getkey()
 #
@@ -21,9 +31,3 @@ def getkey():
 # entry.insert(0,str(integer))
 # entry.grid()
 # tk.mainloop()
-
-
-
-
-
-

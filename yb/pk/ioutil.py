@@ -1,7 +1,10 @@
 ﻿from openpyxl import load_workbook
 from pandas import read_excel, DataFrame, concat
-from xlrd import *
-import decoratorsFunc as dec
+from xlrd import XLRDError
+from pk import decoratorsFunc as dec
+from os import path
+from multiprocessing import process
+
 
 class IoUtil:
 
@@ -10,6 +13,7 @@ class IoUtil:
         self.zd_path = zd_path
         self.zrz_path = zrz_path
         self.save_path = save_path
+        self.results = None  # 传递结果信息
 
         """path文件路径，i修改第几行，string需要修改的内容参数,该方法按行修改内容,并将修改后的内容返回"""
 
@@ -85,7 +89,7 @@ class IoUtil:
             if len(str(s)) == 7:
                 temp_excel[j] = str(s) + ".000000"
             else:
-                temp_excel[j] = str(s) + "0"*(14-len(str(s)))
+                temp_excel[j] = str(s) + "0" * (14 - len(str(s)))
             j += 1
         return temp_excel
 
@@ -153,10 +157,11 @@ class IoUtil:
         iof = iof.set_index("乡镇（街道）")
         iof = iof.rename(columns={"姓名": "办证权利人", "身份证": "证件号码"})
         if self.save_path != '':
-            iof.to_excel(self.save_path + "\\" + "新增统计表.xlsx")
+            iof.to_excel(path.join(self.save_path, "新增统计表.xlsx"))
         else:
             iof.to_excel("新增统计表.xlsx")
-        return  "汇总表生成成功！"
+
+        self.results = "汇总表生成成功！"
 
     @dec.getexceptionreturn
     def exf(self):
@@ -207,7 +212,7 @@ class IoUtil:
                 exf2 = "0.0∴0.0∴∴∴∴∴0.0∴" + list_bdcdyh[while_x] + "∴" + list_zddm[
                     while_x] + "F0001∴0.0∴0.0∴∴∴∴∴∴∴∴∴∴∴0∴∴∴2∴2110\n"
             except TypeError:
-                print("挂接表可能没填好！")
+                self.results = "挂接表可能没填好！"
                 break
 
             list_exf[1054] = str(len(z_d)) + "\n"
@@ -247,9 +252,7 @@ class IoUtil:
             sc += 1
             while_x += 1
 
-        create = "    生成：" + str(sc) + "个"  # create产生
-        not_create = "    未生成：" + str(err) + "个"  # not_create未产生
-        return create + not_create
+        self.results = "    生成：%s个    未生成：%s个" % (sc, err)
 
     @dec.getexceptionreturn
     def jzb(self):
@@ -261,8 +264,8 @@ class IoUtil:
         n = 0
         for e in zddm:
             try:
-                zd[e].cell(row=5, column=1, value="    宗地面积(平方米): " + str(zdmj[n]) + "              坐标系: 2000国家大地坐标系")
-                zd[e].cell(row=6, column=1, value="    建筑面积(平方米): " + str(zjmj[n]))
+                zd[e].cell(row=5, column=1, value="    宗地面积(平方米):%s              坐标系: 2000国家大地坐标系" % zdmj[n])
+                zd[e].cell(row=6, column=1, value="    建筑面积(平方米):%s " % zjmj[n])
             except KeyError:
                 print(e + "没找到这个表")
                 continue
@@ -282,4 +285,5 @@ class IoUtil:
                 zd2.save(self.save_path + "\\" + e + "界址点成果表.xlsx")
             else:
                 zd2.save(e + "界址点成果表.xlsx")
-        return "导出：" + str(n) + "个"
+
+            self.results = "导出：%d个" % n

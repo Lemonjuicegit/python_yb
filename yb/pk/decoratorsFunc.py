@@ -37,5 +37,7 @@ def getexceptionreturn(f):
             return returnvalue
         except BaseException as e:
             return str(e)
+        except AttributeError as e:
+            return str(e)
 
     return exception

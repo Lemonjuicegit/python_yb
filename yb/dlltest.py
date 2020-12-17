@@ -1,6 +1,7 @@
 import ctypes
 import os
 import pk.decoratorsFunc as decorators
+from multiprocessing import process
 
 dllpath = {"testdll": r"D:\program_c++\Dllpk\x64\Release"}
 

@@ -13,7 +13,7 @@ app = QApplication(sys.argv)
 mainWindow = QMainWindow()
 window = WinUI.exportGJ2.Ui_MainWindow()
 window.setupUi(mainWindow)
-mainWindow.setWindowIcon(WinUI.exportGJ2.QIcon("图标.ico"))
+mainWindow.setWindowIcon(WinUI.exportGJ2.QIcon("icon.ico"))
 
 def text():
     window.plainTextEdit.setPlainText(slo.value)

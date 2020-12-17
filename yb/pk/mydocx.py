@@ -1,6 +1,7 @@
 import pk.ioutil
 from docx import Document
 from docx.shared import Cm
+from pk import decoratorsFunc
 
 
 class DocxUtil():
@@ -22,12 +23,12 @@ class DocxUtil():
         self.docx.tables[table].cell(columu, row).paragraphs[paragraph].text = value
 
         #   房产面积测算说明书
-
+    @decoratorsFunc.getexceptionreturn
     def getsms(self, gjb_path, jpg_path, save_path):
         execldata = pk.ioutil.IoUtil(gjb_path=gjb_path)
 
         for i in range(1, len(execldata.list_excel("宗地代码"))):
-            self.docx = Document(r"模板\房产面积测算说明书.docx")
+            self.docx = Document(r"templet\房产面积测算说明书.docx")
             value = execldata.row_excel(i)
 
             #   转换日期数据格式
@@ -93,10 +94,10 @@ class DocxUtil():
             self.setjpg(r"%s\%s%s\近景.jpg" % (jpg_path, value[0], value[2]),
                         r"%s\%s%s\远景.jpg" % (jpg_path, value[0], value[2]))
 
-            # self.docx.save(execldata.save_path+value[0]+"房产面积测算说明书.doc")
             self.docx.save(r"%s\%s%s\%s房产面积测算说明书.doc" % (save_path, value[0], value[2], value[0]))
             self.n += 1
-        print("生成房产面积测算说明书：%d个" % self.n)
+
+        return "生成房产面积测算说明书：%d个" % (self.n)
 
         #   不动产实地查看记录表
 

@@ -1,1 +1,1 @@
-pyinstaller --path C:\Users\Administrator\AppData\Local\Programs\Python\Python38\Lib\site-packages\PySide2 -F 工具.py
+pyinstaller --path C:\Users\Administrator\AppData\Local\Programs\Python\Python38\Lib\site-packages\PySide2 -w 工具.py
