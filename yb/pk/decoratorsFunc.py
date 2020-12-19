@@ -7,7 +7,6 @@ def runtime(f):
         f(*args, **kwargs)
         d = time()
         print(d - a)
-
     return run
 
 def runtimereturn(f):

@@ -3,28 +3,26 @@ from pandas import read_excel, DataFrame, concat
 from xlrd import XLRDError
 from pk import decoratorsFunc as dec
 from os import path
-from multiprocessing import process
 
 
 class IoUtil:
 
-    def __init__(self, gjb_path="挂接表.xlsx", zd_path="zd.xlsx", zrz_path="zrz.xlsx", save_path=""):
+    def __init__(self, gjb_path="挂接表.xlsx", zd_path="zd.xlsx", zrz_path="zrz.xlsx"):
         self.gjb_path = gjb_path
         self.zd_path = zd_path
         self.zrz_path = zrz_path
-        self.save_path = save_path
         self.results = None  # 传递结果信息
 
         """path文件路径，i修改第几行，string需要修改的内容参数,该方法按行修改内容,并将修改后的内容返回"""
 
-    def revise_file(salf, string, i, path):
+    def revise_file(salf, string, i, file_path):
         b = 0
         try:
-            new_file = open(path, 'r')
+            new_file = open(file_path, 'r')
             file_str = list(new_file)  # 读取的文件字符串列表
             new_file.close()
         except FileNotFoundError:
-            new_file = open(path, 'w')
+            new_file = open(file_path, 'w')
         try:
             if isinstance(string, str):
                 file_str[i] = string + "\n"
@@ -65,13 +63,10 @@ class IoUtil:
 
     # 打开excel将一个字段数据转化成列表
     def list_excel(self, field: str):
+        self.exc = read_excel(self.gjb_path, dtype="str")
+        liste = list(self.exc[field])
 
-        try:
-            self.exc = read_excel(self.gjb_path)
-            liste = list(self.exc[field])
-            return liste
-        except OSError:
-            print("请检查文件路径是否正确")
+        return liste
 
     def row_excel(self, row, sheet="Sheet1"):
         try:
@@ -142,7 +137,7 @@ class IoUtil:
 
     # 汇总表
     @dec.getexceptionreturn
-    def hzb(self):
+    def hzb(self,save_path):
         try:
             data = read_excel(self.gjb_path, dtype="str")
         except FileNotFoundError:
@@ -156,15 +151,14 @@ class IoUtil:
                "建筑总面积", "层数", "结构", "登记方式"]]
         iof = iof.set_index("乡镇（街道）")
         iof = iof.rename(columns={"姓名": "办证权利人", "身份证": "证件号码"})
-        if self.save_path != '':
-            iof.to_excel(path.join(self.save_path, "新增统计表.xlsx"))
-        else:
-            iof.to_excel("新增统计表.xlsx")
 
-        self.results = "汇总表生成成功！"
+        iof.to_excel(path.join(save_path, "新增统计表.xlsx"))
+
+        results = "汇总表生成成功！"
+        return results
 
     @dec.getexceptionreturn
-    def exf(self):
+    def exf(self,save_path):
         op = open(r"templet\exftemplet.exf")
         list_exf = list(op)
         op.close()
@@ -183,8 +177,6 @@ class IoUtil:
         sc = 0  # 生成数
         while while_x < len(list_zddm):
 
-            rate = "进度: " + str(round((while_x + 1) / len(list_zddm), 4) * 100) + "%"  # rate进度
-            print("\r" + rate, end="")
             try:
                 t = self.x_y("zd.xlsx", list_zddm[while_x])  # 获取宗地的坐标数据
                 t2 = self.x_y("zrz.xlsx", list_zddm[while_x])  # 获取幢的坐标数据
@@ -234,7 +226,8 @@ class IoUtil:
                 list_exf.insert(z, z_z[n2])
                 z += 1
                 n2 += 1
-            self.new_file_str(r"%s\%s%s上传.exf" % (self.save_path, list_zddm[while_x], list_xm[while_x]), list_exf)
+            self.new_file_str(r"%s\%s%s\%s%s上传.exf" % (
+                save_path, list_zddm[while_x], list_xm[while_x], list_zddm[while_x], list_xm[while_x]), list_exf)
 
             # 删除坐标数据还原模板文件
             l = 1
@@ -252,13 +245,15 @@ class IoUtil:
             sc += 1
             while_x += 1
 
-        self.results = "    生成：%s个    未生成：%s个" % (sc, err)
+        results = "生成：%s个    未生成：%s个" % (sc, err)
+        return results
 
     @dec.getexceptionreturn
-    def jzb(self):
+    def jzb(self,save_path):
         zddm = self.excel_field("A", "Sheet1")
         zdmj = self.excel_field("P", "Sheet1")
         zjmj = self.excel_field("R", "Sheet1")
+        xm = self.excel_field("c", "Sheet1")
         zd = load_workbook("zd.xlsx", data_only=True, read_only=False)
 
         n = 0
@@ -269,21 +264,16 @@ class IoUtil:
             except KeyError:
                 print(e + "没找到这个表")
                 continue
-            if self.save_path != '':
-                zd.save(self.save_path + "\\" + e + "界址点成果表.xlsx")
-                zd2 = load_workbook(self.save_path + "\\" + e + "界址点成果表.xlsx", data_only=True)
-            else:
-                zd.save(e + "界址点成果表.xlsx")
-                zd2 = load_workbook(e + "界址点成果表.xlsx", data_only=True)
 
+            zd.save(path.join(r"%s\%s%s" % (save_path, e, xm[n]), e + "界址点成果表.xlsx"))
+            zd2 = load_workbook(path.join(r"%s\%s%s" % (save_path, e, xm[n]), e + "界址点成果表.xlsx"),data_only=True)
             # 将复制出来的表多余的删除
             for i in zddm:
                 if i != e:
                     zd2.remove(zd2[i])
-            n += 1
-            if self.save_path != '':
-                zd2.save(self.save_path + "\\" + e + "界址点成果表.xlsx")
-            else:
-                zd2.save(e + "界址点成果表.xlsx")
 
-            self.results = "导出：%d个" % n
+            zd2.save(path.join(r"%s\%s%s" % (save_path, e, xm[n]), e + "界址点成果表.xlsx"))
+            n += 1
+
+            results = "导出：%d个" % n
+            return results

@@ -18,12 +18,12 @@ class Ui_MainWindow(object):
         if not MainWindow.objectName():
             MainWindow.setObjectName(u"MainWindow")
         MainWindow.resize(361, 236)
-        MainWindow.setFixedSize(361, 330)
+        MainWindow.setFixedSize(361, 430)
         self.centralwidget = QWidget(MainWindow)
         self.centralwidget.setObjectName(u"centralwidget")
         self.gridLayoutWidget = QWidget(self.centralwidget)
         self.gridLayoutWidget.setObjectName(u"gridLayoutWidget")
-        self.gridLayoutWidget.setGeometry(QRect(10, 10, 341, 311))
+        self.gridLayoutWidget.setGeometry(QRect(10, 10, 341, 411))
         self.gridLayout = QGridLayout(self.gridLayoutWidget)
         self.gridLayout.setObjectName(u"gridLayout")
         self.gridLayout.setContentsMargins(0, 0, 0, 0)
@@ -117,7 +117,7 @@ class Ui_MainWindow(object):
     # setupUi
 
     def retranslateUi(self, MainWindow):
-        MainWindow.setWindowTitle(QCoreApplication.translate("MainWindow", u"MainWindow", None))
+        MainWindow.setWindowTitle(QCoreApplication.translate("MainWindow", u"\u6e1d\u5317\u9879\u76ee\u8d44\u6599\u5bfc\u51fa", None))
         self.label.setText(QCoreApplication.translate("MainWindow", u"\u6302\u63a5\u8868\uff1a", None))
         self.pushButton.setText(QCoreApplication.translate("MainWindow", u"exf\u5bfc\u51fa", None))
         self.pushButton_3.setText(QCoreApplication.translate("MainWindow", u"\u754c\u5740\u8868\u5bfc\u51fa", None))

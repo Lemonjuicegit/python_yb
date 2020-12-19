@@ -1,4 +1,5 @@
-﻿import py_compile
+﻿#   这是一个批量生成.pyc的class
+import py_compile
 import os
 
 filepath=input("输入源文件路径:")

@@ -1,7 +1,6 @@
 # import tkinter as tk
 import socket
 
-
 class licKey:
 
     def __init__(self):
@@ -16,7 +15,6 @@ class licKey:
 
     def lic(self):
         return self.k != 18670669457275772673
-
 
 if __name__ == '__main__':
     lic = licKey()

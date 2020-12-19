@@ -13,15 +13,18 @@ app = QApplication(sys.argv)
 mainWindow = QMainWindow()
 window = WinUI.exportGJ2.Ui_MainWindow()
 window.setupUi(mainWindow)
-mainWindow.setWindowIcon(WinUI.exportGJ2.QIcon("icon.ico"))
+mainWindow.setWindowIcon(WinUI.exportGJ2.QIcon(r".\image\icon.ico"))
 
 def text():
-    window.plainTextEdit.setPlainText(slo.value)
+    window.plainTextEdit.setPlainText(slo.results)
 
 # 事件slot
 window.lineEdit.textChanged.connect(slo.setsavepath)
-window.lineEdit_2.textChanged.connect(slo.setgjbpath)
-window.lineEdit_3.textChanged.connect(slo.setjpgpath)
+window.lineEdit.textChanged.connect(text)
+window.lineEdit_2.textChanged.connect(slo.setgjb_path)
+window.lineEdit_2.textChanged.connect(text)
+window.lineEdit_3.textChanged.connect(slo.lineEdit_3)
+window.lineEdit_3.textChanged.connect(text)
 
 window.pushButton.clicked.connect(slo.exf)
 window.pushButton.clicked.connect(text)
