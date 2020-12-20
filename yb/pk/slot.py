@@ -1,5 +1,6 @@
-from pk import mydocx, pycmd, key, decoratorsFunc
-from multiprocessing import Process, Queue
+from pk import mydocx, pycmd, key
+from multiprocessing import Queue
+from threading import Thread
 
 
 class Slot():
@@ -61,17 +62,41 @@ class Slot():
     def sdckb(self):
         self.results = self.doc.getsdckb(self.doc.execldata.save_path)
 
-    # def one_click(self):
-    #     pp=Pool()
-    #     pp.apply_async(func=self.doc.getsmss,args=(self.doc.execldata.save_path,))
-    #     pp.apply_async(func=self.doc.getsmss,args=(self.doc.execldata.save_path,))
-    #     pp.apply_async(func=self.doc.getchjssms, args=(self.doc.execldata.save_path,))
-    #     pp.apply_async(func=self.doc.getsdckb, args=(self.doc.execldata.save_path,))
-    #     pp.apply_async(func=self.doc.execldata.exf, args=(self.doc.execldata.save_path,))
-    #     pp.apply_async(func=self.doc.execldata.jzb, args=(self.doc.execldata.save_path,))
-    #     pp.apply_async(func=self.doc.execldata.hzb, args=(self.doc.execldata.save_path,))
-    #     pp.close()
-    #     pp.join()
+    def one_click(self):
+        exfthread=slotThreadreturn(self.doc.execldata.exf,(self.save_path,))
+        hzbthread=slotThreadreturn(self.doc.execldata.hzb,(self.save_path,))
+        jzbthread=slotThreadreturn(self.doc.execldata.jzb,(self.save_path,))
+        smsthread=slotThreadreturn(self.doc.getsmss,(self.save_path,))
+        chjssmsthread=slotThreadreturn(self.doc.getchjssms,(self.save_path,))
+        sdckbthread=slotThreadreturn(self.doc.getsdckb,(self.save_path,))
+        exfthread.start()
+        hzbthread.start()
+        jzbthread.start()
+        smsthread.start()
+        chjssmsthread.start()
+        sdckbthread.start()
+        exfthread.join()
+        hzbthread.join()
+        jzbthread.join()
+        smsthread.join()
+        chjssmsthread.join()
+        sdckbthread.join()
+        exfthreadresult=exfthread.get_result()
+        hzbthreadresult=hzbthread.get_result()
+        jzbthreadresult=jzbthread.get_result()
+        smsthreadresult=smsthread.get_result()
+        chjssmsthreadresult=chjssmsthread.get_result()
+        sdckbthreadresult=sdckbthread.get_result()
+        result_list=[]
+        result_list.append(exfthreadresult)
+        result_list.append(hzbthreadresult)
+        result_list.append(jzbthreadresult)
+        result_list.append(smsthreadresult)
+        result_list.append(chjssmsthreadresult)
+        result_list.append(sdckbthreadresult)
+        result_list=[str(i) for i in result_list]
+
+        self.results="\n".join(result_list)
 
     def setsavepath(self, text):
         if self.cmd.isdir(text):
@@ -84,6 +109,23 @@ class Slot():
         self.results = "你输入了东西但是不会有什么用(*>﹏<*)"
 
 
+#   自定义线程
+class slotThreadreturn(Thread):
+    def __init__(self, func, args=()):
+        super().__init__()
+        self.func = func
+        self.args = args
+
+    def run(self):
+        self.result = self.func(*self.args)
+
+    def get_result(self):
+        try:
+            return self.result
+        except Exception as e:
+            return str(e)
+
+
+
 if __name__ == '__main__':
     print("主进程开始")
-

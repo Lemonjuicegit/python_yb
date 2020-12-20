@@ -245,7 +245,7 @@ class IoUtil:
             sc += 1
             while_x += 1
 
-        results = "生成：%s个    未生成：%s个" % (sc, err)
+        results = "exf文件生成：%s个    exf文件未生成：%s个" % (sc, err)
         return results
 
     @dec.getexceptionreturn
@@ -254,7 +254,11 @@ class IoUtil:
         zdmj = self.excel_field("P", "Sheet1")
         zjmj = self.excel_field("R", "Sheet1")
         xm = self.excel_field("c", "Sheet1")
-        zd = load_workbook("zd.xlsx", data_only=True, read_only=False)
+        try:
+            zd = load_workbook(r".\zd.xlsx", data_only=True, read_only=False)
+        except:
+            results="宗地界址表打不开！！！！"
+            return results
 
         n = 0
         for e in zddm:
@@ -275,5 +279,5 @@ class IoUtil:
             zd2.save(path.join(r"%s\%s%s" % (save_path, e, xm[n]), e + "界址点成果表.xlsx"))
             n += 1
 
-            results = "导出：%d个" % n
-            return results
+        results = "界址点成果表导出：%s个" % n
+        return results

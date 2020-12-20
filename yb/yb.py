@@ -40,6 +40,7 @@ window.pushButton_6.clicked.connect(slo.chjssms)
 window.pushButton_6.clicked.connect(text)
 window.pushButton_7.clicked.connect(slo.sdckb)
 window.pushButton_7.clicked.connect(text)
-
+window.pushButton_8.clicked.connect(slo.one_click)
+window.pushButton_8.clicked.connect(text)
 mainWindow.show()
 sys.exit(app.exec_())

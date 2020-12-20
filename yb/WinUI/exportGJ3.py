@@ -14,106 +14,101 @@ from PySide2.QtWidgets import *
 
 
 class Ui_MainWindow(object):
-    def setupUi(self, MainWindow):
-        if not MainWindow.objectName():
-            MainWindow.setObjectName(u"MainWindow")
-        MainWindow.resize(361, 236)
-        MainWindow.setFixedSize(361, 430)
-        self.centralwidget = QWidget(MainWindow)
-        self.centralwidget.setObjectName(u"centralwidget")
-        self.gridLayoutWidget = QWidget(self.centralwidget)
-        self.gridLayoutWidget.setObjectName(u"gridLayoutWidget")
-        self.gridLayoutWidget.setGeometry(QRect(10, 10, 341, 411))
-        self.gridLayout = QGridLayout(self.gridLayoutWidget)
+    def setupUi(self,MainWindow):
+
+        # self.centralwidget = QWidget(MainWindow)
+        # self.centralwidget.setObjectName(u"centralwidget")
+        # self.gridLayoutWidget = QWidget(self.centralwidget)
+        # self.gridLayoutWidget.setObjectName(u"gridLayoutWidget")
+        # self.gridLayoutWidget.setGeometry(QRect(10, 10, 341, 411))
+        self.gridLayout = QGridLayout(MainWindow)
         self.gridLayout.setObjectName(u"gridLayout")
         self.gridLayout.setContentsMargins(0, 0, 0, 0)
 
 
         #按钮生成
-        self.pushButton = QPushButton(self.gridLayoutWidget)
+        self.pushButton = QPushButton(MainWindow)
         self.pushButton.setObjectName(u"pushButton")
         self.gridLayout.addWidget(self.pushButton, 0, 0, 1, 1)
 
-        self.pushButton_2 = QPushButton(self.gridLayoutWidget)
+        self.pushButton_2 = QPushButton(MainWindow)
         self.pushButton_2.setObjectName(u"pushButton_2")
         self.gridLayout.addWidget(self.pushButton_2, 0, 1, 1, 1)
 
-        self.pushButton_3 = QPushButton(self.gridLayoutWidget)
+        self.pushButton_3 = QPushButton(MainWindow)
         self.pushButton_3.setObjectName(u"pushButton_3")
         self.gridLayout.addWidget(self.pushButton_3, 0, 2, 1, 1)
 
-        self.pushButton_4 = QPushButton(self.gridLayoutWidget)
+        self.pushButton_4 = QPushButton(MainWindow)
         self.pushButton_4.setObjectName(u"pushButton_4")
         self.gridLayout.addWidget(self.pushButton_4, 0, 3, 1, 1)
 
-        self.pushButton_5 = QPushButton(self.gridLayoutWidget)
+        self.pushButton_5 = QPushButton(MainWindow)
         self.pushButton_5.setObjectName(u"pushButton_5")
         self.gridLayout.addWidget(self.pushButton_5, 1, 0, 1, 1)
 
-        self.pushButton_6 = QPushButton(self.gridLayoutWidget)
+        self.pushButton_6 = QPushButton(MainWindow)
         self.pushButton_6.setObjectName(u"pushButton_6")
         self.gridLayout.addWidget(self.pushButton_6, 1, 1, 1, 1)
 
-        self.pushButton_7 = QPushButton(self.gridLayoutWidget)
+        self.pushButton_7 = QPushButton(MainWindow)
         self.pushButton_7.setObjectName(u"pushButton_7")
         self.gridLayout.addWidget(self.pushButton_7, 1, 2, 1, 1)
 
-        self.pushButton_8 = QPushButton(self.gridLayoutWidget)
+        self.pushButton_8 = QPushButton(MainWindow)
         self.pushButton_8.setObjectName(u"pushButton_8")
         self.gridLayout.addWidget(self.pushButton_8, 1, 3, 1, 1)
 
         #   标签和文本框
         self.horizontalLayout_1 = QHBoxLayout()# 水平布局
         self.horizontalLayout_1.setObjectName(u"horizontalLayout_1")
-        self.label = QLabel(self.gridLayoutWidget)
+        self.label = QLabel(MainWindow)
         self.label.setObjectName(u"label")
         self.horizontalLayout_1.addWidget(self.label)
 
-        self.lineEdit_2 = QLineEdit(self.gridLayoutWidget)
+        self.lineEdit_2 = QLineEdit(MainWindow)
         self.lineEdit_2.setObjectName(u"lineEdit_2")
         self.horizontalLayout_1.addWidget(self.lineEdit_2)
         self.gridLayout.addLayout(self.horizontalLayout_1, 2, 0, 1, 4)
 
         self.horizontalLayout_2 = QHBoxLayout() #   水平布局
         self.horizontalLayout_2.setObjectName(u"horizontalLayout_2")
-        self.label_2 = QLabel(self.gridLayoutWidget)
+        self.label_2 = QLabel(MainWindow)
         self.label_2.setObjectName(u"label_2")
         self.horizontalLayout_2.addWidget(self.label_2)
 
-        self.lineEdit = QLineEdit(self.gridLayoutWidget)
+        self.lineEdit = QLineEdit(MainWindow)
         self.lineEdit.setObjectName(u"lineEdit")
         self.horizontalLayout_2.addWidget(self.lineEdit)
         self.gridLayout.addLayout(self.horizontalLayout_2, 3, 0, 1, 4)
 
         self.horizontalLayout_3= QHBoxLayout()# 水平布局
         self.horizontalLayout_3.setObjectName(u"horizontalLayout_3")
-        self.label_4 = QLabel(self.gridLayoutWidget)
+        self.label_4 = QLabel(MainWindow)
         self.label_4.setObjectName(u"label_4")
 
-        self.lineEdit_3 = QLineEdit(self.gridLayoutWidget)
+        self.lineEdit_3 = QLineEdit(MainWindow)
         self.lineEdit_3.setObjectName(u"lineEdit")
         self.horizontalLayout_3.addWidget(self.label_4 )
         self.horizontalLayout_3.addWidget(self.lineEdit_3)
         self.gridLayout.addLayout(self.horizontalLayout_3, 4, 0, 1, 4)
 
         #   消息提醒标签
-        self.label_3 = QLabel(self.gridLayoutWidget)
+        self.label_3 = QLabel(MainWindow)
         self.label_3.setObjectName(u"label_3")
         self.gridLayout.addWidget(self.label_3, 5, 0, 1, 4)
 
         #   编辑框
-        self.plainTextEdit = QPlainTextEdit(self.gridLayoutWidget)
+        self.plainTextEdit = QPlainTextEdit(MainWindow)
         self.plainTextEdit.setObjectName(u"plainTextEdit")
         self.gridLayout.addWidget(self.plainTextEdit, 6, 0, 1, 4)
 
-        MainWindow.setCentralWidget(self.centralwidget)
-        self.statusbar = QStatusBar(MainWindow)
-        self.statusbar.setObjectName(u"statusbar")
-        MainWindow.setStatusBar(self.statusbar)
+
+
 
         self.retranslateUi(MainWindow)
 
-        QMetaObject.connectSlotsByName(MainWindow)
+
         return self.gridLayout
     # setupUi
 
