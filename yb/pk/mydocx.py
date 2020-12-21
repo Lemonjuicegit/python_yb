@@ -46,7 +46,7 @@ class DocxUtil():
         pass
 
     #   房产面积测算说明书
-    @decoratorsFunc.getexceptionreturn
+    # @decoratorsFunc.getexceptionreturn
     def getsmss(self, save_path):
         n = 0
         for i in range(0, len(self.execldata.list_excel("宗地代码"))):
@@ -59,14 +59,14 @@ class DocxUtil():
 
             self.makevalue(self.sms_templet, 0, 0, "F00010001", value[1])  # 不动产单元号：F00010001
             self.makevalue(self.sms_templet, 11, 1, "xxx", value[2])  # 委托测绘的房屋名称：xxx
-            self.makevalue(self.sms_templet, 12, 2, "xxx", value[26])  # 委托测绘的房屋地址：xxx
+            self.makevalue(self.sms_templet, 12, 1, "xxx", value[26])  # 委托测绘的房屋地址：xxx
             self.makevalue(self.sms_templet, 20, 0, "2020年11月23日", value[4])
             self.makevalue(self.sms_templet, 49, 3, "xx", value[2])  # 规划批准项目名称：  xx
             self.makevalue(self.sms_templet, 50, 3, "xx", value[2])  # 本次申请测绘的楼盘（组团）名称：  xx
             self.makevalue(self.sms_templet, 55, 1, "cc", str(value[22]))  # 层数
             self.makevalue(self.sms_templet, 55, 3, "dd", str(value[22]))  # 层数
             self.makevalue(self.sms_templet, 55, 5, "aa", str(value[17]))  # 总建筑面积为：aa平方米
-            self.makevalue(self.sms_templet, 55, 9, "bb", str(value[16]))  # 建筑占地面积为：bb平方米
+            self.makevalue(self.sms_templet, 55, 7, "bb", str(value[16]))  # 建筑占地面积为：bb平方米
             self.makevalue(self.sms_templet, 57, 0, "xxx", value[33])  #
             if str(value[8]) != "nan":
                 self.makevalue(self.sms_templet, 65, 1, "x", value[8])  # 根据委托方提供乡村建设规划许可证及附件，x
@@ -177,8 +177,10 @@ if __name__ == '__main__':
     mydo = DocxUtil()
     string1 = mydo.sdckb_templet.tables[0].cell(4, 1).paragraphs[1].text
     string2 = mydo.sms_templet.tables[0].cell(0, 1).paragraphs[1].text
-    string3 = mydo.sms_templet.paragraphs[12].runs[2].text
+    string3 = mydo.sms_templet.paragraphs[12].text
+    string4 = mydo.sms_templet.paragraphs[12].runs[1].text
 
     print(string1)
     print(string2)
     print(string3)
+    print(string4)
