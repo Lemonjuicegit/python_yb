@@ -1,6 +1,5 @@
 ﻿from openpyxl import load_workbook
 from pandas import read_excel, DataFrame, concat
-from xlrd import XLRDError
 from pk import decoratorsFunc as dec
 from os import path
 
@@ -137,7 +136,7 @@ class IoUtil:
 
     # 汇总表
     @dec.getexceptionreturn
-    def hzb(self,save_path):
+    def hzb(self, save_path):
         try:
             data = read_excel(self.gjb_path, dtype="str")
         except FileNotFoundError:
@@ -158,7 +157,7 @@ class IoUtil:
         return results
 
     @dec.getexceptionreturn
-    def exf(self,save_path):
+    def exf(self, save_path):
         op = open(r"templet\exftemplet.exf")
         list_exf = list(op)
         op.close()
@@ -170,20 +169,11 @@ class IoUtil:
         list_zl = self.list_excel("坐落")
         list_zdmj = self.list_excel("宗地面积")
         list_cjr = self.list_excel("调查人")
-
         # 生成exf
         while_x = 0  # 循环总数
-        err = 0  # 未生成数
-        sc = 0  # 生成数
         while while_x < len(list_zddm):
-
-            try:
-                t = self.x_y("zd.xlsx", list_zddm[while_x])  # 获取宗地的坐标数据
-                t2 = self.x_y("zrz.xlsx", list_zddm[while_x])  # 获取幢的坐标数据
-            except XLRDError:
-                while_x += 1
-                err += 1
-                continue
+            t = self.x_y("zd.xlsx", list_zddm[while_x])  # 获取宗地的坐标数据
+            t2 = self.x_y("zrz.xlsx", list_zddm[while_x])  # 获取幢的坐标数据
 
             # 填充坐标后面的0
             temp_excel = list(t["Unnamed: 2"])
@@ -198,13 +188,13 @@ class IoUtil:
             z_d = self.exf_x_y(temp_excel, temp2_excel)  # 格式化宗地坐标
             z_z = self.exf_x_y(z_excel, z2_excel)  # 格式化自然幢坐标
             try:
-                exf1 = "0.0∴0.0∴112500000∴地表宗地∴" + list_bdcdyh[while_x] + "∴" + list_zddm[while_x] + "∴0.0∴0.0∴" + \
-                       list_zl[while_x] + "∴" + str(list_zdmj[while_x]) + "∴" + list_cjr[while_x] + "∴∴∴∴0∴" + list_xm[
-                           while_x] + "∴∴宅基地∴" + list_zl[while_x] + "∴∴∴0∴0∴0∴∴1∴112512000\n"
-                exf2 = "0.0∴0.0∴∴∴∴∴0.0∴" + list_bdcdyh[while_x] + "∴" + list_zddm[
-                    while_x] + "F0001∴0.0∴0.0∴∴∴∴∴∴∴∴∴∴∴0∴∴∴2∴2110\n"
+                exf1 = "0.0∴0.0∴112500000∴地表宗地∴%s∴%s∴0.0∴0.0∴%s∴%s∴%s∴∴∴∴0∴%s∴∴宅基地∴%s∴∴∴0∴0∴0∴∴1∴112512000\n" % (
+                list_bdcdyh[while_x], list_zddm[while_x], list_zl[while_x], list_zdmj[while_x], list_cjr[while_x],
+                list_xm[
+                    while_x], list_zl[while_x])
+                exf2 = "0.0∴0.0∴∴∴∴∴0.0∴%s∴%sF0001∴0.0∴0.0∴∴∴∴∴∴∴∴∴∴∴0∴∴∴2∴2110\n" % (list_bdcdyh[while_x], list_zddm[
+                    while_x])
             except TypeError:
-                self.results = "挂接表可能没填好！"
                 break
 
             list_exf[1054] = str(len(z_d)) + "\n"
@@ -242,14 +232,13 @@ class IoUtil:
                 del list_exf[z_l2]
                 l2 += 1
 
-            sc += 1
             while_x += 1
 
-        results = "exf文件生成：%s个    exf文件未生成：%s个" % (sc, err)
+        results = "exf文件生成：%s个 " % (while_x)
         return results
 
     @dec.getexceptionreturn
-    def jzb(self,save_path):
+    def jzb(self, save_path):
         zddm = self.excel_field("A", "Sheet1")
         zdmj = self.excel_field("P", "Sheet1")
         zjmj = self.excel_field("R", "Sheet1")
@@ -257,7 +246,7 @@ class IoUtil:
         try:
             zd = load_workbook(r".\zd.xlsx", data_only=True, read_only=False)
         except:
-            results="宗地界址表打不开！！！！"
+            results = "宗地界址表打不开！！！！"
             return results
 
         n = 0
@@ -270,7 +259,7 @@ class IoUtil:
                 continue
 
             zd.save(path.join(r"%s\%s%s" % (save_path, e, xm[n]), e + "界址点成果表.xlsx"))
-            zd2 = load_workbook(path.join(r"%s\%s%s" % (save_path, e, xm[n]), e + "界址点成果表.xlsx"),data_only=True)
+            zd2 = load_workbook(path.join(r"%s\%s%s" % (save_path, e, xm[n]), e + "界址点成果表.xlsx"), data_only=True)
             # 将复制出来的表多余的删除
             for i in zddm:
                 if i != e:

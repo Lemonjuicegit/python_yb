@@ -129,11 +129,13 @@ class DocxUtil():
         zddm = self.execldata.list_excel("宗地代码")
         zl = self.execldata.list_excel("坐落")
         xm = self.execldata.list_excel("姓名")
+        djfs = self.execldata.list_excel("登记方式")
         dcrq = self.execldata.list_excel("调查日期")
         n = 0
-        while n < len(xm):
+        while n < len(zddm):
+            self.sdckb_templet = Document(r".\templet\不动产实地查看记录表.docx")
             dcrq[n] = "%s年%s月%s日" % (str(dcrq[n])[:4], str(dcrq[n])[5:7], str(dcrq[n])[8:10])
-            self.maketableparagraphs(self.sdckb_templet, 0, 0, 3, 0, "[xm]", xm[n])
+            self.maketableparagraphs(self.sdckb_templet, 0, 0, 3, 0, "[xm]", djfs[n])
             self.maketableparagraphs(self.sdckb_templet, 0, 1, 1, 0, "[zl]", zl[n])
             self.maketableparagraphs(self.sdckb_templet, 0, 4, 1, 1, "[dcrq]", dcrq[n])
             self.sdckb_templet.save(r"%s\%s%s\%s不动产实地查看记录表.doc" % (save_path, zddm[n], xm[n], zddm[n]))

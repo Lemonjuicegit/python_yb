@@ -1,5 +1,5 @@
-zrz.xlsx
-zd.xlsx
+*.csv
+*.xlsx
 python常用模块.xlsx
 *.pyc
 第三方依赖清华大学镜像安装.bat

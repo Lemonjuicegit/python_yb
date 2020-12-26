@@ -46,6 +46,8 @@ class Slot():
         zddm_xm = []
         zddm = self.doc.execldata.list_excel("宗地代码")
         xm = self.doc.execldata.list_excel("姓名")
+        print(zddm)
+        print(xm)
         i = 0
         while i < len(zddm):
             zddm_xm.append(zddm[i] + xm[i])
@@ -60,7 +62,7 @@ class Slot():
 
     #   不动产实地查看记录表
     def sdckb(self):
-        self.results = self.doc.getsdckb(self.doc.execldata.save_path)
+        self.results = self.doc.getsdckb(self.save_path)
 
     def one_click(self):
         exfthread=slotThreadreturn(self.doc.execldata.exf,(self.save_path,))

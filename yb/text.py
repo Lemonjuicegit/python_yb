@@ -1,7 +1,6 @@
 import cv2
 import numpy as np
 
-from pk import sfz
 
 class Compress_img:
 
@@ -13,9 +12,6 @@ class Compress_img:
         img = cv2.imread(self.img_path)
         width = img.shape[:2]
         heigh = img.shape[:2]
-        print(width)
-        print(heigh)
-        print(compress_rate)
         # 双三次插值
         img_resize = cv2.resize(img, (int(width[0] * compress_rate), int(heigh[1] * compress_rate)),
                                 interpolation=cv2.INTER_AREA)

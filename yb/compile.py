@@ -10,3 +10,5 @@ for i in os.listdir(filepath):
     if name[1]==".py":
         print(filepath+name[0]+".pyc")
         py_compile.compile(os.path.join(filepath,i),filepath+"\\"+os.path.split(filepath)[1]+"\\"+name[0]+".pyc")
+
+

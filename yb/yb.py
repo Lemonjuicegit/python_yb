@@ -5,10 +5,10 @@ from PySide2.QtWidgets import QMainWindow, QApplication
 
 slo = slot.Slot()
 
-if slo.key():
-    exit()
+# if slo.key():
+#     exit()
 
-# 程序界面生成k
+# 程序界面生成
 app = QApplication(sys.argv)
 mainWindow = QMainWindow()
 window = WinUI.exportGJ2.Ui_MainWindow()
