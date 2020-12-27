@@ -20,7 +20,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/3.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'l*mg_zz76oib64!6lpxzy5i&@f-0g_!nk545-s%ec)09$veo_t'
+SECRET_KEY = 'vferev%)u7d@#rw@yp+0$=a58gf@ebs1-7gj8)1t*s7pwo@$dn'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -37,6 +37,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'ybwebapp',
 ]
 
 MIDDLEWARE = [
@@ -75,14 +76,12 @@ WSGI_APPLICATION = 'ybweb.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlserver',
+        'ENGINE': 'django.db.backends.mysql',
         'NAME': 'yb',
-        'USER':'sa',
+        'USER':'root',
         'PASSWORD':'123456',
         'HOST':'192.168.0.3',
-        'PORT':'1433',
-        'driver':'SQL Server Native Client 11.0',	# ODBC连接应用驱动
-        'MARS_Connection': True,
+        'PORT':'3306',
     }
 }
 
