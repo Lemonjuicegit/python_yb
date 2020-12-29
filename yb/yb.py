@@ -1,9 +1,9 @@
-from pk import slot
+from pk import customslot
 import sys
 import WinUI.exportGJ2
 from PySide2.QtWidgets import QMainWindow, QApplication
 
-slo = slot.Slot()
+slo = customslot.Slot()
 
 # if slo.key():
 #     exit()

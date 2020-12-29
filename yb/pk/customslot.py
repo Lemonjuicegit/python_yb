@@ -1,5 +1,4 @@
 from pk import mydocx, pycmd, key
-from multiprocessing import Queue
 from threading import Thread
 
 

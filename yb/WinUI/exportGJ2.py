@@ -28,8 +28,7 @@ class Ui_MainWindow(object):
         self.gridLayout.setObjectName(u"gridLayout")
         self.gridLayout.setContentsMargins(0, 0, 0, 0)
 
-
-        #按钮生成
+        # 按钮生成
         self.pushButton = QPushButton(self.gridLayoutWidget)
         self.pushButton.setObjectName(u"pushButton")
         self.gridLayout.addWidget(self.pushButton, 0, 0, 1, 1)
@@ -63,7 +62,7 @@ class Ui_MainWindow(object):
         self.gridLayout.addWidget(self.pushButton_8, 1, 3, 1, 1)
 
         #   标签和文本框
-        self.horizontalLayout_1 = QHBoxLayout()# 水平布局
+        self.horizontalLayout_1 = QHBoxLayout()  # 水平布局
         self.horizontalLayout_1.setObjectName(u"horizontalLayout_1")
         self.label = QLabel(self.gridLayoutWidget)
         self.label.setObjectName(u"label")
@@ -74,7 +73,7 @@ class Ui_MainWindow(object):
         self.horizontalLayout_1.addWidget(self.lineEdit_2)
         self.gridLayout.addLayout(self.horizontalLayout_1, 2, 0, 1, 4)
 
-        self.horizontalLayout_2 = QHBoxLayout() #   水平布局
+        self.horizontalLayout_2 = QHBoxLayout()  # 水平布局
         self.horizontalLayout_2.setObjectName(u"horizontalLayout_2")
         self.label_2 = QLabel(self.gridLayoutWidget)
         self.label_2.setObjectName(u"label_2")
@@ -85,14 +84,14 @@ class Ui_MainWindow(object):
         self.horizontalLayout_2.addWidget(self.lineEdit)
         self.gridLayout.addLayout(self.horizontalLayout_2, 3, 0, 1, 4)
 
-        self.horizontalLayout_3= QHBoxLayout()# 水平布局
+        self.horizontalLayout_3 = QHBoxLayout()  # 水平布局
         self.horizontalLayout_3.setObjectName(u"horizontalLayout_3")
         self.label_4 = QLabel(self.gridLayoutWidget)
         self.label_4.setObjectName(u"label_4")
 
         self.lineEdit_3 = QLineEdit(self.gridLayoutWidget)
         self.lineEdit_3.setObjectName(u"lineEdit")
-        self.horizontalLayout_3.addWidget(self.label_4 )
+        self.horizontalLayout_3.addWidget(self.label_4)
         self.horizontalLayout_3.addWidget(self.lineEdit_3)
         self.gridLayout.addLayout(self.horizontalLayout_3, 4, 0, 1, 4)
 
@@ -115,11 +114,11 @@ class Ui_MainWindow(object):
 
         QMetaObject.connectSlotsByName(MainWindow)
         return self.gridLayout
+
     # setupUi
-
-
     def retranslateUi(self, MainWindow):
-        MainWindow.setWindowTitle(QCoreApplication.translate("MainWindow", u"\u6e1d\u5317\u9879\u76ee\u8d44\u6599\u5bfc\u51fa", None))
+        MainWindow.setWindowTitle(
+            QCoreApplication.translate("MainWindow", u"\u6e1d\u5317\u9879\u76ee\u8d44\u6599\u5bfc\u51fa", None))
         self.label.setText(QCoreApplication.translate("MainWindow", u"\u6302\u63a5\u8868\uff1a", None))
         self.pushButton.setText(QCoreApplication.translate("MainWindow", u"exf\u5bfc\u51fa", None))
         self.pushButton_3.setText(QCoreApplication.translate("MainWindow", u"\u754c\u5740\u8868\u5bfc\u51fa", None))
@@ -129,8 +128,8 @@ class Ui_MainWindow(object):
         self.pushButton_4.setText(QCoreApplication.translate("MainWindow", u"\u6d4b\u7b97\u8bf4\u660e\u4e66", None))
         self.label_4.setText(QCoreApplication.translate("MainWindow", u"\u8fdc/\u8fd1\u666f", None))
         self.pushButton_5.setText(QCoreApplication.translate("MainWindow", u"\u6587\u4ef6\u5939\u751f\u6210", None))
-        self.pushButton_6.setText(QCoreApplication.translate("MainWindow", u"\u6d4b\u7ed8\u6280\u672f\u8bf4\u660e", None))
+        self.pushButton_6.setText(
+            QCoreApplication.translate("MainWindow", u"\u6d4b\u7ed8\u6280\u672f\u8bf4\u660e", None))
         self.pushButton_7.setText(QCoreApplication.translate("MainWindow", u"\u67e5\u770b\u8bb0\u5f55\u8868", None))
         self.pushButton_8.setText(QCoreApplication.translate("MainWindow", u"\u4e00\u952e\u5168\u5bfc", None))
     # retranslateUi
-

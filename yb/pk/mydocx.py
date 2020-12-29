@@ -75,7 +75,7 @@ class DocxUtil():
             self.makevalue(self.sms_templet, 106, 2, "xxx", value[2])  # 建筑物名称:xxx
             self.makevalue(self.sms_templet, 109, 2, "xxx", value[2])  # 建筑物名称: xxx
             self.makevalue(self.sms_templet, 112, 2, "xxx", value[2])  # 建筑物名称: xxx
-            self.makevalue(self.sms_templet, 116, 2, "xxx", value[4])  # 计算者：  xxx
+            self.makevalue(self.sms_templet, 116, 2, "xxx", value[27])  # 计算者：  xxx
             self.makevalue(self.sms_templet, 117, 1, "xxx", value[4])  # 制表日期：xxx
             self.makevalue(self.sms_templet, 118, 0, "苏航", value[2])  # 苏航(近景)
             self.makevalue(self.sms_templet, 120, 0, "苏航", value[2])  # 苏航(远景)
@@ -179,8 +179,9 @@ if __name__ == '__main__':
     mydo = DocxUtil()
     string1 = mydo.sdckb_templet.tables[0].cell(4, 1).paragraphs[1].text
     string2 = mydo.sms_templet.tables[0].cell(0, 1).paragraphs[1].text
-    string3 = mydo.sms_templet.paragraphs[12].text
-    string4 = mydo.sms_templet.paragraphs[12].runs[1].text
+    string3 = mydo.sms_templet.paragraphs[115].text
+    string4 = mydo.sms_templet.paragraphs[116].text
+    string5 = mydo.sms_templet.paragraphs[12].runs[1].text
 
     print(string1)
     print(string2)
