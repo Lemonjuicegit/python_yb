@@ -3,10 +3,10 @@ import pymssql
 import re
 import os
 import decoratorsFunc
+import json
 
 
 class DatabaseConnect:
-
     def __init__(self, serverip, user, password, port: int, database, drive, charset="utf8"):
         """
         @param serverip:服务器ip地址
@@ -17,18 +17,18 @@ class DatabaseConnect:
         @param drive:要连接那种数据库（mysql sqlserver）
         @param charset:字符编码
         """
-        self.serverip = serverip  # 连接服务器地址
-        self.user = user  # 用户名
-        self.password = password  # 密码
-        self.port = port  # 端口
-        self.database = database  # 数据库名称
-        self.charset = charset  # 字符编码
+        serverip = serverip  # 连接服务器地址
+        user = user  # 用户名
+        password = password  # 密码
+        port = port  # 端口
+        database = database  # 数据库名称
+        charset = charset  # 字符编码
         if drive == "mysql":
-            self.connect = pymysql.connect(host=self.serverip, port=self.port, user=self.user, password=self.password,
-                                           database=self.database, charset=self.charset)  # 获取连接
+            self.connect = pymysql.connect(host=serverip, port=port, user=user, password=password,
+                                           database=database, charset=charset)  # 获取mysql连接
         elif drive == "sqlserver":
-            self.connect = pymssql.connect(host=self.serverip, port=self.port, user=self.user, password=self.password,
-                                           database=self.database, charset=self.charset)  # 获取连接
+            self.connect = pymssql.connect(host=serverip, port=port, user=user, password=password,
+                                           database=database, charset=charset)  # 获取sqlserver连接
         self.cursor = self.connect.cursor()  # 获取光标
 
     # 基本查询数据

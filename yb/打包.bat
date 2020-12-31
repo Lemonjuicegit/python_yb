@@ -1,1 +1,0 @@
-pyinstaller --path C:\Users\Administrator\AppData\Local\Programs\Python\Python38\Lib\site-packages\PySide2 -w ¹¤¾ß.py
