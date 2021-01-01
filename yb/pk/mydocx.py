@@ -1,8 +1,7 @@
-import pk.ioutil
+from pk import fileutil, decoratorsFunc, sfz
 from docx import Document
 from docx.shared import Cm
-from pk import decoratorsFunc
-import pk.sfz
+from pandas import read_excel
 
 
 class DocxUtil():
@@ -11,13 +10,12 @@ class DocxUtil():
         self.sms_templet = Document(r".\templet\房产面积测算说明书.docx")
         self.chjssms_templet = Document(r".\templet\农村宅基地使用权及房屋所有权测绘技术说明.docx")
         self.sdckb_templet = Document(r".\templet\不动产实地查看记录表.docx")
-        self.execldata = pk.ioutil.IoUtil()
 
     @decoratorsFunc.getexceptionreturn
-    def checksfz(self):
-        sfz_list = self.execldata.list_excel("身份证")
+    def checksfz(self, excel_gjb):
+        sfz_list = list(excel_gjb["身份证"])
         sfz_list = [str(i) for i in sfz_list]
-        execldata_sfz = pk.sfz.Sfz(sfz_list)
+        execldata_sfz = sfz.Sfz(sfz_list)
         check_sfz = execldata_sfz.check_list()
         return check_sfz
 
@@ -42,16 +40,13 @@ class DocxUtil():
     def addtablevalue(self, doc_templet: Document, table: int, columu: int, row: int, paragraph: int, value):  # 向
         doc_templet.tables[table].cell(columu, row).paragraphs[paragraph].text = value
 
-    def getsms(self, save_path):
-        pass
-
     #   房产面积测算说明书
     # @decoratorsFunc.getexceptionreturn
-    def getsmss(self, save_path):
+    def getsmss(self, excel_gjb, save_path):
         n = 0
-        for i in range(0, len(self.execldata.list_excel("宗地代码"))):
+        for i in range(0, len(excel_gjb["宗地代码"])):
             self.sms_templet = Document(r"templet\房产面积测算说明书.docx")
-            value = self.execldata.row_excel(i)
+            value = list(excel_gjb.loc[i])
 
             #   转换日期数据格式
             value[5] = value[5][:4] + "年" + value[5][5:7] + "月" + value[5][8:10] + "日"
@@ -125,12 +120,12 @@ class DocxUtil():
 
     #   不动产实地查看记录表
     @decoratorsFunc.getexceptionreturn
-    def getsdckb(self, save_path):
-        zddm = self.execldata.list_excel("宗地代码")
-        zl = self.execldata.list_excel("坐落")
-        xm = self.execldata.list_excel("姓名")
-        djfs = self.execldata.list_excel("登记方式")
-        dcrq = self.execldata.list_excel("调查日期")
+    def getsdckb(self, excel_gjb, save_path):
+        zddm = excel_gjb["宗地代码"]
+        zl = excel_gjb["坐落"]
+        xm = excel_gjb["姓名"]
+        djfs = excel_gjb["登记方式"]
+        dcrq = excel_gjb["调查日期"]
         n = 0
         while n < len(zddm):
             self.sdckb_templet = Document(r".\templet\不动产实地查看记录表.docx")
@@ -146,13 +141,13 @@ class DocxUtil():
 
     #   农村宅基地使用权及房屋所有权测绘技术说明
     @decoratorsFunc.getexceptionreturn
-    def getchjssms(self, save_path):
-        zddm = self.execldata.list_excel("宗地代码")
-        xm = self.execldata.list_excel("姓名")
-        dcrq = self.execldata.list_excel("调查日期")
+    def getchjssms(self, excel_gjb, save_path):
+        zddm = excel_gjb["宗地代码"]
+        xm = excel_gjb["姓名"]
+        dcrq = excel_gjb["调查日期"]
 
-        zdmj = self.execldata.list_excel("宗地面积")
-        jzmj = self.execldata.list_excel("建筑总面积")
+        zdmj = excel_gjb["宗地面积"]
+        jzmj = excel_gjb["建筑总面积"]
 
         i = 0
         while i < len(xm):

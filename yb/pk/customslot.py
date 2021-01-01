@@ -1,5 +1,6 @@
-from pk import mydocx, pycmd, key
+from pk import mydocx, pycmd, key, fileutil
 from threading import Thread
+from pandas import read_excel
 
 
 class Slot():
@@ -10,15 +11,17 @@ class Slot():
         self.results = None
         self.lic = key.licKey()
         self.save_path = ""
+        self.execldata = fileutil.IoUtil()
 
     def key(self):
         return self.lic.lic()
 
     #   获取挂接表并检查身份证号码
     def setgjb_path(self, txet):
-        self.doc.execldata.gjb_path = txet
+        self.gjb = txet
+        self.execl_gjb = read_excel(txet, dtype=str)
 
-        n = self.doc.checksfz()
+        n = self.doc.checksfz(self.execl_gjb)
         if n == []:
             self.results = r"(*>﹏<*)"
         elif len(n) == 1:
@@ -29,24 +32,22 @@ class Slot():
             self.results = "\n".join(n)
 
     def exf(self):
-        self.results = self.doc.execldata.exf(self.save_path)
+        self.results = self.execldata.exf(self.execl_gjb, self.save_path)
 
     def hzb(self):
-        self.results = self.doc.execldata.hzb(self.save_path)
+        self.results = self.execldata.hzb(self.execl_gjb, self.save_path)
 
     def jzb(self):
-        self.results = self.doc.execldata.jzb(self.save_path)
+        self.results = self.execldata.jzb(self.gjb, self.save_path)
 
     def sms(self):
-        self.results = self.doc.getsmss(save_path=self.save_path)
+        self.results = self.doc.getsmss(self.execl_gjb, self.save_path)
 
     #   批量生成文件夹
     def gjb_paper_files(self):
         zddm_xm = []
-        zddm = self.doc.execldata.list_excel("宗地代码")
-        xm = self.doc.execldata.list_excel("姓名")
-        print(zddm)
-        print(xm)
+        zddm = self.execl_gjb["宗地代码"]
+        xm = self.execl_gjb["姓名"]
         i = 0
         while i < len(zddm):
             zddm_xm.append(zddm[i] + xm[i])
@@ -57,19 +58,19 @@ class Slot():
 
     #   房产面积测算说明书
     def chjssms(self):
-        self.results = self.doc.getchjssms(self.doc.execldata.save_path)
+        self.results = self.doc.getchjssms(self.execl_gjb, self.save_path)
 
     #   不动产实地查看记录表
     def sdckb(self):
-        self.results = self.doc.getsdckb(self.save_path)
+        self.results = self.doc.getsdckb(self.execl_gjb, self.save_path)
 
     def one_click(self):
-        exfthread=slotThreadreturn(self.doc.execldata.exf,(self.save_path,))
-        hzbthread=slotThreadreturn(self.doc.execldata.hzb,(self.save_path,))
-        jzbthread=slotThreadreturn(self.doc.execldata.jzb,(self.save_path,))
-        smsthread=slotThreadreturn(self.doc.getsmss,(self.save_path,))
-        chjssmsthread=slotThreadreturn(self.doc.getchjssms,(self.save_path,))
-        sdckbthread=slotThreadreturn(self.doc.getsdckb,(self.save_path,))
+        exfthread = slotThreadreturn(self.execldata.exf, (self.execl_gjb, self.save_path,))
+        hzbthread = slotThreadreturn(self.execldata.hzb, (self.gjb, self.save_path,))
+        jzbthread = slotThreadreturn(self.execldata.jzb, (self.execl_gjb, self.save_path,))
+        smsthread = slotThreadreturn(self.doc.getsmss, (self.execl_gjb, self.save_path,))
+        chjssmsthread = slotThreadreturn(self.doc.getchjssms, (self.execl_gjb, self.save_path,))
+        sdckbthread = slotThreadreturn(self.doc.getsdckb, (self.execl_gjb, self.save_path,))
         exfthread.start()
         hzbthread.start()
         jzbthread.start()
@@ -82,22 +83,22 @@ class Slot():
         smsthread.join()
         chjssmsthread.join()
         sdckbthread.join()
-        exfthreadresult=exfthread.get_result()
-        hzbthreadresult=hzbthread.get_result()
-        jzbthreadresult=jzbthread.get_result()
-        smsthreadresult=smsthread.get_result()
-        chjssmsthreadresult=chjssmsthread.get_result()
-        sdckbthreadresult=sdckbthread.get_result()
-        result_list=[]
+        exfthreadresult = exfthread.get_result()
+        hzbthreadresult = hzbthread.get_result()
+        jzbthreadresult = jzbthread.get_result()
+        smsthreadresult = smsthread.get_result()
+        chjssmsthreadresult = chjssmsthread.get_result()
+        sdckbthreadresult = sdckbthread.get_result()
+        result_list = []
         result_list.append(exfthreadresult)
         result_list.append(hzbthreadresult)
         result_list.append(jzbthreadresult)
         result_list.append(smsthreadresult)
         result_list.append(chjssmsthreadresult)
         result_list.append(sdckbthreadresult)
-        result_list=[str(i) for i in result_list]
+        result_list = [str(i) for i in result_list]
 
-        self.results="\n".join(result_list)
+        self.results = "\n".join(result_list)
 
     def setsavepath(self, text):
         if self.cmd.isdir(text):
@@ -125,7 +126,6 @@ class slotThreadreturn(Thread):
             return self.result
         except Exception as e:
             return str(e)
-
 
 
 if __name__ == '__main__':

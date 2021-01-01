@@ -2,9 +2,10 @@
   "databaesconnect": {
     "serverip": "192.168.0.3",
     "user": "root",
-    "passwork":"123456",
+    "password":"123456",
     "port": 3306,
-    "databaes": "yb",
-    "charset": "utf8"
+    "database": "yb",
+    "charset": "utf8",
+    "drive": "mysql"
   }
 }

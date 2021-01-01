@@ -1,13 +1,28 @@
 import pymysql
 import pymssql
-import re
-import os
 import decoratorsFunc
-import json
+import fileutil
 
 
 class DatabaseConnect:
-    def __init__(self, serverip, user, password, port: int, database, drive, charset="utf8"):
+    def jsonconnect(self, json_path):
+        jsonvalue = fileutil.jsondict(json_path)
+        serverip = jsonvalue["databaesconnect"]["serverip"]  # 连接服务器地址
+        user = jsonvalue["databaesconnect"]["user"]  # 用户名
+        password = jsonvalue["databaesconnect"]["password"]  # 密码
+        port = jsonvalue["databaesconnect"]["port"]  # 端口
+        database = jsonvalue["databaesconnect"]["database"]  # 数据库名称
+        charset = jsonvalue["databaesconnect"]["charset"]  # 字符编码
+        if jsonvalue["databaesconnect"]["drive"] == "mysql":
+            self.connect = pymysql.connect(host=serverip, port=port, user=user, password=password,
+                                           database=database, charset=charset)  # 获取mysql连接
+        elif jsonvalue["databaesconnect"]["drive"] == "sqlserver":
+            self.connect = pymssql.connect(host=serverip, port=port, user=user, password=password,
+                                   database=database, charset=charset)  # 获取sqlserver连接
+        self.cursor = self.connect.cursor()  # 获取光标
+
+
+    def connect(self, serverip, user, password, port: int, database, drive, charset="utf8"):
         """
         @param serverip:服务器ip地址
         @param user:用户名
@@ -100,8 +115,10 @@ class DatabaseConnect:
     # 执行一条SQL语句
     @decoratorsFunc.getexceptionreturn
     def one_sql(self, sql: str):
-        result = self.cursor.execute(sql)
-        return result
+        self.cursor.execute(sql)
+        search_result = self.cursor.fetchall()
+
+        return search_result
 
     def close(self):
         self.cursor.close()
@@ -109,13 +126,12 @@ class DatabaseConnect:
 
 
 if __name__ == '__main__':
-    data = DatabaseConnect("192.168.0.3", "root", "123456", 3306, "test", "mysql")
-
-    search_result = data.select_join(field=['XZMC', 'CM', 'ZDDM_QS', 'ZDDM_JS', 'BMR', 'SL', 'DJZQDM'],
-                                     table_="zddm_list", table__="DJZQBM", link_condition=r"CM = DJZQMC",
-                                     condition=r"CM like '%玉峰%'")
+    data = DatabaseConnect()
+    data.jsonconnect(r"..\yb.json")
+    search_result = data.one_sql("select * from djzqbm where djqmc = '玉峰山镇'")
     print(['XZMC', 'CM', 'ZDDM_QS', 'ZDDM_JS', 'BMR', 'SL', 'DJZQDM'])
-    search_result = [str(i) for i in search_result]
+    # search_result = [str(i) for i in search_result]
+    search_result=(str(i) for i in search_result)
     search_result = "\n".join(search_result)
 
     print(search_result)

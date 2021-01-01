@@ -1,8 +1,6 @@
+from pk import fileutil
 
-import json
-string=open("yb.json","r")
 
-jso = json.load(string)
 
-print(jso["databaesconnect"]["sqlserver"])
-string.close()
+if __name__ == '__main__':
+    print(execl_gjb["身份证"])
