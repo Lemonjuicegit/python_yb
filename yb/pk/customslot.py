@@ -1,6 +1,6 @@
 from pk import mydocx, pycmd, key, fileutil
 from threading import Thread
-from pandas import read_excel
+from pandas import read_excel, DataFrame
 
 
 class Slot():
@@ -10,7 +10,6 @@ class Slot():
         self.doc = mydocx.DocxUtil()
         self.results = None
         self.lic = key.licKey()
-        self.save_path = ""
         self.execldata = fileutil.IoUtil()
 
     def key(self):
@@ -66,8 +65,8 @@ class Slot():
 
     def one_click(self):
         exfthread = slotThreadreturn(self.execldata.exf, (self.execl_gjb, self.save_path,))
-        hzbthread = slotThreadreturn(self.execldata.hzb, (self.gjb, self.save_path,))
-        jzbthread = slotThreadreturn(self.execldata.jzb, (self.execl_gjb, self.save_path,))
+        hzbthread = slotThreadreturn(self.execldata.hzb, (self.execl_gjb, self.save_path,))
+        jzbthread = slotThreadreturn(self.execldata.jzb, (self.jzb, self.save_path,))
         smsthread = slotThreadreturn(self.doc.getsmss, (self.execl_gjb, self.save_path,))
         chjssmsthread = slotThreadreturn(self.doc.getchjssms, (self.execl_gjb, self.save_path,))
         sdckbthread = slotThreadreturn(self.doc.getsdckb, (self.execl_gjb, self.save_path,))
@@ -128,5 +127,35 @@ class slotThreadreturn(Thread):
             return str(e)
 
 
+class mass_detection_slot:
+
+    def getdata_path(self, text):
+        self.data_path = text
+
+    def getpaper_path(self, text):
+        self.paper_path = text
+
+    def exf(self):
+        file_path = fileutil.getfilepath(self.paper_path)
+        exfdata = fileutil.read_exf(file_path)
+        comparison_d = {"宗地代码": [], "权利人姓名": [], "宗地面积对比": [], "宗地代码是否重复": []}
+        comparison = DataFrame(columns=["宗地代码", "权利人姓名", "宗地面积对比", "宗地代码是否重复"])  # 检查结果集
+        for i in exfdata.itertuples():
+            data = read_excel(self.data_path)
+            zdmj_comparison = float(data[data["宗地代码"] == getattr(i, "宗地代码")]["宗地面积"]) == getattr(i, "宗地面积")
+            comparison_d["宗地代码"].append(getattr(i, "宗地代码"))
+            comparison_d["宗地面积对比"].append(zdmj_comparison)
+            comparison_d["权利人姓名"].append(getattr(i, "权利人姓名"))
+            comparison_temp=DataFrame(comparison_d)
+            comparison.append(comparison_temp,ignore_index=True)
+
+
 if __name__ == '__main__':
-    print("主进程开始")
+    data = read_excel(r"E:\工作文件\成果数据\石船666\挂接表.xlsx")
+    print(data)
+    for i in data.itertuples():
+        print(getattr(i, "宗地代码"))
+
+        a = float(data[data["宗地代码"] == getattr(i, "宗地代码")]["宗地面积"])
+
+        print(a)

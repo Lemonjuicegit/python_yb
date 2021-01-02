@@ -1,7 +1,7 @@
-from pk import fileutil, decoratorsFunc, sfz
+from pk import decoratorsFunc, sfz
 from docx import Document
 from docx.shared import Cm
-from pandas import read_excel
+from pandas import DataFrame
 
 
 class DocxUtil():
@@ -42,7 +42,7 @@ class DocxUtil():
 
     #   房产面积测算说明书
     # @decoratorsFunc.getexceptionreturn
-    def getsmss(self, excel_gjb, save_path):
+    def getsmss(self, excel_gjb:DataFrame, save_path):
         n = 0
         for i in range(0, len(excel_gjb["宗地代码"])):
             self.sms_templet = Document(r"templet\房产面积测算说明书.docx")
@@ -120,7 +120,7 @@ class DocxUtil():
 
     #   不动产实地查看记录表
     @decoratorsFunc.getexceptionreturn
-    def getsdckb(self, excel_gjb, save_path):
+    def getsdckb(self, excel_gjb:DataFrame, save_path):
         zddm = excel_gjb["宗地代码"]
         zl = excel_gjb["坐落"]
         xm = excel_gjb["姓名"]
@@ -141,7 +141,7 @@ class DocxUtil():
 
     #   农村宅基地使用权及房屋所有权测绘技术说明
     @decoratorsFunc.getexceptionreturn
-    def getchjssms(self, excel_gjb, save_path):
+    def getchjssms(self, excel_gjb:DataFrame, save_path):
         zddm = excel_gjb["宗地代码"]
         xm = excel_gjb["姓名"]
         dcrq = excel_gjb["调查日期"]

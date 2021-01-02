@@ -1,17 +1,50 @@
 ﻿from openpyxl import load_workbook
 from pandas import read_excel, DataFrame, concat
 from pk import decoratorsFunc as dec
-from os import path
+from os import path, walk
 import json
 
-
+#解析json文件
 def jsondict(json_path):
     jsonfile = open(json_path)
     jsonvalue = json.load(jsonfile)
     jsonfile.close()
     return jsonvalue
 
+
+# 获取paper_path文件夹下面文件的路径
+def getfilepath(paper_path, file_type):
+    file_name = walk(paper_path,topdown=False)
+    file_path = []
+    for paper_path,paper_name,file_name in file_name:
+        for i in file_name:
+            if path.splitext(i)[-1] == file_type:
+                file_path.append(path.join(paper_path, i))
+    return file_path
+
+def read_exf(path):
+    value2 = {"宗地点数量": [], "自然幢点数量": [], "宗地代码": [], "宗地面积": [], "地籍号": [], "坐落": [], "权利人姓名": []}
+    for i in path:
+        exf = open(i)
+        exf_sring = list(exf)
+        nu1 = exf_sring[1054]
+        nu2 = exf_sring[1068 + int(nu1)]
+        value1 = exf_sring[1109 + int(nu1) + int(nu2)]
+        value1 = value1.split("∴")
+        value2["宗地点数量"].append(int(nu1))
+        value2["自然幢点数量"].append(int(nu2))
+        value2["宗地代码"].append(value1[5])
+        value2["地籍号"].append(value1[4])
+        value2["坐落"].append(value1[8])
+        value2["宗地面积"].append(float(value1[9]))
+        value2["权利人姓名"].append(value1[15])
+        exf.close()
+    datafrom = DataFrame(value2)
+    return datafrom
+
 """path文件路径，i修改第几行，string需要修改的内容参数,该方法按行修改内容,并将修改后的内容返回"""
+
+
 def revise_file(string, i, file_path):
     b = 0
     try:
@@ -272,3 +305,9 @@ class IoUtil:
 
         results = "界址点成果表导出：%s个" % n
         return results
+
+if __name__ == '__main__':
+
+    paths=getfilepath(paper_path=r"D:\pythonProject", file_type=".exf")
+    print(paths)
+
