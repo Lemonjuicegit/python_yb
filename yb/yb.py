@@ -1,6 +1,6 @@
 from pk import customslot
 import sys
-import WinUI.exportGJ2
+from WinUI import exportGJ2
 from PySide2.QtWidgets import QMainWindow, QApplication
 
 slo = customslot.Slot()
@@ -11,9 +11,9 @@ slo = customslot.Slot()
 # 程序界面生成
 app = QApplication(sys.argv)
 mainWindow = QMainWindow()
-window = WinUI.exportGJ2.Ui_MainWindow()
+window = exportGJ2.Ui_MainWindow()
 window.setupUi(mainWindow)
-mainWindow.setWindowIcon(WinUI.exportGJ2.QIcon(r".\image\icon.ico"))
+mainWindow.setWindowIcon(exportGJ2.QIcon(r".\image\icon.ico"))
 
 def text():
     window.plainTextEdit.setPlainText(slo.results)

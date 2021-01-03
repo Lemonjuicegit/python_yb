@@ -8,7 +8,7 @@ class Slot():
     def __init__(self):
         self.cmd = pycmd.Cmd()
         self.doc = mydocx.DocxUtil()
-        self.results = None
+        self.results = ""
         self.lic = key.licKey()
         self.execldata = fileutil.IoUtil()
 
@@ -18,8 +18,11 @@ class Slot():
     #   获取挂接表并检查身份证号码
     def setgjb_path(self, txet):
         self.gjb = txet
-        self.execl_gjb = read_excel(txet, dtype=str)
-
+        try:
+            self.execl_gjb = read_excel(txet, dtype=str)
+        except IOError as e:
+            self.results=str(e)
+        print("sdad")
         n = self.doc.checksfz(self.execl_gjb)
         if n == []:
             self.results = r"(*>﹏<*)"
@@ -29,6 +32,7 @@ class Slot():
             self.results = n
         else:
             self.results = "\n".join(n)
+        print(n)
 
     def exf(self):
         self.results = self.execldata.exf(self.execl_gjb, self.save_path)
@@ -106,9 +110,6 @@ class Slot():
         else:
             self.results = "请输入保存路径！"
 
-    def lineEdit_3(self):
-        self.results = "你输入了东西但是不会有什么用(*>﹏<*)"
-
 
 #   自定义线程
 class slotThreadreturn(Thread):
@@ -126,14 +127,23 @@ class slotThreadreturn(Thread):
         except Exception as e:
             return str(e)
 
-
 class mass_detection_slot:
-
+    def __init__(self):
+        self.results=""
+        self.cmd = pycmd.Cmd()
     def getdata_path(self, text):
-        self.data_path = text
+        if self.cmd.isdir(text):
+            self.data_path = text
+            self.results = r"(*>﹏<*)"
+        else:
+            self.results = "请输入正确路径！"
 
     def getpaper_path(self, text):
-        self.paper_path = text
+        if self.cmd.isdir(text):
+            self.paper_path = text
+            self.results = r"(*>﹏<*)"
+        else:
+            self.results = "请输入正确路径！"
 
     def exf(self):
         file_path = fileutil.getfilepath(self.paper_path)

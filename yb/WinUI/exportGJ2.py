@@ -113,7 +113,6 @@ class Ui_MainWindow(object):
         self.retranslateUi(MainWindow)
 
         QMetaObject.connectSlotsByName(MainWindow)
-        return self.gridLayout
 
     # setupUi
     def retranslateUi(self, MainWindow):

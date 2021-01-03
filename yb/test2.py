@@ -16,4 +16,8 @@ def exf(data_path,paper_path):
         comparison.append(comparison_temp, ignore_index=True)
 
 if __name__ == '__main__':
-    print(execl_gjb["身份证"])
+    treedcit={"a":"sdad","d":["s",5,6]}
+
+    a=treedcit.keys()
+    for i in a:
+        print(i)
