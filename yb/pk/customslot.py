@@ -21,7 +21,7 @@ class Slot():
         try:
             self.execl_gjb = read_excel(txet, dtype=str)
         except IOError as e:
-            self.results=str(e)
+            self.results = str(e)
         print("sdad")
         n = self.doc.checksfz(self.execl_gjb)
         if n == []:
@@ -70,7 +70,7 @@ class Slot():
     def one_click(self):
         exfthread = slotThreadreturn(self.execldata.exf, (self.execl_gjb, self.save_path,))
         hzbthread = slotThreadreturn(self.execldata.hzb, (self.execl_gjb, self.save_path,))
-        jzbthread = slotThreadreturn(self.execldata.jzb, (self.jzb, self.save_path,))
+        jzbthread = slotThreadreturn(self.execldata.jzb, (self.gjb, self.save_path,))
         smsthread = slotThreadreturn(self.doc.getsmss, (self.execl_gjb, self.save_path,))
         chjssmsthread = slotThreadreturn(self.doc.getchjssms, (self.execl_gjb, self.save_path,))
         sdckbthread = slotThreadreturn(self.doc.getsdckb, (self.execl_gjb, self.save_path,))
@@ -127,10 +127,12 @@ class slotThreadreturn(Thread):
         except Exception as e:
             return str(e)
 
+
 class mass_detection_slot:
     def __init__(self):
-        self.results=""
+        self.results = ""
         self.cmd = pycmd.Cmd()
+
     def getdata_path(self, text):
         if self.cmd.isdir(text):
             self.data_path = text
@@ -156,8 +158,8 @@ class mass_detection_slot:
             comparison_d["宗地代码"].append(getattr(i, "宗地代码"))
             comparison_d["宗地面积对比"].append(zdmj_comparison)
             comparison_d["权利人姓名"].append(getattr(i, "权利人姓名"))
-            comparison_temp=DataFrame(comparison_d)
-            comparison.append(comparison_temp,ignore_index=True)
+            comparison_temp = DataFrame(comparison_d)
+            comparison.append(comparison_temp, ignore_index=True)
 
 
 if __name__ == '__main__':
