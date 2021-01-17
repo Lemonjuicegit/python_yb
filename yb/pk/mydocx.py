@@ -86,7 +86,6 @@ class DocxUtil():
             self.maketablevalue(self.sms_templet, 1, 5, 3, 0, 0, "xxx", value[17])  # 总建筑面积
             self.maketablevalue(self.sms_templet, 1, 5, 6, 0, 0, "xxx", value[22])  # 地面以上层数
             self.maketablevalue(self.sms_templet, 1, 6, 3, 0, 0, "xxx", value[17])  # 地面以上面积
-            # self.maketablevalue(1, 9, 3, 0, 0, "xxx", value[17])  # 共用建筑面积总计
 
             i = 18
             fcmj = []

@@ -1,7 +1,7 @@
 import pymysql
 import pymssql
-import decoratorsFunc
-import fileutil
+from pk import fileutil
+
 
 
 class DatabaseConnect:
@@ -25,7 +25,6 @@ class DatabaseConnect:
         self.cursor = self.connect.cursor()  # 获取光标
 
     # 执行一条SQL语句
-    @decoratorsFunc.getexceptionreturn
     def one_sql(self, sql: str):
         self.cursor.execute(sql)
         search_result = self.cursor.fetchall()
@@ -40,10 +39,7 @@ class DatabaseConnect:
 if __name__ == '__main__':
     data = DatabaseConnect(r"..\yb.json")
     data.jsonconnect()
-    search_result = data.one_sql(r"SELECT XZMC,CM, ZDDM_QS,ZDDM_JS, BMR, SL, DJZQDM FROM ZDDM_list LEFT JOIN DJZQBM ON CM = DJZQMc WHERE CM LIKE '%上坝%' ORDER BY ZDDM_Qs;")
-    # search_result = [str(i) for i in search_result]
-    search_result=(str(i) for i in search_result)
-    search_result = "\n".join(search_result)
+    search_result = data.one_sql(r"SELECT XZMC,CM, ZDDM_QS,ZDDM_JS, BMR, DJZQDM FROM ZDDM_list LEFT JOIN DJZQBM ON CM = DJZQMc WHERE CM LIKE '%上坝%' ORDER BY ZDDM_Qs;")
 
     print(search_result)
     data.close()

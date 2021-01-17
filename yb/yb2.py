@@ -9,17 +9,34 @@ slo2 = customslot.mass_detection_slot()
 if slo.key():
     exit()
 
+
+def text():
+    if slo.results != "":
+        window.plainTextEdit.setPlainText(slo.results)
+    if slo2.results != "":
+        window.plainTextEdit.setPlainText(slo2.results)
+
+
+def data_select():
+    window.tabeldata["data"] = slo.data
+
+
+def select_event():
+    window.findChild(QLineEdit, "lineEdit_5").textChanged.connect(slo.select)
+    window.findChild(QLineEdit, "lineEdit_5").textChanged.connect(slo.data_select)
+    window.findChild(QLineEdit, "lineEdit_5").textChanged.connect(data_select)
+    window.findChild(QLineEdit, "lineEdit_5").textChanged.connect(text)
+
+
 # 程序界面生成
 app = QApplication(sys.argv)
 window = exportGJ3.Ui_MainWindow()
-window.settreeslotdict({"导出资料路径": window.label_1, "exf检查": window.exfutil})
+window.treeslotdict["导出资料路径"] = window.input_1
+window.treeslotdict["exf检查"] = window.exfutil
+window.treeslotdict["查询宗地代码"] = [window.input_2, select_event]
 
-
-def text():
-    if slo.results!="":
-        window.plainTextEdit.setPlainText(slo.results)
-    if slo2.results!="":
-        window.plainTextEdit.setPlainText(slo2.results)
+window.tabeldata["header"] = ["乡镇名称", "村名", "起始编码", "结束编码", "编码人", "地籍子区代码"]
+window.tabeldata["column"] = 6
 
 # 事件slot
 window.findChild(QLineEdit, "lineEdit_1").textChanged.connect(slo.setgjb_path)
@@ -28,6 +45,7 @@ window.findChild(QLineEdit, "lineEdit_2").textChanged.connect(slo.setsavepath)
 window.findChild(QLineEdit, "lineEdit_2").textChanged.connect(text)
 window.slotdicts["lineEdit_3"] = [slo2.getdata_path, text]
 window.slotdicts["lineEdit_4"] = [slo2.getdata_path, text]
+window.slotdicts["pushbutton_1"] = [window.settabelvalue]
 
 window.findChild(QAction, "action_1").triggered.connect(slo.exf)
 window.findChild(QAction, "action_1").triggered.connect(text)
@@ -45,5 +63,9 @@ window.findChild(QAction, "action_7").triggered.connect(slo.sdckb)
 window.findChild(QAction, "action_7").triggered.connect(text)
 window.findChild(QAction, "action_8").triggered.connect(slo.one_click)
 window.findChild(QAction, "action_8").triggered.connect(text)
+
 window.show()
-sys.exit(app.exec_())
+try:
+    sys.exit(app.exec_())
+finally:
+    slo.connenct.close()

@@ -4,7 +4,8 @@ from pk import decoratorsFunc as dec
 from os import path, walk
 import json
 
-#解析json文件
+
+# 解析json文件
 def jsondict(json_path):
     jsonfile = open(json_path)
     jsonvalue = json.load(jsonfile)
@@ -14,13 +15,14 @@ def jsondict(json_path):
 
 # 获取paper_path文件夹下面文件的路径
 def getfilepath(paper_path, file_type):
-    file_name = walk(paper_path,topdown=False)
+    file_name = walk(paper_path, topdown=False)
     file_path = []
-    for paper_path,paper_name,file_name in file_name:
+    for paper_path, paper_name, file_name in file_name:
         for i in file_name:
             if path.splitext(i)[-1] == file_type:
                 file_path.append(path.join(paper_path, i))
     return file_path
+
 
 def read_exf(path):
     value2 = {"宗地点数量": [], "自然幢点数量": [], "宗地代码": [], "宗地面积": [], "地籍号": [], "坐落": [], "权利人姓名": []}
@@ -41,6 +43,7 @@ def read_exf(path):
         exf.close()
     datafrom = DataFrame(value2)
     return datafrom
+
 
 """path文件路径，i修改第几行，string需要修改的内容参数,该方法按行修改内容,并将修改后的内容返回"""
 
@@ -108,8 +111,6 @@ def row_excel(row, gjb_path, sheet="Sheet1"):
     except OSError:
         print("请检查文件路径是否正确")
     return liste
-
-    # string：excel表列名（A,B,C....）,sheet:工作表名称
 
 
 def excel_field(gjb_path, string, sheet_name="Sheet1"):
@@ -283,15 +284,14 @@ class IoUtil:
         except:
             results = "宗地界址表打不开！！！！"
             return results
-
         n = 0
         for e in zddm:
             try:
                 zd[e].cell(row=5, column=1, value="    宗地面积(平方米):%s              坐标系: 2000国家大地坐标系" % zdmj[n])
                 zd[e].cell(row=6, column=1, value="    建筑面积(平方米):%s " % zjmj[n])
-            except KeyError:
-                print(e + "没找到这个表")
-                continue
+            except KeyError as e:
+                results = str(e)
+                return results
 
             zd.save(path.join(r"%s\%s%s" % (save_path, e, xm[n]), e + "界址点成果表.xlsx"))
             zd2 = load_workbook(path.join(r"%s\%s%s" % (save_path, e, xm[n]), e + "界址点成果表.xlsx"), data_only=True)
@@ -306,8 +306,7 @@ class IoUtil:
         results = "界址点成果表导出：%s个" % n
         return results
 
+
 if __name__ == '__main__':
-
-    paths=getfilepath(paper_path=r"D:\pythonProject", file_type=".exf")
+    paths = getfilepath(paper_path=r"D:\pythonProject", file_type=".exf")
     print(paths)
-

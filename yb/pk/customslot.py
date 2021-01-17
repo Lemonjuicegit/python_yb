@@ -1,4 +1,4 @@
-from pk import mydocx, pycmd, key, fileutil
+from pk import mydocx, pycmd, key, fileutil, mysqlutil
 from threading import Thread
 from pandas import read_excel, DataFrame
 
@@ -11,6 +11,8 @@ class Slot():
         self.results = ""
         self.lic = key.licKey()
         self.execldata = fileutil.IoUtil()
+        self.selectfield=""
+        self.data=""
 
     def key(self):
         return self.lic.lic()
@@ -20,10 +22,9 @@ class Slot():
         self.gjb = txet
         try:
             self.execl_gjb = read_excel(txet, dtype=str)
-        except IOError as e:
+            n = self.doc.checksfz(self.execl_gjb)
+        except Exception as e:
             self.results = str(e)
-        print("sdad")
-        n = self.doc.checksfz(self.execl_gjb)
         if n == []:
             self.results = r"(*>﹏<*)"
         elif len(n) == 1:
@@ -32,7 +33,6 @@ class Slot():
             self.results = n
         else:
             self.results = "\n".join(n)
-        print(n)
 
     def exf(self):
         self.results = self.execldata.exf(self.execl_gjb, self.save_path)
@@ -110,6 +110,26 @@ class Slot():
         else:
             self.results = "请输入保存路径！"
 
+    def select(self, text):
+        self.selectfield = text
+
+
+
+    def data_select(self):
+        self.connenct = mysqlutil.DatabaseConnect(r".\yb.json")
+        self.connenct.jsonconnect()
+        self.data = self.connenct.one_sql(
+            r"SELECT XZMC,CM, ZDDM_QS,ZDDM_JS, BMR, DJZQDM FROM ZDDM_list LEFT JOIN DJZQBM ON CM = DJZQMc WHERE CM LIKE '%"+self.selectfield+r"%' ORDER BY ZDDM_Qs;")
+
+        self.results = str(len(self.data)) + "条数据"
+
+    def insert(self):
+        self.connenct = mysqlutil.DatabaseConnect(r".\yb.json")
+        self.connenct.jsonconnect()
+        self.data = self.connenct.one_sql(
+            r"INSERT into ZDDM_list(XZMC, CM, ZDDM_QS,ZDDM_JS, BMR) VALUES ('%s','%s', '%s','%s', '%s');"%())
+
+        self.results = str(len(self.data)) + "条数据"
 
 #   自定义线程
 class slotThreadreturn(Thread):
