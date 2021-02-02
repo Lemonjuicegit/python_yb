@@ -1,6 +1,5 @@
 from time import time
 
-
 def runtime(f):
     def run(*args, **kwargs):
         a = time()
@@ -16,7 +15,6 @@ def runtimereturn(f):
         d = time()
         print(d - a)
         return returnvalue
-
     return run
 
 def getexception(f):
@@ -25,9 +23,7 @@ def getexception(f):
             f(*args, **kwargs)
         except BaseException as e:
             return str(e)
-
     return exception
-
 
 def getexceptionreturn(f):
     def exception(*args, **kwargs):

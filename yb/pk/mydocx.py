@@ -41,19 +41,19 @@ class DocxUtil():
         doc_templet.tables[table].cell(columu, row).paragraphs[paragraph].text = value
 
     #   房产面积测算说明书
-    # @decoratorsFunc.getexceptionreturn
-    def getsmss(self, excel_gjb:DataFrame, save_path):
+    @decoratorsFunc.getexceptionreturn
+    def getsmss(self, excel_gjb, save_path):
         n = 0
         for i in range(0, len(excel_gjb["宗地代码"])):
-            self.sms_templet = Document(r"templet\房产面积测算说明书.docx")
+            self.sms_templet = Document(r".\templet\房产面积测算说明书.docx")
             value = list(excel_gjb.loc[i])
-
             #   转换日期数据格式
             value[5] = value[5][:4] + "年" + value[5][5:7] + "月" + value[5][8:10] + "日"
             value[4] = value[4][:4] + "年" + value[4][5:7] + "月" + value[4][8:10] + "日"
 
             self.makevalue(self.sms_templet, 0, 0, "F00010001", value[1])  # 不动产单元号：F00010001
-            self.makevalue(self.sms_templet, 11, 1, "xxx", value[2])  # 委托测绘的房屋名称：xxx
+            self.makevalue(self.sms_templet, 10, 1, "x", value[-6])  # 委托测绘的房屋名称：x
+            self.makevalue(self.sms_templet, 11, 1, "x", value[2])  # 委托测绘的房屋名称：x
             self.makevalue(self.sms_templet, 12, 1, "xxx", value[26])  # 委托测绘的房屋地址：xxx
             self.makevalue(self.sms_templet, 20, 0, "2020年11月23日", value[4])
             self.makevalue(self.sms_templet, 49, 3, "xx", value[2])  # 规划批准项目名称：  xx
@@ -67,17 +67,17 @@ class DocxUtil():
                 self.makevalue(self.sms_templet, 65, 1, "x", value[8])  # 根据委托方提供乡村建设规划许可证及附件，x
             else:
                 self.makevalue(self.sms_templet, 65, 1, "x", "")
-            self.makevalue(self.sms_templet, 106, 2, "xxx", value[2])  # 建筑物名称:xxx
-            self.makevalue(self.sms_templet, 109, 2, "xxx", value[2])  # 建筑物名称: xxx
-            self.makevalue(self.sms_templet, 112, 2, "xxx", value[2])  # 建筑物名称: xxx
+            self.makevalue(self.sms_templet, 106, 2, "x", value[2])  # 建筑物名称:xxx
+            self.makevalue(self.sms_templet, 109, 2, "x", value[2])  # 建筑物名称: xxx
+            self.makevalue(self.sms_templet, 112, 2, "x", value[2])  # 建筑物名称: xxx
             self.makevalue(self.sms_templet, 116, 2, "xxx", value[27])  # 计算者：  xxx
             self.makevalue(self.sms_templet, 117, 1, "xxx", value[4])  # 制表日期：xxx
             self.makevalue(self.sms_templet, 118, 0, "苏航", value[2])  # 苏航(近景)
             self.makevalue(self.sms_templet, 120, 0, "苏航", value[2])  # 苏航(远景)
 
-            self.maketablevalue(self.sms_templet, 0, 0, 0, 1, 1, "2020年11月23日", value[4])  # 检查日期：   2020年11月23日
-            self.maketablevalue(self.sms_templet, 0, 0, 0, 3, 0, "2020年11月25日", value[5])  # 检查日期：   2020年11月25日
-            self.maketablevalue(self.sms_templet, 0, 1, 0, 1, 2, "2020年11月25日", value[5])  # 检查日期：   2020年11月25日
+            self.maketablevalue(self.sms_templet, 0, 0, 0, 1, 2, "x", value[4])  # 检查日期：   2020年11月23日
+            self.maketablevalue(self.sms_templet, 0, 0, 0, 3, 1, "x", value[5])  # 检查日期：   2020年11月25日
+            self.maketablevalue(self.sms_templet, 0, 1, 0, 1, 3, "x", value[5])  # 检查日期：   2020年11月25日
 
             self.maketablevalue(self.sms_templet, 1, 0, 3, 0, 0, "xxx", value[0])  # 宗地号
             self.maketablevalue(self.sms_templet, 1, 0, 6, 0, 0, "xx", value[2])  # 建筑物名称
@@ -86,7 +86,6 @@ class DocxUtil():
             self.maketablevalue(self.sms_templet, 1, 5, 3, 0, 0, "xxx", value[17])  # 总建筑面积
             self.maketablevalue(self.sms_templet, 1, 5, 6, 0, 0, "xxx", value[22])  # 地面以上层数
             self.maketablevalue(self.sms_templet, 1, 6, 3, 0, 0, "xxx", value[17])  # 地面以上面积
-
             i = 18
             fcmj = []
             while str(value[i]) != "nan":
@@ -109,9 +108,10 @@ class DocxUtil():
                 self.addtablevalue(self.sms_templet, 4, 1 + i, 8, 0, "1")  # 第九列
             self.addtablevalue(self.sms_templet, 4, 24, 4, 0, value[17])
             self.addtablevalue(self.sms_templet, 4, 24, 7, 0, value[17])
-            self.setjpg(r"%s\%s%s\近景.jpg" % (save_path, value[0], value[2]),
-                        r"%s\%s%s\远景.jpg" % (save_path, value[0], value[2]))
-
+            jj_path = r"%s\%s%s\近景.jpg" % (save_path, value[0], value[2])
+            yj_path = r"%s\%s%s\远景.jpg" % (save_path, value[0], value[2])
+            self.sms_templet.paragraphs[119].add_run().add_picture(jj_path, width=Cm(14))
+            self.sms_templet.add_picture(yj_path, width=Cm(14))
             self.sms_templet.save(r"%s\%s%s\%s房产面积测算说明书.doc" % (save_path, value[0], value[2], value[0]))
             n += 1
         results = "房产面积测算说明书生成： %s个" % n
@@ -119,7 +119,7 @@ class DocxUtil():
 
     #   不动产实地查看记录表
     @decoratorsFunc.getexceptionreturn
-    def getsdckb(self, excel_gjb:DataFrame, save_path):
+    def getsdckb(self, excel_gjb: DataFrame, save_path):
         zddm = excel_gjb["宗地代码"]
         zl = excel_gjb["坐落"]
         xm = excel_gjb["姓名"]
@@ -140,7 +140,7 @@ class DocxUtil():
 
     #   农村宅基地使用权及房屋所有权测绘技术说明
     @decoratorsFunc.getexceptionreturn
-    def getchjssms(self, excel_gjb:DataFrame, save_path):
+    def getchjssms(self, excel_gjb: DataFrame, save_path):
         zddm = excel_gjb["宗地代码"]
         xm = excel_gjb["姓名"]
         dcrq = excel_gjb["调查日期"]
@@ -172,12 +172,16 @@ class DocxUtil():
 if __name__ == '__main__':
     mydo = DocxUtil()
     string1 = mydo.sdckb_templet.tables[0].cell(4, 1).paragraphs[1].text
-    string2 = mydo.sms_templet.tables[0].cell(0, 1).paragraphs[1].text
+    string2 = mydo.sms_templet.tables[0].cell(1, 0).paragraphs[1].text
+    string6 = mydo.sms_templet.tables[0].cell(1, 0).paragraphs[1].runs[3].text
     string3 = mydo.sms_templet.paragraphs[115].text
-    string4 = mydo.sms_templet.paragraphs[116].text
+    string4 = mydo.sms_templet.paragraphs[12].text
     string5 = mydo.sms_templet.paragraphs[12].runs[1].text
 
     print(string1)
     print(string2)
+    print(string6)
     print(string3)
     print(string4)
+    print(string5)
+

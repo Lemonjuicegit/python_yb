@@ -1,22 +1,24 @@
-# -*- coding: utf-8 -*-
-
-################################################################################
-## Form generated from reading UI file '导出工具2.ui'
-##
-## Created by: Qt User Interface Compiler version 5.15.2
-##
-## WARNING! All changes made in this file will be lost when recompiling UI file!
-################################################################################
 import sys
-
 from PySide2.QtCore import *
-from PySide2.QtGui import QIcon
+from PySide2.QtGui import QIcon, QCursor
 from PySide2.QtWidgets import *
 
+from pk.fileutil import read_json
 
 class Ui_MainWindow(QMainWindow):
     def __init__(self):
         super().__init__()
+        self.collocation = read_json("yb.json")
+        self.icon = self.collocation["icon"]  # 工具图标
+        self.action = self.collocation["action"]
+        self.actiontext = self.collocation["actiontext"]
+        self.treeslotdict = {}  # 与treedict类名称对应的点击事件，键为树节点名称，值为事件函数名称
+        self.slotdicts = {}  # 空间事件字典
+        self.treedict = self.collocation["tree"]
+
+        self.setupUI()
+
+    def setupUI(self):
         width = QDesktopWidget().screenGeometry().width()
         height = QDesktopWidget().screenGeometry().height()
         self.setFixedSize(int(width * (2 / 3)), int(height * (2 / 3)))
@@ -24,12 +26,8 @@ class Ui_MainWindow(QMainWindow):
         self.centralwidget = QWidget(self)
         self.centralwidget.setObjectName(u"centralwidget")
 
-        self.treeslotdict = {"质检":None}  # 与treedict类名称对应的点击事件，键为树节点名称，值为事件函数名称
-        self.slotdicts = {"lineEdit_3": [self.passs], "lineEdit_4": [self.passs]}  # 空间事件字典
-        self.tabeldata = {"header": [], "data": [[]], "column": 0}  # 表数据字典
-
-        self.frame_1 = QFrame(self.centralwidget)
-        self.frame_1.setObjectName(u"verticalLayoutWidget_1")
+        self.frame_1 = QFrame(self)
+        self.frame_1.setObjectName(u"frame_1")
         sizePolicy_1 = QSizePolicy(QSizePolicy.Preferred, QSizePolicy.Preferred)
         sizePolicy_1.setHorizontalStretch(3)
         sizePolicy_1.setVerticalStretch(0)
@@ -49,25 +47,23 @@ class Ui_MainWindow(QMainWindow):
         # 菜单栏
         menubar = self.menuBar()
         menu_1 = menubar.addMenu("文件")
-        menu_1.setObjectName("文件")
+        menu_1.setObjectName("menu_1")
         menu_2 = menubar.addMenu("功能")
-        menu_2.setObjectName("功能")
+        menu_2.setObjectName("menu_2")
+        action_10 = QAction(QIcon(self.collocation["menubar"]["menu_2"]["action_10"][1]),
+                            self.collocation["menubar"]["menu_2"]["action_10"][0], self)
+        menu_2.addAction(action_10)
         menu_3 = menubar.addMenu("帮助")
-        menu_3.setObjectName("帮助")
+        menu_3.setObjectName("menu_3")
 
         # 工具栏
-        self.icon = [r".\image\exf.png", r".\image\hzb.png", r".\image\jzb.png", r".\image\sms.png",
-                     r".\image\file.png", r".\image\jssms.png", r".\image\sdckb.png", r".\image\one.png"]  # 工具图标
-        self.action = ["action_1", "action_2", "action_3", "action_4", "action_5", "action_6", "action_7", "action_8"]
-        self.actiontext = ["exf导出", "汇总表导出", "界址表导出", "测绘面积说明书导出", "资料文件夹生成", "技术说明书导出", "实地查看记录表导出", "一键全导"]
         self.toolbar(self.action, self.icon, self.actiontext)
 
         # tree
-
-        treedict = ["导出资料路径", {"质检": ["exf检查"]}, "查询宗地代码"]
         self.tree = QTreeWidget(self)
         self.tree.setHeaderLabel("功能区")
-        self.settrees(self.tree, treedict)
+        self.settrees(self.tree, self.treedict)
+
         # 尺寸策略
         sizePolicy_2 = QSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
         sizePolicy_2.setHorizontalStretch(1)
@@ -78,8 +74,8 @@ class Ui_MainWindow(QMainWindow):
         self.tree.clicked.connect(self.treeslot)  # 事件
         self.horizontalLayout_1.addWidget(self.tree)
 
-        line_1 = QFrame(self.centralwidget)
-        line_1.setObjectName(u"line")
+        line_1 = QFrame(self)
+        line_1.setObjectName(u"line_1")
         line_1.setFrameShape(QFrame.VLine)
         line_1.setFrameShadow(QFrame.Sunken)
         self.horizontalLayout_1.addWidget(line_1)
@@ -87,10 +83,10 @@ class Ui_MainWindow(QMainWindow):
         self.input_1()
 
         #   消息提醒标签
-        label_3 = QLabel(self.frame_1)
-        label_3.setObjectName(u"label_3")
-        label_3.setText("消息：")
-        self.gridLayout_1.addWidget(label_3, 1, 0, 1, 1)
+        label_8 = QLabel(self.frame_1)
+        label_8.setObjectName(u"label_8")
+        label_8.setText("消息：")
+        self.gridLayout_1.addWidget(label_8, 1, 0, 1, 1)
 
         #   编辑框
         self.plainTextEdit = QPlainTextEdit(self.frame_1)
@@ -147,35 +143,62 @@ class Ui_MainWindow(QMainWindow):
 
         lineEdit_2 = QLineEdit(self.frame_1)
         lineEdit_2.setObjectName(u"lineEdit_2")
+
         self.gridLayout_2.addWidget(lineEdit_2, 1, 1, 1, 1)
         self.gridLayout_1.addLayout(self.gridLayout_2, 0, 0, 1, 1)
 
     def exfutil(self):
         for i in range(self.gridLayout_2.count()):
             self.gridLayout_2.itemAt(i).widget().deleteLater()
+        pushbutton_3 = QPushButton("开始exf检查")
+        pushbutton_3.setObjectName("pushbutton_3")
+        self.gridLayout_2.addWidget(pushbutton_3, 0, 0, 1, 1)
+        qcombobox_1 = QComboBox(self.frame_1)  # 质检结果保存的下拉菜单
+        qcombobox_1.setObjectName("qcombobox_1")
+        collocation = read_json("data.json")
+        for i in collocation:
+            if i == "nan":
+                continue
+            qcombobox_1.addItem(i)
+        self.gridLayout_2.addWidget(qcombobox_1, 4, 0, 1, 1)
+
+        pushbutton_4 = QPushButton("清空记录")
+        pushbutton_4.setObjectName("pushbutton_4")
+        self.gridLayout_2.addWidget(pushbutton_4, 4, 1, 1, 1)
+
         label_3 = QLabel(self.frame_1)
         label_3.setObjectName(u"label_3")
-        label_3.setText("exf：")
-        self.gridLayout_2.addWidget(label_3, 0, 0, 1, 1)
+        label_3.setText("exf目录：")
+
+        self.gridLayout_2.addWidget(label_3, 1, 0, 1, 1)
 
         lineEdit_3 = QLineEdit(self.frame_1)
         lineEdit_3.setObjectName(u"lineEdit_3")
-        self.gridLayout_2.addWidget(lineEdit_3, 0, 1, 1, 1)
+        self.gridLayout_2.addWidget(lineEdit_3, 1, 1, 1, 7)
+
+        label_6 = QLabel(self.frame_1)
+        label_6.setObjectName(u"label_6")
+        label_6.setText("台账：")
+        self.gridLayout_2.addWidget(label_6, 3, 0, 1, 1)
+
+        lineEdit_11 = QLineEdit(self.frame_1)
+        lineEdit_11.setObjectName(u"lineEdit_11")
+        self.gridLayout_2.addWidget(lineEdit_11, 3, 1, 1, 7)
 
         label_4 = QLabel(self.frame_1)
         label_4.setObjectName(u"label_4")
-        label_4.setText("mdb：")
-        self.gridLayout_2.addWidget(label_4, 1, 0, 1, 1)
+        label_4.setText("mdb数据表：")
+        self.gridLayout_2.addWidget(label_4, 2, 0, 1, 1)
 
         lineEdit_4 = QLineEdit(self.frame_1)
         lineEdit_4.setObjectName(u"lineEdit_4")
-        self.gridLayout_2.addWidget(lineEdit_4, 1, 1, 1, 1)
+        self.gridLayout_2.addWidget(lineEdit_4, 2, 1, 1, 7)
+
+        self.tabelwidget_2 = QTableWidget(self.frame_1)
+        self.tabelwidget_2.setObjectName("tabelwidget_2")
+        self.gridLayout_2.addWidget(self.tabelwidget_2, 5, 0, 1, 8)
 
         self.gridLayout_1.addLayout(self.gridLayout_2, 0, 0, 1, 1)
-        self.findChild(QLineEdit, "lineEdit_3").textChanged.connect(self.slotdicts["lineEdit_3"][0])
-        self.findChild(QLineEdit, "lineEdit_3").textChanged.connect(self.slotdicts["lineEdit_3"][1])
-        self.findChild(QLineEdit, "lineEdit_4").textChanged.connect(self.slotdicts["lineEdit_4"][0])
-        self.findChild(QLineEdit, "lineEdit_4").textChanged.connect(self.slotdicts["lineEdit_4"][1])
 
     def input_2(self):
         for i in range(self.gridLayout_2.count()):
@@ -186,9 +209,9 @@ class Ui_MainWindow(QMainWindow):
         label_5 = QLabel(self.frame_1)
         label_5.setObjectName("label_5")
         label_5.setText("查询：")
-        label_6 = QLabel(self.frame_1)
-        label_6.setObjectName("label_6")
-        label_6.setText("添加：")
+        label_7 = QLabel(self.frame_1)
+        label_7.setObjectName("label_7")
+        label_7.setText("添加：")
         lineEdit_5 = QLineEdit(self.frame_1)
         lineEdit_5.setObjectName(u"lineEdit_5")
         lineEdit_6 = QLineEdit(self.frame_1)
@@ -216,7 +239,7 @@ class Ui_MainWindow(QMainWindow):
         self.gridLayout_2.addWidget(label_5, 0, 0, 1, 1)
         self.gridLayout_2.addWidget(lineEdit_5, 0, 1, 1, 5)
         self.gridLayout_2.addWidget(pushbutton_1, 0, 6, 1, 1)
-        self.gridLayout_2.addWidget(label_6, 1, 0, 1, 1)
+        self.gridLayout_2.addWidget(label_7, 1, 0, 1, 1)
         self.gridLayout_2.addWidget(lineEdit_6, 1, 1, 1, 1)
         self.gridLayout_2.addWidget(lineEdit_7, 1, 2, 1, 1)
         self.gridLayout_2.addWidget(lineEdit_8, 1, 3, 1, 1)
@@ -226,41 +249,100 @@ class Ui_MainWindow(QMainWindow):
         self.gridLayout_2.addWidget(self.tabelwidget_1, 2, 0, 1, 7)
         self.gridLayout_1.addLayout(self.gridLayout_2, 0, 0, 1, 1)
 
-        self.findChild(QPushButton, "pushbutton_1").clicked.connect(self.slotdicts["pushbutton_1"][0])
+        self.tabelwidget_1.setContextMenuPolicy(Qt.CustomContextMenu)
 
-    def settabelvalue(self):
-        self.tabelwidget_1.setRowCount(len(self.tabeldata["data"]))
-        self.tabelwidget_1.setColumnCount(self.tabeldata["column"])
-        self.tabelwidget_1.setHorizontalHeaderLabels(self.tabeldata["header"])
+    #   事件生成器
+    def setevent(self, widget, widgetobjectname, signal):
+        """
+        @param widget: 控件类型
+        @param widgetobjectname: 控件对象名字
+        @param signal: 控件的事件信号
+        """
+        if signal == "clicked":
+            for j in widgetobjectname:
+                for i in self.slotdicts[j]:
+                    self.findChild(widget, j).clicked.connect(i)
+        elif signal == "textChanged":
+            for j in widgetobjectname:
+                for i in self.slotdicts[j]:
+                    self.findChild(widget, j).textChanged.connect(i)
+        elif signal == "triggered":
+            for j in widgetobjectname:
+                for i in self.slotdicts[j]:
+                    self.findChild(widget, j).triggered.connect(i)
+        elif signal == "customContextMenuRequested":
+            for j in widgetobjectname:
+                for i in self.slotdicts[j]:
+                    self.findChild(widget, j).customContextMenuRequested.connect(i)
+        elif signal == "currentIndexChanged":
+            for j in widgetobjectname:
+                for i in self.slotdicts[j]:
+                    self.findChild(widget, j).currentIndexChanged.connect(i)
+
+    def foraddction(self, menueventlist: dict):
+        """
+        @param action_name: 名称
+        @param menueventlist: 与名称对应的事件字典
+        """
+        menu = QMenu(self)
+        actionlist = {}
+        for i in menueventlist:
+            action = menu.addAction(i)
+            actionlist[i] = action
+        item = menu.exec_(QCursor.pos())
+        for m in actionlist:
+            if item == actionlist[m]:
+                for v in menueventlist[m]:
+                    v()
+
+    # tabelwidget控件的数据展示
+    def settabelvalue(self, tabelwidget, tabeldata):
+        tabelwidget.setColumnCount(len(tabeldata["header"]))
+        tabelwidget.setHorizontalHeaderLabels(tabeldata["header"])
         a = 0
-        for i in self.tabeldata["data"]:
-            b = 0
-            for n in i:
-                dataitem = QTableWidgetItem(n)
-                self.tabelwidget_1.setItem(a, b, dataitem)
-                b += 1
-            a += 1
-
-    def settabeldata(self, tabeldata):
-        self.tabeldata = tabeldata
+        if isinstance(tabeldata["data"], list):
+            tabelwidget.setRowCount(len(tabeldata["data"]))
+            for i in tabeldata["data"]:
+                b = 0
+                for n in i:
+                    dataitem = QTableWidgetItem(str(n))
+                    tabelwidget.setItem(a, b, dataitem)
+                    b += 1
+                a += 1
+        else:
+            m = []
+            for k in tabeldata["data"].values():
+                m.append(len(k))
+            tabelwidget.setRowCount(max(m))
+            for i in tabeldata["data"].values():
+                b = 0
+                for n in i:
+                    dataitem = QTableWidgetItem(str(n))
+                    tabelwidget.setItem(b, a, dataitem)
+                    b += 1
+                a += 1
 
     def treeslot(self):
         item = self.tree.currentItem()  # 当前选择的树节点
-        if isinstance(self.treeslotdict[item.text(0)],list):
+        try:
             for i in self.treeslotdict[item.text(0)]:
                 i()
-        else:
-            try:
-                self.treeslotdict[item.text(0)]()
-            except KeyError:
-                pass
-            except TypeError:
-                pass
+        except KeyError:
+            pass
+        except TypeError:
+            pass
 
+    # 工具栏生成
     def toolbar(self, action, icon, actiontext, name="tool"):
+        """
+        @param action:功能按钮
+        @param icon:按钮图标
+        @param actiontext:按钮名称
+        @param name:工具条名称
+        """
         tool = self.addToolBar(name)
         for i in range(len(action)):
-            qaction = QAction(QIcon(icon[i]), actiontext[i], self)
+            qaction = QAction(QIcon(icon[i]), actiontext[i], tool)
             qaction.setObjectName(action[i])
             tool.addAction(qaction)
 
@@ -276,8 +358,6 @@ if __name__ == '__main__':
     app = QApplication(sys.argv)
     window = Ui_MainWindow()
     window.setWindowIcon(QIcon(r"..\image\icon.ico"))
-    window.findChild(QAction, "action_1").triggered.connect(a)
-    window.settreeslotdict({"导出资料路径": window.label_1, "exf检查": window.exfutil})
 
     window.show()
     try:

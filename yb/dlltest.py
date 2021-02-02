@@ -1,18 +1,27 @@
-import ctypes
+from ctypes import *
 import os
 import pk.decoratorsFunc as decorators
 from multiprocessing import process
 
-dllpath = {"testdll": r"D:\program_c++\Dllpk\x64\Release"}
+dllpath = {"testdll": r"D:\program_c++\Project1"}
 
-
-@decorators.runtime
+# @decorators.runtime
 def dll(path, dllfilename, funcname):
-    dllpk = ctypes.cdll.LoadLibrary(os.path.join(dllpath[path], dllfilename))
-
+    """
+    @param path:链接库的路径
+    @param dllfilename:链接库的方法名
+    @param funcname:要执行的方法名
+    @return:
+    """
+    dllpk = cdll.LoadLibrary(os.path.join(path, dllfilename))
     # return dllpk.dlltest.add(a,r)
     func = getattr(dllpk, funcname)
-    return func(2, 6)
+    return func
+
+
+def c_dll(path):
+    dll = CDLL(path)
+    return dll
 
 
 @decorators.getexceptionreturn
@@ -23,9 +32,11 @@ def d():
         a += i
     return a
 
-
 if __name__ == '__main__':
-    # a = dll("testdll", "Dllpk.dll", "dlltest")
-    g=d("sasf")
-    print(g)
-    # print("--------------")
+    # a = dll(r"D:\program_c++\Project1", "tast.dll", "__cname")
+    # g=a()
+    # print(hex(g))
+
+    dll = c_dll(r"D:\program_c++\Project1\lic.dll")
+    a = dll.getlic()
+    print(a)

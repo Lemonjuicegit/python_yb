@@ -7,5 +7,34 @@
     "database": "test",
     "charset": "utf8",
     "drive": "mysql"
-  }
+  },
+  "icon":[".\\image\\exf.png",
+        ".\\image\\hzb.png",
+        ".\\image\\jzb.png",
+        ".\\image\\sms.png",
+        ".\\image\\file.png",
+        ".\\image\\jssms.png",
+        ".\\image\\sdckb.png",
+        ".\\image\\one.png"],
+  "action":["action_1", "action_2", "action_3", "action_4", "action_5", "action_6", "action_7", "action_8"],
+  "actiontext":["exf导出", "汇总表导出", "界址表导出", "测绘面积说明书导出", "资料文件夹生成", "技术说明书导出", "实地查看记录表导出", "一键全导"],
+  "menubar": {
+        "menu_1": {
+
+        },
+        "menu_2": {
+          "action_10": ["数据库连接",".\\image\\databaseconn.png"]
+        },
+        "menu_3": {
+
+        }
+  },
+  "templetpath": [".\\templet\\房产面积测算说明书.docx",
+                  ".\\templet\\农村宅基地使用权及房屋所有权测绘技术说明.docx",
+                  ".\\templet\\不动产实地查看记录表.docx"
+  ],
+  "tree": [
+    "导出资料",
+    {"质检": ["exf和台账检查"]},
+    "查询宗地代码"]
 }

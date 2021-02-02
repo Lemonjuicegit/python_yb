@@ -4,7 +4,6 @@ import os
 
 filepath=input("输入源文件路径:")
 a=os.path.split(filepath)
-print(a)
 for i in os.listdir(filepath):
     name=os.path.splitext(i)
     if name[1]==".py":
