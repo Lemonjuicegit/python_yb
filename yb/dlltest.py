@@ -1,11 +1,8 @@
 from ctypes import *
 import os
 import pk.decoratorsFunc as decorators
-from multiprocessing import process
 
-dllpath = {"testdll": r"D:\program_c++\Project1"}
-
-# @decorators.runtime
+@decorators.runtime
 def dll(path, dllfilename, funcname):
     """
     @param path:链接库的路径

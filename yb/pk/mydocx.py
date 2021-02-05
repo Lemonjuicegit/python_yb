@@ -3,9 +3,7 @@ from docx import Document
 from docx.shared import Cm
 from pandas import DataFrame
 
-
 class DocxUtil():
-
     def __init__(self):
         self.sms_templet = Document(r".\templet\房产面积测算说明书.docx")
         self.chjssms_templet = Document(r".\templet\农村宅基地使用权及房屋所有权测绘技术说明.docx")

@@ -6,8 +6,7 @@ import json
 
 class Slot():
     def __init__(self):
-        dll = CDLL(r"bin\lic.dll").getlic()
-        if dll==0:
+        if CDLL(r"bin\lic.dll").getlic() == 0:
             exit()
         self.cmd = pycmd.Cmd()
         self.doc = mydocx.DocxUtil()
@@ -17,6 +16,9 @@ class Slot():
         self.connenct.jsonconnect()
         self.collocation = fileutil.read_json("data.json")
         self.data = []
+
+    def getcollocation(self):
+        self.collocation = fileutil.read_json("data.json")
 
     #   获取挂接表并检查身份证号码
     def setgjb_path(self, txet):
@@ -88,6 +90,7 @@ class Slot():
         smsthread.join()
         chjssmsthread.join()
         sdckbthread.join()
+        # 获取结果
         exfthreadresult = exfthread.get_result()
         hzbthreadresult = hzbthread.get_result()
         jzbthreadresult = jzbthread.get_result()
@@ -134,9 +137,9 @@ class Slot():
     def delete(self, id):
         self.connenct.one_dml(r"""DELETE FROM zddm_list WHERE id = %s;""" % (id))
 
-    def emptydata(self,data):
-        with open(r"data.json","w") as flie:
-            json.dump(data,flie)
+    def emptydata(self, data):
+        with open(r"data.json", "w") as flie:
+            json.dump(data, flie)
 
 
 #   自定义线程
@@ -172,6 +175,10 @@ class mass_detection_slot:
         else:
             self.results = "请输入正确路径！"
 
+    def getTZ_path(self, text):
+        self.tz_path = text
+        self.results = r"(*>﹏<*)"
+
     def exf(self):
         file_path = fileutil.getfilepath(self.paper_path, r".exf")
         exfdata = fileutil.read_exf(file_path)
@@ -187,17 +194,25 @@ class mass_detection_slot:
             comparison_d["宗地代码"].append(getattr(i, "宗地代码"))
             comparison_d["权利人姓名"].append(getattr(i, "权利人姓名"))
             comparison_d["宗地代码个数"].append(list(data["ZDDM"]).count(getattr(i, "宗地代码")))
-        n=1
+        n = 1
         af = "第1次检查"
         temp = {}
         while (af in list(fileutil.read_json(r".\data.json").keys())):
-            n+=1
+            n += 1
             af = "第%s次检查" % n
         temp[af] = comparison_d
         fileutil.write_json(r".\data.json", temp)
 
         self.results = comparison_d
         del comparison_d
+
+    def tz_exf_gis(self):
+        comparison_d={"检查项":[],"宗地代码": [], "权利人姓名": [],"说明":[]}
+        file_path = fileutil.getfilepath(self.paper_path, r".exf")
+        exfdata = fileutil.read_exf(file_path)
+        data = read_excel(self.data_path)
+        tz=read_excel(self.tz_path)
+
 
 
 if __name__ == '__main__':

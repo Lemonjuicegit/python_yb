@@ -11,6 +11,10 @@ def read_json(json_path):
     return jsonvalue
 
 def write_json(json_path,jsonstr):
+    """
+    @param json_path: josn文件路径
+    @param jsonstr:
+    """
     with open(json_path,encoding="utf-8") as file1:
         jsonvalue = json.load(file1)
         jsonvalue.update(jsonstr)

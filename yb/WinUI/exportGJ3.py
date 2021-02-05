@@ -5,6 +5,7 @@ from PySide2.QtWidgets import *
 
 from pk.fileutil import read_json
 
+
 class Ui_MainWindow(QMainWindow):
     def __init__(self):
         super().__init__()
@@ -152,50 +153,50 @@ class Ui_MainWindow(QMainWindow):
             self.gridLayout_2.itemAt(i).widget().deleteLater()
         pushbutton_3 = QPushButton("开始exf检查")
         pushbutton_3.setObjectName("pushbutton_3")
-        self.gridLayout_2.addWidget(pushbutton_3, 0, 0, 1, 1)
+
         qcombobox_1 = QComboBox(self.frame_1)  # 质检结果保存的下拉菜单
         qcombobox_1.setObjectName("qcombobox_1")
-        collocation = read_json("data.json")
-        for i in collocation:
-            if i == "nan":
-                continue
-            qcombobox_1.addItem(i)
-        self.gridLayout_2.addWidget(qcombobox_1, 4, 0, 1, 1)
 
         pushbutton_4 = QPushButton("清空记录")
         pushbutton_4.setObjectName("pushbutton_4")
-        self.gridLayout_2.addWidget(pushbutton_4, 4, 1, 1, 1)
+
+        pushbutton_5 = QPushButton("一键检查")
+        pushbutton_5.setObjectName("pushbutton_5")
 
         label_3 = QLabel(self.frame_1)
         label_3.setObjectName(u"label_3")
         label_3.setText("exf目录：")
 
-        self.gridLayout_2.addWidget(label_3, 1, 0, 1, 1)
-
         lineEdit_3 = QLineEdit(self.frame_1)
         lineEdit_3.setObjectName(u"lineEdit_3")
-        self.gridLayout_2.addWidget(lineEdit_3, 1, 1, 1, 7)
 
         label_6 = QLabel(self.frame_1)
         label_6.setObjectName(u"label_6")
         label_6.setText("台账：")
-        self.gridLayout_2.addWidget(label_6, 3, 0, 1, 1)
 
         lineEdit_11 = QLineEdit(self.frame_1)
         lineEdit_11.setObjectName(u"lineEdit_11")
-        self.gridLayout_2.addWidget(lineEdit_11, 3, 1, 1, 7)
 
         label_4 = QLabel(self.frame_1)
         label_4.setObjectName(u"label_4")
         label_4.setText("mdb数据表：")
-        self.gridLayout_2.addWidget(label_4, 2, 0, 1, 1)
 
         lineEdit_4 = QLineEdit(self.frame_1)
         lineEdit_4.setObjectName(u"lineEdit_4")
-        self.gridLayout_2.addWidget(lineEdit_4, 2, 1, 1, 7)
 
         self.tabelwidget_2 = QTableWidget(self.frame_1)
         self.tabelwidget_2.setObjectName("tabelwidget_2")
+
+        self.gridLayout_2.addWidget(pushbutton_3, 0, 0, 1, 1)
+        self.gridLayout_2.addWidget(pushbutton_5, 0, 1, 1, 1)
+        self.gridLayout_2.addWidget(qcombobox_1, 4, 0, 1, 1)
+        self.gridLayout_2.addWidget(pushbutton_4, 4, 1, 1, 1)
+        self.gridLayout_2.addWidget(label_3, 1, 0, 1, 1)
+        self.gridLayout_2.addWidget(lineEdit_3, 1, 1, 1, 7)
+        self.gridLayout_2.addWidget(label_6, 3, 0, 1, 1)
+        self.gridLayout_2.addWidget(lineEdit_11, 3, 1, 1, 7)
+        self.gridLayout_2.addWidget(label_4, 2, 0, 1, 1)
+        self.gridLayout_2.addWidget(lineEdit_4, 2, 1, 1, 7)
         self.gridLayout_2.addWidget(self.tabelwidget_2, 5, 0, 1, 8)
 
         self.gridLayout_1.addLayout(self.gridLayout_2, 0, 0, 1, 1)
@@ -258,23 +259,23 @@ class Ui_MainWindow(QMainWindow):
         @param widgetobjectname: 控件对象名字
         @param signal: 控件的事件信号
         """
-        if signal == "clicked":
+        if signal == "clicked":  # pushbutton鼠标左键点击事件
             for j in widgetobjectname:
                 for i in self.slotdicts[j]:
                     self.findChild(widget, j).clicked.connect(i)
-        elif signal == "textChanged":
+        elif signal == "textChanged":  # lineEdit输入文本变化事件
             for j in widgetobjectname:
                 for i in self.slotdicts[j]:
                     self.findChild(widget, j).textChanged.connect(i)
-        elif signal == "triggered":
+        elif signal == "triggered":  # action单击事件
             for j in widgetobjectname:
                 for i in self.slotdicts[j]:
                     self.findChild(widget, j).triggered.connect(i)
-        elif signal == "customContextMenuRequested":
+        elif signal == "customContextMenuRequested":  # tabelwidget鼠标右击事件
             for j in widgetobjectname:
                 for i in self.slotdicts[j]:
                     self.findChild(widget, j).customContextMenuRequested.connect(i)
-        elif signal == "currentIndexChanged":
+        elif signal == "currentIndexChanged":  # QComboBox控件选中事件
             for j in widgetobjectname:
                 for i in self.slotdicts[j]:
                     self.findChild(widget, j).currentIndexChanged.connect(i)
@@ -349,16 +350,13 @@ class Ui_MainWindow(QMainWindow):
     def passs(self):
         pass
 
-
 if __name__ == '__main__':
     def a():
         print("dianjile")
 
-
     app = QApplication(sys.argv)
     window = Ui_MainWindow()
     window.setWindowIcon(QIcon(r"..\image\icon.ico"))
-
     window.show()
     try:
         sys.exit(app.exec_())

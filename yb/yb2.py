@@ -13,16 +13,19 @@ class run:
         self.tabeldata = {}
         self.widget = fileutil.read_json("yb.json")
 
+    # 结果消息源
     def text(self):
         if self.slot.results != "":
             self.window.plainTextEdit.setPlainText(self.slot.results)
         if self.slot2.results != "":
             self.window.plainTextEdit.setPlainText(self.slot2.results)
 
+    # 表控件数据源
     def data(self, header, data):
         self.tabeldata["data"] = data
         self.tabeldata["header"] = header
 
+    # 删除一行表数据
     def a(self):
         temp = None
         remove = []
@@ -36,6 +39,7 @@ class run:
             self.window.tabelwidget_1.removeRow(r)
         self.slot.results = "删除：%s条数据" % len(remove)
 
+    # 生成检查记录下拉选项卡
     def qcombobox_item(self):
         for i in self.slot.collocation:
             if i == "nan":
@@ -62,26 +66,31 @@ class run:
         self.window.setevent(QLineEdit, ["lineEdit_2", "lineEdit_1"], "textChanged")
 
     def exf(self):
+        self.window.exfutil()
+        self.qcombobox_item()
         header = ["宗地代码", "权利人姓名", "宗地面积对比", "宗地代码个数"]
         self.window.slotdicts["lineEdit_3"] = [self.slot2.getpaper_path, self.text]
         self.window.slotdicts["lineEdit_4"] = [self.slot2.getdata_path, self.text]
+        self.window.slotdicts["qcombobox_1"] = [self.slot.getcollocation,
+                                                lambda: self.data(header, self.slot.collocation[
+                                                    self.window.findChild(QComboBox, "qcombobox_1").currentText()]),
+                                                lambda: self.window.settabelvalue(self.window.tabelwidget_2,
+                                                                                  self.tabeldata)]
         self.window.slotdicts["pushbutton_3"] = [self.slot2.exf, lambda: self.data(header, self.slot2.results),
                                                  lambda: self.window.settabelvalue(self.window.tabelwidget_2,
-                                                                                   self.tabeldata), self.qcombobox_item]
-        self.window.slotdicts["pushbutton_4"] = [self.slot.emptydata({}), self.qcombobox_item]
-
-        self.window.slotdicts["qcombobox_1"] = [
-            lambda: self.data(header, self.collocation[self.window.findChild(QComboBox, "qcombobox_1").currentText()]),
-            lambda: self.window.settabelvalue(self.window.tabelwidget_2,
-                                              self.tabeldata)]
+                                                                                   self.tabeldata),
+                                                 self.slot.getcollocation,
+                                                 self.qcombobox_item]
+        self.window.slotdicts["pushbutton_4"] = [lambda: self.slot.emptydata({}), self.slot.getcollocation,
+                                                 self.qcombobox_item]
 
         self.window.setevent(QComboBox, ["qcombobox_1"], "currentIndexChanged")
         self.window.setevent(QLineEdit, ["lineEdit_3", "lineEdit_4"], "textChanged")
-        self.window.setevent(QPushButton, ["pushbutton_3"], "clicked")
+        self.window.setevent(QPushButton, ["pushbutton_3", "pushbutton_4"], "clicked")
 
     def event_init(self):
         self.window.treeslotdict["导出资料"] = [self.window.input_1, self.input1]
-        self.window.treeslotdict["exf和台账检查"] = [self.window.exfutil, self.exf]
+        self.window.treeslotdict["exf和台账检查"] = [self.exf]
         self.window.treeslotdict["查询宗地代码"] = [self.window.input_2, self.select_event]
 
         self.window.slotdicts["lineEdit_1"] = [self.slot.setgjb_path, self.text]
