@@ -8,6 +8,9 @@
     "charset": "utf8",
     "drive": "mysql"
   },
+  "comparison_tz_exf_gis": {
+    "检查项":[],"宗地代码": [], "权利人姓名": [],"说明":[]
+  },
   "icon":[".\\image\\exf.png",
         ".\\image\\hzb.png",
         ".\\image\\jzb.png",

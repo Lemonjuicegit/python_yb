@@ -3,7 +3,6 @@ import sys
 from WinUI import exportGJ3
 from PySide2.QtWidgets import QApplication, QAction, QLineEdit, QPushButton, QComboBox
 
-
 class run:
     def __init__(self):
         self.slot = customslot.Slot()

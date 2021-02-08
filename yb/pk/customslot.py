@@ -1,8 +1,9 @@
+import json
 from pk import mydocx, pycmd, fileutil, sqlutil
 from threading import Thread
 from pandas import read_excel
 from ctypes import CDLL
-import json
+
 
 class Slot():
     def __init__(self):
@@ -207,12 +208,11 @@ class mass_detection_slot:
         del comparison_d
 
     def tz_exf_gis(self):
-        comparison_d={"检查项":[],"宗地代码": [], "权利人姓名": [],"说明":[]}
+        comparison_tz_exf_gis = fileutil.read_json("data.json")["comparison_tz_exf_gis"]
         file_path = fileutil.getfilepath(self.paper_path, r".exf")
         exfdata = fileutil.read_exf(file_path)
         data = read_excel(self.data_path)
-        tz=read_excel(self.tz_path)
-
+        tz = read_excel(self.tz_path)
 
 
 if __name__ == '__main__':
