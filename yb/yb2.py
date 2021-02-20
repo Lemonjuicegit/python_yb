@@ -3,6 +3,7 @@ import sys
 from WinUI import exportGJ3
 from PySide2.QtWidgets import QApplication, QAction, QLineEdit, QPushButton, QComboBox
 
+
 class run:
     def __init__(self):
         self.slot = customslot.Slot()
@@ -25,7 +26,7 @@ class run:
         self.tabeldata["header"] = header
 
     # 删除一行表数据
-    def a(self):
+    def d(self):
         temp = None
         remove = []
         for i in self.window.tabelwidget_1.selectionModel().selection().indexes():
@@ -59,33 +60,39 @@ class run:
             lambda: self.window.settabelvalue(self.window.tabelwidget_1, self.tabeldata), self.text]
         self.window.setevent(QPushButton, ["pushbutton_1", "pushbutton_2"], "clicked")
         self.window.tabelwidget_1.customContextMenuRequested.connect(
-            lambda: self.window.foraddction(menueventlist={"删除": [self.a, self.text]}))
+            lambda: self.window.foraddction(menueventlist={"删除": [self.d, self.text]}))
 
     def input1(self):
         self.window.setevent(QLineEdit, ["lineEdit_2", "lineEdit_1"], "textChanged")
 
     def exf(self):
-        self.window.exfutil()
+        self.window.qualitychecking()
         self.qcombobox_item()
-        header = ["宗地代码", "权利人姓名", "宗地面积对比", "宗地代码个数"]
+        header = ["宗地代码", "权利人姓名", "宗地面积对比", "宗地代码个数", ]
         self.window.slotdicts["lineEdit_3"] = [self.slot2.getpaper_path, self.text]
         self.window.slotdicts["lineEdit_4"] = [self.slot2.getdata_path, self.text]
+        self.window.slotdicts["lineEdit_11"] = [self.slot2.getTZ_path, self.text]
         self.window.slotdicts["qcombobox_1"] = [self.slot.getcollocation,
-                                                lambda: self.data(header, self.slot.collocation[
-                                                    self.window.findChild(QComboBox, "qcombobox_1").currentText()]),
+                                                lambda: self.data(self.slot.collocation[
+                                                                      self.window.findChild(QComboBox,
+                                                                                            "qcombobox_1").currentText()].keys(),
+                                                                  self.slot.collocation[
+                                                                      self.window.findChild(QComboBox,
+                                                                                            "qcombobox_1").currentText()]),
                                                 lambda: self.window.settabelvalue(self.window.tabelwidget_2,
                                                                                   self.tabeldata)]
-        self.window.slotdicts["pushbutton_3"] = [self.slot2.exf, lambda: self.data(header, self.slot2.results),
+        self.window.slotdicts["pushbutton_3"] = [self.slot2.exf,
+                                                 lambda: self.data(self.slot2.results.keys(), self.slot2.results),
                                                  lambda: self.window.settabelvalue(self.window.tabelwidget_2,
                                                                                    self.tabeldata),
                                                  self.slot.getcollocation,
-                                                 self.qcombobox_item]
+                                                 self.qcombobox_item]  # exf检查
         self.window.slotdicts["pushbutton_4"] = [lambda: self.slot.emptydata({}), self.slot.getcollocation,
-                                                 self.qcombobox_item]
-
+                                                 self.qcombobox_item]  # 清空记录
+        self.window.slotdicts["pushbutton_6"] = [self.slot2.TZqualitychecking]
         self.window.setevent(QComboBox, ["qcombobox_1"], "currentIndexChanged")
-        self.window.setevent(QLineEdit, ["lineEdit_3", "lineEdit_4"], "textChanged")
-        self.window.setevent(QPushButton, ["pushbutton_3", "pushbutton_4"], "clicked")
+        self.window.setevent(QLineEdit, ["lineEdit_3", "lineEdit_4", "lineEdit_11"], "textChanged")
+        self.window.setevent(QPushButton, ["pushbutton_3", "pushbutton_4", "pushbutton_6"], "clicked")
 
     def event_init(self):
         self.window.treeslotdict["导出资料"] = [self.window.input_1, self.input1]

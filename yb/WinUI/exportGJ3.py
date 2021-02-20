@@ -148,7 +148,7 @@ class Ui_MainWindow(QMainWindow):
         self.gridLayout_2.addWidget(lineEdit_2, 1, 1, 1, 1)
         self.gridLayout_1.addLayout(self.gridLayout_2, 0, 0, 1, 1)
 
-    def exfutil(self):
+    def qualitychecking(self):
         for i in range(self.gridLayout_2.count()):
             self.gridLayout_2.itemAt(i).widget().deleteLater()
         pushbutton_3 = QPushButton("开始exf检查")
@@ -162,6 +162,9 @@ class Ui_MainWindow(QMainWindow):
 
         pushbutton_5 = QPushButton("一键检查")
         pushbutton_5.setObjectName("pushbutton_5")
+
+        pushbutton_6 = QPushButton("台账检查")
+        pushbutton_6.setObjectName("pushbutton_6")
 
         label_3 = QLabel(self.frame_1)
         label_3.setObjectName(u"label_3")
@@ -188,9 +191,10 @@ class Ui_MainWindow(QMainWindow):
         self.tabelwidget_2.setObjectName("tabelwidget_2")
 
         self.gridLayout_2.addWidget(pushbutton_3, 0, 0, 1, 1)
-        self.gridLayout_2.addWidget(pushbutton_5, 0, 1, 1, 1)
+        self.gridLayout_2.addWidget(pushbutton_5, 0, 2, 1, 1)
         self.gridLayout_2.addWidget(qcombobox_1, 4, 0, 1, 1)
         self.gridLayout_2.addWidget(pushbutton_4, 4, 1, 1, 1)
+        self.gridLayout_2.addWidget(pushbutton_6, 0, 1, 1, 1)
         self.gridLayout_2.addWidget(label_3, 1, 0, 1, 1)
         self.gridLayout_2.addWidget(lineEdit_3, 1, 1, 1, 7)
         self.gridLayout_2.addWidget(label_6, 3, 0, 1, 1)

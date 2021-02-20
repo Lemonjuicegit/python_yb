@@ -7,8 +7,8 @@ from ctypes import CDLL
 
 class Slot():
     def __init__(self):
-        if CDLL(r"bin\lic.dll").getlic() == 0:
-            exit()
+        # if CDLL(r"bin\lic.dll").getlic() == 0:
+        #     exit()
         self.cmd = pycmd.Cmd()
         self.doc = mydocx.DocxUtil()
         self.results = ""
@@ -177,35 +177,43 @@ class mass_detection_slot:
             self.results = "请输入正确路径！"
 
     def getTZ_path(self, text):
-        self.tz_path = text
+        self.tzdata = read_excel(text)
         self.results = r"(*>﹏<*)"
 
     def exf(self):
         file_path = fileutil.getfilepath(self.paper_path, r".exf")
         exfdata = fileutil.read_exf(file_path)
-        comparison_d = {"宗地代码": [], "权利人姓名": [], "宗地面积对比": [], "宗地代码个数": []}
+        comparison_d = {"宗地代码": [], "权利人姓名": [], "宗地面积对比": [], "宗地代码个数": [], "地籍号一致性": []}
         data = read_excel(self.data_path)
         for i in exfdata.itertuples():
             try:
+                djh = (getattr(i, "地籍号")[8:12] == getattr(i, "宗地代码")[15:])
                 zdmj_comparison = round(float(data[data["ZDDM"].isin([getattr(i, "宗地代码")])]["SHAPE_Area"]), 2) == float(
                     getattr(i, "宗地面积"))
                 comparison_d["宗地面积对比"].append(zdmj_comparison)
+                comparison_d["地籍号一致性"].append(djh)
             except Exception as e:
                 comparison_d["宗地面积对比"].append(str(e))
             comparison_d["宗地代码"].append(getattr(i, "宗地代码"))
             comparison_d["权利人姓名"].append(getattr(i, "权利人姓名"))
             comparison_d["宗地代码个数"].append(list(data["ZDDM"]).count(getattr(i, "宗地代码")))
         n = 1
-        af = "第1次检查"
+        f = "第1次检查"
         temp = {}
-        while (af in list(fileutil.read_json(r".\data.json").keys())):
+        while (f in list(fileutil.read_json(r".\data.json").keys())):
             n += 1
-            af = "第%s次检查" % n
-        temp[af] = comparison_d
+            f = "第%s次检查" % n
+        temp[f] = comparison_d
         fileutil.write_json(r".\data.json", temp)
 
         self.results = comparison_d
         del comparison_d
+
+    def TZqualitychecking(self):
+        data=read_excel(r"D:\pythonProject\yb\测试数据\有效台账.xlsx")
+        self.tzdata=read_excel(r"D:\pythonProject\yb\测试数据\有效台账.xlsx")
+        for i in self.tzdata:
+            self.tzdata[self.tzdata["宗地代码"].isin(getattr(i, "宗地代码"))["宗地代码"]]
 
     def tz_exf_gis(self):
         comparison_tz_exf_gis = fileutil.read_json("data.json")["comparison_tz_exf_gis"]
@@ -216,5 +224,5 @@ class mass_detection_slot:
 
 
 if __name__ == '__main__':
-    so = Slot()
-    so.emptydata({})
+    so = mass_detection_slot()
+    so.TZqualitychecking()

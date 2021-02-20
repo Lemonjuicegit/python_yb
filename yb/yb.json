@@ -1,6 +1,6 @@
 {
   "databaesconnect": {
-    "serverip": "192.168.0.3",
+    "serverip": "192.168.0.2",
     "user": "root",
     "password":"123456",
     "port": 3306,
