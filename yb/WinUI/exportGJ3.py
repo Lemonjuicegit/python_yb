@@ -47,15 +47,16 @@ class Ui_MainWindow(QMainWindow):
 
         # 菜单栏
         menubar = self.menuBar()
-        menu_1 = menubar.addMenu("文件")
-        menu_1.setObjectName("menu_1")
-        menu_2 = menubar.addMenu("功能")
-        menu_2.setObjectName("menu_2")
-        action_10 = QAction(QIcon(self.collocation["menubar"]["menu_2"]["action_10"][1]),
-                            self.collocation["menubar"]["menu_2"]["action_10"][0], self)
-        menu_2.addAction(action_10)
-        menu_3 = menubar.addMenu("帮助")
-        menu_3.setObjectName("menu_3")
+        menujsonObjectName = 0
+        actionjsonObjectName = 0
+        for menubarjson in self.collocation["menubar"].keys():
+            menu = menubar.addMenu(menubarjson)
+            menu.setObjectName("menu_" + str(menujsonObjectName))
+            for actionjson in self.collocation["menubar"][menubarjson].keys():
+                if self.collocation["menubar"][menubarjson][actionjson] != {}:
+                    action = QAction(QIcon(self.collocation["menubar"][menubarjson][actionjson]), actionjson, self)
+                    action.setObjectName("menu_%saction_%s" % (actionjsonObjectName, actionjsonObjectName))
+                    menu.addAction(action)
 
         # 工具栏
         self.toolbar(self.action, self.icon, self.actiontext)
@@ -148,6 +149,7 @@ class Ui_MainWindow(QMainWindow):
         self.gridLayout_2.addWidget(lineEdit_2, 1, 1, 1, 1)
         self.gridLayout_1.addLayout(self.gridLayout_2, 0, 0, 1, 1)
 
+    # 质量检查
     def qualitychecking(self):
         for i in range(self.gridLayout_2.count()):
             self.gridLayout_2.itemAt(i).widget().deleteLater()
@@ -256,6 +258,25 @@ class Ui_MainWindow(QMainWindow):
 
         self.tabelwidget_1.setContextMenuPolicy(Qt.CustomContextMenu)
 
+    def ratio_area(self):
+        for i in range(self.gridLayout_2.count()):
+            self.gridLayout_2.itemAt(i).widget().deleteLater()
+        label_9 = QLabel(self.frame_1)
+        label_9.setObjectName("label_9")
+        label_9.setText("共用面积列表：")
+        lineEdit_12 = QLineEdit(self.frame_1)
+        lineEdit_12.setPlaceholderText("面积1 面积2 面积3 。。。")
+        lineEdit_12.setObjectName("lineEdit_12")
+
+        pushbutton_7 = QPushButton(self.frame_1)
+        pushbutton_7.setObjectName("pushbutton_7")
+        pushbutton_7.setText("计算")
+        self.gridLayout_2.addWidget(label_9, 0, 0, 1, 1)
+        self.gridLayout_2.addWidget(lineEdit_12, 0, 1, 1, 1)
+        self.gridLayout_2.addWidget(pushbutton_7, 0, 2, 1, 1)
+        self.gridLayout_1.addLayout(self.gridLayout_2, 0, 0, 1, 1)
+
+
     #   事件生成器
     def setevent(self, widget, widgetobjectname, signal):
         """
@@ -354,9 +375,11 @@ class Ui_MainWindow(QMainWindow):
     def passs(self):
         pass
 
+
 if __name__ == '__main__':
     def a():
         print("dianjile")
+
 
     app = QApplication(sys.argv)
     window = Ui_MainWindow()

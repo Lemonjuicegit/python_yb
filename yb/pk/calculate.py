@@ -17,9 +17,13 @@ def share_area(share_area, area_list):
         for n in ratio:
             tmpe.append(round(i * n,2))
         ratio_area.append(tmpe)
+    ratio_area=[str(i) for i in ratio_area]
+
+    ratio_area="\n".join(ratio_area)
     return ratio_area
 
 if __name__ == '__main__':
-    a=[82.88,55.12,82.66]
-    b=share_area([12.57,25.14],a)
+    a="82.88 55.12 82.66"
+    b=a.split(" ")
+    b=[float(i) for i in b]
     print(b)

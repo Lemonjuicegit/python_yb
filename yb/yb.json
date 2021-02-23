@@ -22,14 +22,15 @@
   "action":["action_1", "action_2", "action_3", "action_4", "action_5", "action_6", "action_7", "action_8"],
   "actiontext":["exf导出", "汇总表导出", "界址表导出", "测绘面积说明书导出", "资料文件夹生成", "技术说明书导出", "实地查看记录表导出", "一键全导"],
   "menubar": {
-        "menu_1": {
-
+        "文件": {
         },
-        "menu_2": {
-          "action_10": ["数据库连接",".\\image\\databaseconn.png"]
+        "功能": {
+            "数据库连接":
+            ".\\image\\databaseconn.png",
+            "段落计数":
+            ".\\image\\dljs.png"
         },
-        "menu_3": {
-
+        "帮助": {
         }
   },
   "templetpath": [".\\templet\\房产面积测算说明书.docx",
@@ -39,5 +40,6 @@
   "tree": [
     "导出资料",
     {"质检": ["exf和台账检查"]},
-    "查询宗地代码"]
+    "查询宗地代码",
+    "分摊面积计算"]
 }

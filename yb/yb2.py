@@ -1,4 +1,4 @@
-from pk import customslot, fileutil
+from pk import customslot, fileutil, calculate
 import sys
 from WinUI import exportGJ3
 from PySide2.QtWidgets import QApplication, QAction, QLineEdit, QPushButton, QComboBox
@@ -94,10 +94,26 @@ class run:
         self.window.setevent(QLineEdit, ["lineEdit_3", "lineEdit_4", "lineEdit_11"], "textChanged")
         self.window.setevent(QPushButton, ["pushbutton_3", "pushbutton_4", "pushbutton_6"], "clicked")
 
+    def ratio_areaslot(self):
+        self.window.slotdicts["pushbutton_7"] = [self.ratio_area, self.text]
+        self.window.setevent(QPushButton, ["pushbutton_7"], "clicked")
+
+    def ratio_area(self):
+        text = self.window.findChild(QLineEdit, "lineEdit_12").text()
+        share_area = text.split(",")[0]
+        share_area=share_area.split(" ")
+        share_area = [float(i) for i in share_area]
+        area_list = text.split(",")[1]
+        area_list = area_list.split(" ")
+        area_list = [float(i) for i in area_list]
+        ratio_area = calculate.share_area(share_area, area_list)
+        self.slot.results = str(ratio_area)
+
     def event_init(self):
         self.window.treeslotdict["导出资料"] = [self.window.input_1, self.input1]
         self.window.treeslotdict["exf和台账检查"] = [self.exf]
         self.window.treeslotdict["查询宗地代码"] = [self.window.input_2, self.select_event]
+        self.window.treeslotdict["分摊面积计算"] = [self.window.ratio_area, self.ratio_areaslot]
 
         self.window.slotdicts["lineEdit_1"] = [self.slot.setgjb_path, self.text]
         self.window.slotdicts["lineEdit_2"] = [self.slot.setsavepath, self.text]
