@@ -1,13 +1,17 @@
 ﻿#   这是一个批量生成.pyc的class
 import py_compile
 import os
+def compile(path):
 
-filepath=input("输入源文件路径:")
-a=os.path.split(filepath)
-for i in os.listdir(filepath):
-    name=os.path.splitext(i)
-    if name[1]==".py":
-        print(filepath+name[0]+".pyc")
-        py_compile.compile(os.path.join(filepath,i),filepath+"\\"+os.path.split(filepath)[1]+"\\"+name[0]+".pyc")
+    a=os.path.split(path)
+    for i in os.listdir(path):
+        name=os.path.splitext(i)
+        if name[1]==".py":
+            print(path+"\\"+os.path.split(path)[1]+"\\"+name[0]+".pyc")
+            py_compile.compile(os.path.join(path,i),path+"\\"+os.path.split(path)[1]+"\\"+name[0]+".pyc")
 
+if __name__ == '__main__':
+    compile(r"D:\pythonProject\yb\pk")
+    compile(r"D:\pythonProject\yb\WinUI")
+    compile(r"D:\pythonProject\yb")
 

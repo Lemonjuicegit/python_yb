@@ -265,7 +265,7 @@ class Ui_MainWindow(QMainWindow):
         label_9.setObjectName("label_9")
         label_9.setText("共用面积列表：")
         lineEdit_12 = QLineEdit(self.frame_1)
-        lineEdit_12.setPlaceholderText("面积1 面积2 面积3 。。。")
+        lineEdit_12.setPlaceholderText("共用：面积1 面积2 面积3 。。。，独用：面积1 面积2 面积3 。。。")
         lineEdit_12.setObjectName("lineEdit_12")
 
         pushbutton_7 = QPushButton(self.frame_1)

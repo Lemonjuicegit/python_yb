@@ -188,7 +188,7 @@ class mass_detection_slot:
         for i in exfdata.itertuples():
             try:
                 djh = (getattr(i, "地籍号")[8:12] == getattr(i, "宗地代码")[15:])
-                zdmj_comparison = round(float(data[data["ZDDM"].isin([getattr(i, "宗地代码")])]["SHAPE_Area"]), 2) == float(
+                zdmj_comparison = round(float(data[data["ZDDM"].isin([getattr(i, "宗地代码")])]["Shape_Area"]), 2) == float(
                     getattr(i, "宗地面积"))
                 comparison_d["宗地面积对比"].append(zdmj_comparison)
                 comparison_d["地籍号一致性"].append(djh)

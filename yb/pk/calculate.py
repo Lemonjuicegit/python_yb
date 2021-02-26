@@ -17,6 +17,7 @@ def share_area(share_area, area_list):
         for n in ratio:
             tmpe.append(round(i * n,2))
         ratio_area.append(tmpe)
+    ratio_area.append([round(i,4) for i in ratio])
     ratio_area=[str(i) for i in ratio_area]
 
     ratio_area="\n".join(ratio_area)
