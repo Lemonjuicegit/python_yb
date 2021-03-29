@@ -2,7 +2,6 @@ import sys
 from PySide2.QtCore import *
 from PySide2.QtGui import QIcon, QCursor
 from PySide2.QtWidgets import *
-
 from pk.fileutil import read_json
 
 
@@ -189,7 +188,7 @@ class Ui_MainWindow(QMainWindow):
         lineEdit_4 = QLineEdit(self.frame_1)
         lineEdit_4.setObjectName(u"lineEdit_4")
 
-        self.tabelwidget_2 = QTableWidget(self.frame_1)
+        self.tabelwidget_2 = QTableWidget(self)
         self.tabelwidget_2.setObjectName("tabelwidget_2")
 
         self.gridLayout_2.addWidget(pushbutton_3, 0, 0, 1, 1)
@@ -210,7 +209,7 @@ class Ui_MainWindow(QMainWindow):
     def input_2(self):
         for i in range(self.gridLayout_2.count()):
             self.gridLayout_2.itemAt(i).widget().deleteLater()
-        self.tabelwidget_1 = QTableWidget(self.frame_1)
+        self.tabelwidget_1 = QTableWidget(self)
         self.tabelwidget_1.setObjectName("tabelwidget_1")
 
         label_5 = QLabel(self.frame_1)
@@ -274,6 +273,28 @@ class Ui_MainWindow(QMainWindow):
         self.gridLayout_2.addWidget(label_9, 0, 0, 1, 1)
         self.gridLayout_2.addWidget(lineEdit_12, 0, 1, 1, 1)
         self.gridLayout_2.addWidget(pushbutton_7, 0, 2, 1, 1)
+        self.gridLayout_1.addLayout(self.gridLayout_2, 0, 0, 1, 1)
+
+    def file_name(self):
+        for i in range(self.gridLayout_2.count()):
+            self.gridLayout_2.itemAt(i).widget().deleteLater()
+        pushbutton_8 = QPushButton(self.frame_1)
+        pushbutton_8.setObjectName("pushbutton_8")
+        pushbutton_8.setText("提取文件名")
+        pushbutton_9 = QPushButton(self.frame_1)
+        pushbutton_9.setObjectName("pushbutton_9")
+        pushbutton_9.setText("提取文件夹名")
+        label_10 = QLabel(self.frame_1)
+        label_10.setObjectName("label_10")
+        label_10.setText("提取的文件夹：")
+        lineEdit_14 = QLineEdit(self.frame_1)
+        lineEdit_14.setObjectName(u"lineEdit_14")
+
+        self.gridLayout_2.addWidget(pushbutton_8, 0, 0, 1, 1)
+        self.gridLayout_2.addWidget(pushbutton_9, 0, 1, 1, 1)
+        self.gridLayout_2.addWidget(label_10, 1, 0, 1, 1)
+        self.gridLayout_2.addWidget(lineEdit_14, 1, 1, 1, 10)
+
         self.gridLayout_1.addLayout(self.gridLayout_2, 0, 0, 1, 1)
 
 

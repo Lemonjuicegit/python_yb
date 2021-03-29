@@ -5,7 +5,7 @@ from PySide2.QtWidgets import QApplication,QWidget,QHBoxLayout,QTableWidget, QTa
 from itertools import product
 import PySide2
 
-class Demo(QWidget):                                         
+class Demo(QTableWidget):
     def __init__(self):
         self.clipboard = QApplication.clipboard()
         self.text=str()
@@ -14,18 +14,17 @@ class Demo(QWidget):
         self.leftColumn=int()
         self.rightColumn=int()
 
-        super(Demo, self).__init__()
-        self.resize(650,250)        
-        self.table=QTableWidget(self)
-        self.table.setRowCount(6)                            
-        self.table.setColumnCount(6)
-        self.table.setHorizontalHeaderLabels([('{}'.format(i))for i in range(6)])#列表解析式   # 5
-        self.table.setVerticalHeaderLabels([('{}'.format(i))for i in range(6)])
-        self.table.clicked.connect(self.selected)
+        super().__init__()
+        # self.table=QTableWidget(self)
+        # self.table.setRowCount(6)
+        # self.table.setColumnCount(6)
+        # self.table.setHorizontalHeaderLabels([('{}'.format(i))for i in range(6)])#列表解析式   # 5
+        # self.table.setVerticalHeaderLabels([('{}'.format(i))for i in range(6)])
+        self.clicked.connect(self.selected)
 
-        hbox = QHBoxLayout(self)
-        hbox.addWidget(self.table)
-        self.setLayout(hbox)
+        # hbox = QHBoxLayout(self)
+        # hbox.addWidget(self.table)
+        # self.setLayout(hbox)
 
     def selected(self,index):#获取选中单元格的索引
         self.index_row=index.row()
@@ -47,7 +46,8 @@ class Demo(QWidget):
             pass
 
     def table_copy(self):
-        selectRect = self.table.selectedRanges()
+        # selectRect = self.table.selectedRanges()
+        selectRect = self.selectedRanges()
         for r in selectRect:#获取范围边界
             self.top=r.topRow()
             self.left=r.leftColumn()
@@ -118,6 +118,8 @@ class Demo(QWidget):
 
 if __name__=="__main__":
     app=QApplication(sys.argv)
-    demo=Demo()
-    demo.show()
+    iu = QWidget()
+    demo=Demo(iu)
+    # demo.show()
+
     sys.exit(app.exec_())

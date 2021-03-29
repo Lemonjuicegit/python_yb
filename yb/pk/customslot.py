@@ -1,8 +1,9 @@
 import json
+from os import walk
+
 from pk import mydocx, pycmd, fileutil, sqlutil
 from threading import Thread
 from pandas import read_excel
-from ctypes import CDLL
 
 
 class Slot():
@@ -124,7 +125,7 @@ class Slot():
         self.sqldata = self.connenct.one_sql(
             r"""SELECT id,XZMC,CM, ZDDM_QS,ZDDM_JS, BMR, DJZQDM 
                 FROM ZDDM_list LEFT JOIN DJZQBM ON CM = DJZQMc 
-                WHERE CM LIKE '%""" + selectvalue + r"""%' ORDER BY id;""")
+                WHERE CM LIKE '%""" + selectvalue + r"""%' ORDER BY ZDDM_QS;""")
         for i in range(len(self.sqldata)):
             self.data.append([str(j) for j in self.sqldata[i]])
         self.results = str(len(self.data)) + "条数据"
@@ -141,6 +142,18 @@ class Slot():
     def emptydata(self, data):
         with open(r"data.json", "w") as flie:
             json.dump(data, flie)
+
+    def paper_path(self, text):
+        self.paper_path = text
+
+    def extract_file_name(self):
+        file_name = walk(self.paper_path, topdown=False)
+        file_path = []
+        for paper__path, paper_name, file_name in file_name:
+            for i in paper_name:
+                file_path.append(paper_name)
+        self.results = str(file_path)
+        return self.results
 
 
 #   自定义线程
@@ -190,13 +203,21 @@ class mass_detection_slot:
                 djh = (getattr(i, "地籍号")[8:12] == getattr(i, "宗地代码")[15:])
                 zdmj_comparison = round(float(data[data["ZDDM"].isin([getattr(i, "宗地代码")])]["Shape_Area"]), 2) == float(
                     getattr(i, "宗地面积"))
-                comparison_d["宗地面积对比"].append(zdmj_comparison)
-                comparison_d["地籍号一致性"].append(djh)
+                if not djh or not zdmj_comparison:
+                    print(float(data[data["ZDDM"].isin([getattr(i, "宗地代码")])]["Shape_Area"]))
+                    print(round(float(data[data["ZDDM"].isin([getattr(i, "宗地代码")])]["Shape_Area"]), 2))
+                    print(float(getattr(i, "宗地面积")))
+                    comparison_d["宗地面积对比"].append(zdmj_comparison)
+                    comparison_d["地籍号一致性"].append(djh)
+                    comparison_d["宗地代码"].append(getattr(i, "宗地代码"))
+                    comparison_d["权利人姓名"].append(getattr(i, "权利人姓名"))
+                    comparison_d["宗地代码个数"].append(list(data["ZDDM"]).count(getattr(i, "宗地代码")))
             except Exception as e:
                 comparison_d["宗地面积对比"].append(str(e))
-            comparison_d["宗地代码"].append(getattr(i, "宗地代码"))
-            comparison_d["权利人姓名"].append(getattr(i, "权利人姓名"))
-            comparison_d["宗地代码个数"].append(list(data["ZDDM"]).count(getattr(i, "宗地代码")))
+                comparison_d["地籍号一致性"].append(djh)
+                comparison_d["宗地代码"].append(getattr(i, "宗地代码"))
+                comparison_d["权利人姓名"].append(getattr(i, "权利人姓名"))
+                comparison_d["宗地代码个数"].append(list(data["ZDDM"]).count(getattr(i, "宗地代码")))
         n = 1
         f = "第1次检查"
         temp = {}
@@ -210,8 +231,8 @@ class mass_detection_slot:
         del comparison_d
 
     def TZqualitychecking(self):
-        data=read_excel(r"D:\pythonProject\yb\测试数据\有效台账.xlsx")
-        self.tzdata=read_excel(r"D:\pythonProject\yb\测试数据\有效台账.xlsx")
+        data = read_excel(r"D:\pythonProject\yb\测试数据\有效台账.xlsx")
+        self.tzdata = read_excel(r"D:\pythonProject\yb\测试数据\有效台账.xlsx")
         for i in self.tzdata:
             self.tzdata[self.tzdata["宗地代码"].isin(getattr(i, "宗地代码"))["宗地代码"]]
 
@@ -224,5 +245,14 @@ class mass_detection_slot:
 
 
 if __name__ == '__main__':
-    so = mass_detection_slot()
-    so.TZqualitychecking()
+    def extract_file_name(paper_path):
+        file_name = walk(paper_path, topdown=False)
+        file_path=''
+        for paper__path, paper_name, file_name in file_name:
+            for i in  paper_name:
+                file_path=file_path+str(i)+"\n"
+        results = file_path
+        return results
+    string=extract_file_name(r"\\Pc-201904292001\渝北项目成果文件-余勇(勿删！！)\勘测站建盘数据提交文件\补点建盘数据11.12\玉峰山镇")
+    print(string)
+

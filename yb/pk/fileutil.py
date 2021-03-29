@@ -56,6 +56,14 @@ def read_exf(path):
             value2["宗地面积"].append("")
             value2["宗地点数量"].append("")
             value2["自然幢点数量"].append("")
+        except IndexError:
+            value2["宗地代码"].append(i)
+            value2["权利人姓名"].append("")
+            value2["地籍号"].append("")
+            value2["坐落"].append("")
+            value2["宗地面积"].append("")
+            value2["宗地点数量"].append("")
+            value2["自然幢点数量"].append("")
         finally:
             exf.close()
     datafrom = DataFrame(value2)
@@ -324,5 +332,6 @@ class IoUtil:
 
 
 if __name__ == '__main__':
-    a={'y':5}
-    write_json(r"..\data.json",a)
+    file_path = getfilepath(r"C:\Users\Administrator\Desktop\新建文件夹 (2)\退件", r".exf")
+    a= read_exf(file_path)
+    print(a)

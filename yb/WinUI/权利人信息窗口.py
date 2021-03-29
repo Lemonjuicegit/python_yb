@@ -7,11 +7,11 @@
 ##
 ## WARNING! All changes made in this file will be lost when recompiling UI file!
 ################################################################################
+import sys
 
 from PySide2.QtCore import *
 from PySide2.QtGui import *
 from PySide2.QtWidgets import *
-
 
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
@@ -569,3 +569,9 @@ class Ui_MainWindow(object):
         self.radioButton_5.setText(QCoreApplication.translate("MainWindow", u"\u5171\u540c\u5171\u6709", None))
     # retranslateUi
 
+if __name__=="__mian__":
+    app = QApplication(sys.argv)
+    ui=Ui_MainWindow()
+    win=QMainWindow()
+    ui.setupUi(win)
+    sys.exit(app.exec_())
