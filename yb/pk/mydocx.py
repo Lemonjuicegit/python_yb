@@ -39,7 +39,7 @@ class DocxUtil():
         doc_templet.tables[table].cell(columu, row).paragraphs[paragraph].text = value
 
     #   房产面积测算说明书
-    # @decoratorsFunc.getexceptionreturn
+    @decoratorsFunc.getexceptionreturn
     def getsmss(self, excel_gjb, save_path):
         n = 0
         for i in range(0, len(excel_gjb["宗地代码"])):
@@ -176,7 +176,7 @@ if __name__ == '__main__':
     string6 = mydo.sms_templet.tables[0].cell(1, 0).paragraphs[1].runs[3].text
     string3 = mydo.sms_templet.paragraphs[115].text
     string4 = mydo.sms_templet.paragraphs[12].text
-    string5 = mydo.sms_templet.paragraphs[12].runs[1].text
+    string5 = mydo.sms_templet.paragraphs[57].runs[0].text
 
     print(string1)
     print(string2)

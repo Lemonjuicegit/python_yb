@@ -125,6 +125,7 @@ class Ui_MainWindow(QMainWindow):
                     tree = QTreeWidgetItem(treewidget)
                     tree.setText(0, i)
 
+    # 导出资料
     def input_1(self):
         for i in range(self.gridLayout_2.count()):
             self.gridLayout_2.itemAt(i).widget().deleteLater()
@@ -206,6 +207,7 @@ class Ui_MainWindow(QMainWindow):
 
         self.gridLayout_1.addLayout(self.gridLayout_2, 0, 0, 1, 1)
 
+    # 查询宗地代码
     def input_2(self):
         for i in range(self.gridLayout_2.count()):
             self.gridLayout_2.itemAt(i).widget().deleteLater()
@@ -257,6 +259,7 @@ class Ui_MainWindow(QMainWindow):
 
         self.tabelwidget_1.setContextMenuPolicy(Qt.CustomContextMenu)
 
+    # 分摊面积计算
     def ratio_area(self):
         for i in range(self.gridLayout_2.count()):
             self.gridLayout_2.itemAt(i).widget().deleteLater()
@@ -275,6 +278,7 @@ class Ui_MainWindow(QMainWindow):
         self.gridLayout_2.addWidget(pushbutton_7, 0, 2, 1, 1)
         self.gridLayout_1.addLayout(self.gridLayout_2, 0, 0, 1, 1)
 
+    #提取文件名和文件夹名
     def file_name(self):
         for i in range(self.gridLayout_2.count()):
             self.gridLayout_2.itemAt(i).widget().deleteLater()
@@ -294,6 +298,56 @@ class Ui_MainWindow(QMainWindow):
         self.gridLayout_2.addWidget(pushbutton_9, 0, 1, 1, 1)
         self.gridLayout_2.addWidget(label_10, 1, 0, 1, 1)
         self.gridLayout_2.addWidget(lineEdit_14, 1, 1, 1, 10)
+
+        self.gridLayout_1.addLayout(self.gridLayout_2, 0, 0, 1, 1)
+
+    def file_slect(self):
+        for i in range(self.gridLayout_2.count()):
+            self.gridLayout_2.itemAt(i).widget().deleteLater()
+        pushbutton_9 = QPushButton(self.frame_1)
+        pushbutton_9.setObjectName("pushbutton9")
+        pushbutton_9.setText("一般查找")
+        pushbutton_10 = QPushButton(self.frame_1)
+        pushbutton_10.setObjectName("pushbutton_10")
+        pushbutton_10.setText("正则查找")
+        pushbutton_11 = QPushButton(self.frame_1)
+        pushbutton_11.setObjectName("pushbutton_11")
+        pushbutton_11.setText("提取文件名")
+        pushbutton_12 = QPushButton(self.frame_1)
+        pushbutton_12.setObjectName("pushbutton_12")
+        pushbutton_12.setText("提取所有文件名")
+        pushbutton_13 = QPushButton(self.frame_1)
+        pushbutton_13.setObjectName("pushbutton_13")
+        pushbutton_13.setText("提取文件名")
+        pushbutton_14 = QPushButton(self.frame_1)
+        pushbutton_14.setObjectName("pushbutton_14")
+        pushbutton_14.setText("提取文件夹名")
+        pushbutton_15 = QPushButton(self.frame_1)
+        pushbutton_15.setObjectName("pushbutton_15")
+        pushbutton_15.setText("拷贝")
+
+        label_11 = QLabel(self.frame_1)
+        label_11.setObjectName("label_11")
+        label_11.setText("查找文件路径：")
+        lineEdit_15 = QLineEdit(self.frame_1)
+        lineEdit_15.setObjectName(u"lineEdit_15")
+        label_12 = QLabel(self.frame_1)
+        label_12.setObjectName("label_12")
+        label_12.setText("拷贝到：")
+        lineEdit_16 = QLineEdit(self.frame_1)
+        lineEdit_16.setObjectName(u"lineEdit_16")
+
+        self.gridLayout_2.addWidget(pushbutton_9, 0, 0, 1, 1)
+        self.gridLayout_2.addWidget(pushbutton_10, 0, 1, 1, 1)
+        self.gridLayout_2.addWidget(pushbutton_11, 0, 2, 1, 1)
+        self.gridLayout_2.addWidget(pushbutton_12, 0, 3, 1, 1)
+        self.gridLayout_2.addWidget(pushbutton_13, 0, 4, 1, 1)
+        self.gridLayout_2.addWidget(pushbutton_14, 0, 5, 1, 1)
+        self.gridLayout_2.addWidget(label_11, 1, 0, 1, 1)
+        self.gridLayout_2.addWidget(lineEdit_15, 1, 1, 1, 5)
+        self.gridLayout_2.addWidget(label_12, 2, 0, 1, 1)
+        self.gridLayout_2.addWidget(lineEdit_16, 2, 1, 1, 4)
+        self.gridLayout_2.addWidget(pushbutton_15, 2, 5, 1, 1)
 
         self.gridLayout_1.addLayout(self.gridLayout_2, 0, 0, 1, 1)
 

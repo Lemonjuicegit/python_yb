@@ -3,6 +3,7 @@ import sys
 from WinUI import exportGJ3
 from PySide2.QtWidgets import QApplication, QAction, QLineEdit, QPushButton, QComboBox
 
+
 class run:
     def __init__(self):
         self.slot = customslot.Slot()
@@ -100,24 +101,25 @@ class run:
     def ratio_area(self):
         text = self.window.findChild(QLineEdit, "lineEdit_12").text()
         share_area = text.split(",")[0]
-        share_area=share_area.split(" ")
+        share_area = share_area.split(" ")
         share_area = [float(i) for i in share_area]
         area_list = text.split(",")[1]
         area_list = area_list.split(" ")
         area_list = [float(i) for i in area_list]
-        ratio_area = calculate.share_area(share_area, area_list) 
+        ratio_area = calculate.share_area(share_area, area_list)
         self.slot.results = str(ratio_area)
 
     def extract_file_name(self):
         self.window.slotdicts["lineEdit_14"] = [self.slot.paper_path]
-        self.window.slotdicts["pushbutton_8"] = [self.slot.extract_file_name,self.text]
+        self.window.slotdicts["pushbutton_8"] = [self.slot.extract_file_name, self.text]
 
     def event_init(self):
         self.window.treeslotdict["导出资料"] = [self.window.input_1, self.input1]
         self.window.treeslotdict["exf和台账检查"] = [self.exf]
         self.window.treeslotdict["查询宗地代码"] = [self.window.input_2, self.select_event]
         self.window.treeslotdict["分摊面积计算"] = [self.window.ratio_area, self.ratio_areaslot]
-        self.window.treeslotdict["提取文件名和文件夹名"] = [self.window.file_name,self.extract_file_name]
+        self.window.treeslotdict["提取文件名和文件夹名"] = [self.window.file_name, self.extract_file_name]
+        self.window.treeslotdict["正则搜索与复制"] = [self.window.file_slect]
 
         self.window.slotdicts["lineEdit_1"] = [self.slot.setgjb_path, self.text]
         self.window.slotdicts["lineEdit_2"] = [self.slot.setsavepath, self.text]
@@ -142,6 +144,7 @@ class run:
                 self.slot.connenct.close()
             except AttributeError:
                 pass
+
 
 if __name__ == '__main__':
     window = run()
