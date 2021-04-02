@@ -337,6 +337,9 @@ class Ui_MainWindow(QMainWindow):
         lineEdit_16 = QLineEdit(self.frame_1)
         lineEdit_16.setObjectName(u"lineEdit_16")
 
+        plainTextEdit_1 = QPlainTextEdit(self.frame_1)
+        plainTextEdit_1.setObjectName(u"plainTextEdit_1")
+
         self.gridLayout_2.addWidget(pushbutton_9, 0, 0, 1, 1)
         self.gridLayout_2.addWidget(pushbutton_10, 0, 1, 1, 1)
         self.gridLayout_2.addWidget(pushbutton_11, 0, 2, 1, 1)
@@ -348,9 +351,41 @@ class Ui_MainWindow(QMainWindow):
         self.gridLayout_2.addWidget(label_12, 2, 0, 1, 1)
         self.gridLayout_2.addWidget(lineEdit_16, 2, 1, 1, 4)
         self.gridLayout_2.addWidget(pushbutton_15, 2, 5, 1, 1)
+        self.gridLayout_2.addWidget(plainTextEdit_1, 3, 0, 1, 6)
 
         self.gridLayout_1.addLayout(self.gridLayout_2, 0, 0, 1, 1)
 
+    def input_3(self):
+        for i in range(self.gridLayout_2.count()):
+            self.gridLayout_2.itemAt(i).widget().deleteLater()
+        label_13 = QLabel(self.frame_1)
+        label_13.setObjectName("label_13")
+        label_13.setText("台账：")
+        lineEdit_17 = QLineEdit(self.frame_1)
+        lineEdit_17.setObjectName(u"lineEdit_17")
+        label_14 = QLabel(self.frame_1)
+        label_14.setObjectName("label_14")
+        label_14.setText("矢量图片：")
+        lineEdit_18 = QLineEdit(self.frame_1)
+        lineEdit_18.setObjectName(u"lineEdit_18")
+        label_15 = QLabel(self.frame_1)
+        label_15.setObjectName("label_15")
+        label_15.setText("拷贝到：")
+        lineEdit_19 = QLineEdit(self.frame_1)
+        lineEdit_19.setObjectName(u"lineEdit_19")
+        pushbutton_16 = QPushButton(self.frame_1)
+        pushbutton_16.setObjectName("pushbutton_16")
+        pushbutton_16.setText("确定")
+
+        self.gridLayout_2.addWidget(label_13, 0, 0, 1, 1)
+        self.gridLayout_2.addWidget(lineEdit_17, 0, 1, 1, 4)
+        self.gridLayout_2.addWidget(label_14, 1, 0, 1, 1)
+        self.gridLayout_2.addWidget(lineEdit_18, 1, 1, 1, 4)
+        self.gridLayout_2.addWidget(label_15, 2, 0, 1, 1)
+        self.gridLayout_2.addWidget(lineEdit_19, 2, 1, 1, 3)
+        self.gridLayout_2.addWidget(pushbutton_16, 2, 4, 1, 1)
+
+        self.gridLayout_1.addLayout(self.gridLayout_2, 0, 0, 1, 1)
 
     #   事件生成器
     def setevent(self, widget, widgetobjectname, signal):

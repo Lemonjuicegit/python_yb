@@ -1,12 +1,22 @@
-from os import system,path
+import os
+from os import system, path
+
 
 # 批量生成文件夹命令
 class Cmd:
 
-    #批量生成文件夹
-    def paper_files(self,Dpath,name=[]):
-        for i in name:
-            system("md "+Dpath+"\\"+i)
+    # 批量生成文件夹
+    def md(self, Dpath, name):
+        system("md " + Dpath + "\\" + name)
 
-    def isdir(self,Dpath):
+    def copy(self, Y_path, copy_path):
+        system("copy " + Y_path + " " + copy_path)
+
+    def isdir(self, Dpath):
         return path.isdir(Dpath)
+
+
+if __name__ == '__main__':
+    a=["a","d"]
+    d="a" in a
+    print(d)

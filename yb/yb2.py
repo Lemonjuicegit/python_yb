@@ -112,6 +112,16 @@ class run:
     def extract_file_name(self):
         self.window.slotdicts["lineEdit_14"] = [self.slot.paper_path]
         self.window.slotdicts["pushbutton_8"] = [self.slot.extract_file_name, self.text]
+        self.window.setevent(QLineEdit, ["lineEdit_14"], "textChanged")
+        self.window.setevent(QPushButton, ["pushbutton_8"], "clicked")
+
+    def yb_rename(self):
+        self.window.slotdicts["lineEdit_17"] = [self.slot.set_TZ_path]
+        self.window.slotdicts["lineEdit_18"] = [self.slot.set_picture_path]
+        self.window.slotdicts["lineEdit_19"] = [self.slot.set_save_path]
+        self.window.slotdicts["pushbutton_16"] = [self.slot.yb_rename,self.text]
+        self.window.setevent(QLineEdit, ["lineEdit_17", "lineEdit_18", "lineEdit_19"], "textChanged")
+        self.window.setevent(QPushButton, ["pushbutton_16"], "clicked")
 
     def event_init(self):
         self.window.treeslotdict["导出资料"] = [self.window.input_1, self.input1]
@@ -120,6 +130,7 @@ class run:
         self.window.treeslotdict["分摊面积计算"] = [self.window.ratio_area, self.ratio_areaslot]
         self.window.treeslotdict["提取文件名和文件夹名"] = [self.window.file_name, self.extract_file_name]
         self.window.treeslotdict["正则搜索与复制"] = [self.window.file_slect]
+        self.window.treeslotdict["渝北项目存量图片资料改名"] = [self.window.input_3, self.yb_rename]
 
         self.window.slotdicts["lineEdit_1"] = [self.slot.setgjb_path, self.text]
         self.window.slotdicts["lineEdit_2"] = [self.slot.setsavepath, self.text]

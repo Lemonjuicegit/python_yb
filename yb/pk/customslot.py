@@ -1,5 +1,5 @@
 import json
-from os import walk
+import os
 
 from pk import mydocx, pycmd, fileutil, sqlutil
 from threading import Thread
@@ -61,7 +61,8 @@ class Slot():
         while i < len(zddm):
             zddm_xm.append(zddm[i] + xm[i])
             i += 1
-        self.cmd.paper_files(self.save_path, zddm_xm)
+        for i in zddm_xm:
+            self.cmd.md(self.save_path, i)
 
         self.results = "%s个文件夹创建成果" % i
 
@@ -147,7 +148,7 @@ class Slot():
         self.paper_path = text
 
     def extract_file_name(self):
-        file_name = walk(self.paper_path, topdown=False)
+        file_name = os.walk(self.paper_path, topdown=False)
         file_path = []
         for paper__path, paper_name, file_name in file_name:
             for i in paper_name:
@@ -155,6 +156,40 @@ class Slot():
         self.results = str(file_path)
         return self.results
 
+    # 渝北项目存量图片资料改名
+    def yb_rename(self):
+        TZ = read_excel(self.TZ_path)
+        TZ_YWBH_ZDDM = TZ[["业务编号", "权利人名称", "宗地代码", "不动产单元代码"]]
+        TZ_YWBH_ZDDM = TZ_YWBH_ZDDM.dropna(subset=['宗地代码'])
+        picture_path = os.walk(self.rename_pictur_path)
+        paper = []
+        for p, f, n in picture_path:
+            paper.append(os.path.split(p)[1])
+        s = 0
+        for i in TZ_YWBH_ZDDM.itertuples():
+            YWBH = getattr(i, "业务编号")
+            ZDDM = getattr(i, "宗地代码")
+            BDCDYH = getattr(i, "不动产单元代码")
+            QLRXM = getattr(i, "权利人名称")
+            if str(YWBH) in paper:
+                self.cmd.md(self.rename_save_path, ZDDM + QLRXM)
+                self.cmd.copy(r"%s\%s\产权证附图.jpg" % (self.rename_pictur_path, YWBH),
+                              r"%s\%s%s\%s产权证附图.jpg" % (self.rename_save_path, ZDDM, QLRXM, BDCDYH))
+                self.cmd.copy(r"%s\%s\房产分户图.jpg" % (self.rename_pictur_path, YWBH),
+                              r"%s\%s%s\%s登记簿附图.jpg" % (self.rename_save_path, ZDDM, QLRXM, BDCDYH))
+                self.cmd.copy(r"%s\%s\房产分户图.jpg" % (self.rename_pictur_path, YWBH),
+                              r"%s\%s%s\%s登记簿附图.jpg" % (self.rename_save_path, ZDDM, QLRXM, ZDDM))
+                s += 1
+        self.results = str(s) + "户"
+
+    def set_TZ_path(self, text):
+        self.TZ_path = text
+
+    def set_picture_path(self, text):
+        self.rename_pictur_path = text
+
+    def set_save_path(self, text):
+        self.rename_save_path = text
 
 #   自定义线程
 class slotThreadreturn(Thread):
@@ -247,12 +282,13 @@ class mass_detection_slot:
 if __name__ == '__main__':
     def extract_file_name(paper_path):
         file_name = walk(paper_path, topdown=False)
-        file_path=''
+        file_path = ''
         for paper__path, paper_name, file_name in file_name:
-            for i in  paper_name:
-                file_path=file_path+str(i)+"\n"
+            for i in paper_name:
+                file_path = file_path + str(i) + "\n"
         results = file_path
         return results
-    string=extract_file_name(r"\\Pc-201904292001\渝北项目成果文件-余勇(勿删！！)\勘测站建盘数据提交文件\补点建盘数据11.12\玉峰山镇")
-    print(string)
 
+
+    string = extract_file_name(r"\\Pc-201904292001\渝北项目成果文件-余勇(勿删！！)\勘测站建盘数据提交文件\补点建盘数据11.12\玉峰山镇")
+    print(string)

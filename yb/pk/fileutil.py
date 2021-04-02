@@ -120,14 +120,11 @@ def new_file_str(path, string=None):
     except OSError:
         print("请检查文件路径是否正确")
 
-
 # 打开excel将一个字段数据转化成列表
 def list_excel(gjb_path, field: str):
     exc = read_excel(gjb_path, dtype="str")
     liste = list(exc[field])
-
     return liste
-
 
 def row_excel(row, gjb_path, sheet="Sheet1"):
     try:
@@ -136,7 +133,6 @@ def row_excel(row, gjb_path, sheet="Sheet1"):
     except OSError:
         print("请检查文件路径是否正确")
     return liste
-
 
 def excel_field(gjb_path, string, sheet_name="Sheet1"):
     field = []
