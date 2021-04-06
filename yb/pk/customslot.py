@@ -1,6 +1,4 @@
-import json
-import os
-
+import json, os, re
 from pk import mydocx, pycmd, fileutil, sqlutil
 from threading import Thread
 from pandas import read_excel
@@ -149,12 +147,11 @@ class Slot():
 
     def extract_file_name(self):
         file_name = os.walk(self.paper_path, topdown=False)
-        file_path = []
+        file_path = ''
         for paper__path, paper_name, file_name in file_name:
             for i in paper_name:
-                file_path.append(paper_name)
-        self.results = str(file_path)
-        return self.results
+                file_path = file_path + str(i) + "\n"
+        self.results = file_path
 
     # 渝北项目存量图片资料改名
     def yb_rename(self):
@@ -172,13 +169,13 @@ class Slot():
             BDCDYH = getattr(i, "不动产单元代码")
             QLRXM = getattr(i, "权利人名称")
             if str(YWBH) in paper:
-                self.cmd.md(self.rename_save_path, ZDDM + QLRXM)
+                self.cmd.md(self.save_path, ZDDM + QLRXM)
                 self.cmd.copy(r"%s\%s\产权证附图.jpg" % (self.rename_pictur_path, YWBH),
-                              r"%s\%s%s\%s产权证附图.jpg" % (self.rename_save_path, ZDDM, QLRXM, BDCDYH))
+                              r"%s\%s%s\%s产权证附图.jpg" % (self.save_path, ZDDM, QLRXM, BDCDYH))
                 self.cmd.copy(r"%s\%s\房产分户图.jpg" % (self.rename_pictur_path, YWBH),
-                              r"%s\%s%s\%s登记簿附图.jpg" % (self.rename_save_path, ZDDM, QLRXM, BDCDYH))
+                              r"%s\%s%s\%s登记簿附图.jpg" % (self.save_path, ZDDM, QLRXM, BDCDYH))
                 self.cmd.copy(r"%s\%s\房产分户图.jpg" % (self.rename_pictur_path, YWBH),
-                              r"%s\%s%s\%s登记簿附图.jpg" % (self.rename_save_path, ZDDM, QLRXM, ZDDM))
+                              r"%s\%s%s\%s登记簿附图.jpg" % (self.save_path, ZDDM, QLRXM, ZDDM))
                 s += 1
         self.results = str(s) + "户"
 
@@ -188,8 +185,42 @@ class Slot():
     def set_picture_path(self, text):
         self.rename_pictur_path = text
 
-    def set_save_path(self, text):
-        self.rename_save_path = text
+    def setlineEdit_15Text(self, text):
+        self.lineEdit_15Text = text
+
+    def setlineEdit_16Text(self, text):
+        self.lineEdit_16Text = text
+
+    # 正则搜索与复制
+    def re_search(self,REstring):
+        file_names = os.walk(self.lineEdit_15Text, topdown=False)
+        file_path = ''
+        for paper__path, paper_name, file_name in file_names:
+            for i in file_name:
+                searchObj = re.search(REstring, i, re.M | re.I)
+                if searchObj:
+                    file_path = paper__path + ":" +i + "\n"+file_path
+        self.results = file_path
+
+    # 一般查找
+    def pushbutton_11Slot(self):
+        pass
+
+    # 提取所有文件名
+    def pushbutton_12Slot(self):
+        pass
+
+    # 提取文件名
+    def pushbutton_13Slot(self):
+        pass
+
+    # 提取文件夹名
+    def pushbutton_14Slot(self):
+        pass
+
+    def pushbutton_15Slot(self):
+        pass
+
 
 #   自定义线程
 class slotThreadreturn(Thread):
@@ -239,9 +270,6 @@ class mass_detection_slot:
                 zdmj_comparison = round(float(data[data["ZDDM"].isin([getattr(i, "宗地代码")])]["Shape_Area"]), 2) == float(
                     getattr(i, "宗地面积"))
                 if not djh or not zdmj_comparison:
-                    print(float(data[data["ZDDM"].isin([getattr(i, "宗地代码")])]["Shape_Area"]))
-                    print(round(float(data[data["ZDDM"].isin([getattr(i, "宗地代码")])]["Shape_Area"]), 2))
-                    print(float(getattr(i, "宗地面积")))
                     comparison_d["宗地面积对比"].append(zdmj_comparison)
                     comparison_d["地籍号一致性"].append(djh)
                     comparison_d["宗地代码"].append(getattr(i, "宗地代码"))
@@ -280,15 +308,18 @@ class mass_detection_slot:
 
 
 if __name__ == '__main__':
-    def extract_file_name(paper_path):
-        file_name = walk(paper_path, topdown=False)
+
+    def re_search(REstring):
+        file_names = os.walk(r"D:\pythonProject\yb", topdown=False)
         file_path = ''
-        for paper__path, paper_name, file_name in file_name:
-            for i in paper_name:
-                file_path = file_path + str(i) + "\n"
+        for paper__path, paper_name, file_name in file_names:
+            for i in file_name:
+                searchObj = re.search(REstring, i, re.I)
+                if searchObj:
+                    file_path = paper__path + ":" + searchObj.group(0) + "\n" + file_path
         results = file_path
         return results
 
 
-    string = extract_file_name(r"\\Pc-201904292001\渝北项目成果文件-余勇(勿删！！)\勘测站建盘数据提交文件\补点建盘数据11.12\玉峰山镇")
+    string = re_search(r"(.*)\.pyc")
     print(string)
