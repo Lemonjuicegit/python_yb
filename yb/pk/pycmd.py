@@ -17,6 +17,6 @@ class Cmd:
 
 
 if __name__ == '__main__':
-    a=["a","d"]
-    d="a" in a
-    print(d)
+    a=Cmd()
+    a.md(r"E:\工作文件\aaaaa","sadsa")
+

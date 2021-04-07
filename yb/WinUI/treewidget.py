@@ -1,61 +1,136 @@
-from PySide2.QtCore import *
-from PySide2.QtGui import QIcon
-from PySide2.QtWidgets import *
-import os
-import exportGJ3
-class TreeWieget:
-    def settreeWindow(self,mainWindow,excel={"":{"":[],"":[]},"":{"":[],"":[]}}):
-        mainWindow.setObjectName(u"MainWindow")
-        # mainWindow.resize(690, 460)
-        mainWindow.setFixedSize(680, 460)
-        self.centralwidget = QWidget(mainWindow)
-        self.centralwidget.setObjectName(u"centralwidget")
-        self.gridLayoutWidget = QWidget(self.centralwidget)
-        self.gridLayoutWidget.setObjectName(u"gridLayoutWidget")
-        self.gridLayoutWidget.setGeometry(QRect(10, 10, 661, 440))
-        self.horizontalLayout = QHBoxLayout(self.gridLayoutWidget)
-        self.horizontalLayout.setContentsMargins(0, 0, 0, 0)
-        exp=exportGJ3.Ui_MainWindow()
-        self.exp=exp.setupUi(self.gridLayoutWidget)
+from PySide2.QtWidgets import QComboBox, QLineEdit, QListWidgetItem, QListWidget, QCheckBox, \
+  QApplication, QVBoxLayout, QWidget
+import sys
+class ComboCheckBox(QComboBox):
+  def __init__(self, items: list):
+    """
+    initial function
+    :param items: the items of the list
+    """
+    super(ComboCheckBox, self).__init__()
+    self.items = items # items list
+    self.box_list = [] # selected items
+    self.text = QLineEdit() # use to selected items
+    self.text.setReadOnly(True)
+    q = QListWidget()
+    for i in range(len(self.items)):
+      self.box_list.append(QCheckBox())
+      self.box_list[i].setText(self.items[i])
+      item = QListWidgetItem(q)
+      q.setItemWidget(item, self.box_list[i])
+      self.box_list[i].stateChanged.connect(self.show_selected)
+    self.setLineEdit(self.text)
+    self.setModel(q.model())
+    self.setView(q)
+  def get_selected(self):
+    """
+    get selected items
+    :return:
+    """
+    ret = []
+    for i in range(len(self.items)):
+      if self.box_list[i].isChecked():
+        ret.append(self.box_list[i].text())
+    return ret
+  def show_selected(self):
+    """
+    show selected items
+    :return:
+    """
+    self.text.clear()
+    ret = '; '.join(self.get_selected())
+    self.text.setText(ret)
 
-        self.tree=QTreeWidget(self.gridLayoutWidget)
+def all_selected(self):
+  """
+  decide whether to check all
+  :return:
+  """
+  # change state
+  if self.state == 0:
+    self.state = 1
+    for i in range(1, len(self.items)):
+      self.box_list[i].setChecked(True)
+  else:
+    self.state = 0
+    for i in range(1, len(self.items)):
+      self.box_list[i].setChecked(False)
+  self.show_selected()
 
-        for key1 in list(excel.keys()):
-            __qtreewidgetitem=self.settree(self.tree,key1)
-            for key2 in list(excel[key1].keys()):
-                __qtreewidgetitem_1 = self.settree(__qtreewidgetitem, key2)
-                for key3 in list(excel[key1][key2]):
-                    self.settree(__qtreewidgetitem_1, key3)
-
-        self.horizontalLayout.addWidget(self.tree)
-        self.table =QTableView(self.gridLayoutWidget)
-        self.horizontalLayout.addWidget(self.table)
-        self.horizontalLayout.addLayout(self.exp)
-
-
-
-
-
-        # self.tree.setHeaderItem(__qtreewidgetitem_1)
-
-
-        mainWindow.setCentralWidget(self.centralwidget)
-
-    def settree(self,tree,name):
-        __qtreewidgetitem = QTreeWidgetItem(tree)
-        __qtreewidgetitem.setText(0, name)
-        return __qtreewidgetitem
-
-if __name__ == '__main__':
-    app = QApplication(os.sys.argv)
-    mainWindow = QMainWindow()
-    window = TreeWieget()
-    window.settreeWindow(mainWindow)
-
-    mainWindow.show()
-    os.sys.exit(app.exec_())
-
-
+class ComboCheckBox(QComboBox):
+  def __init__(self, items: list):
+    """
+    initial function
+    :param items: the items of the list
+    """
+    super(ComboCheckBox, self).__init__()
+    self.items = ["全选"] + items # items list
+    self.box_list = [] # selected items
+    self.text = QLineEdit() # use to selected items
+    self.state = 0 # use to record state
+    q = QListWidget()
+    for i in range(len(self.items)):
+      self.box_list.append(QCheckBox())
+      self.box_list[i].setText(self.items[i])
+      item = QListWidgetItem(q)
+      q.setItemWidget(item, self.box_list[i])
+      if i == 0:
+        self.box_list[i].stateChanged.connect(self.all_selected)
+      else:
+        self.box_list[i].stateChanged.connect(self.show_selected)
+    q.setStyleSheet("font-size: 20px; font-weight: bold; height: 40px; margin-left: 5px")
+    self.setStyleSheet("width: 300px; height: 50px; font-size: 21px; font-weight: bold")
+    self.text.setReadOnly(True)
+    self.setLineEdit(self.text)
+    self.setModel(q.model())
+    self.setView(q)
+  def all_selected(self):
+    """
+    decide whether to check all
+    :return:
+    """
+    # change state
+    if self.state == 0:
+      self.state = 1
+      for i in range(1, len(self.items)):
+        self.box_list[i].setChecked(True)
+    else:
+      self.state = 0
+      for i in range(1, len(self.items)):
+        self.box_list[i].setChecked(False)
+    self.show_selected()
+  def get_selected(self):
+    """
+    get selected items
+    :return:
+    """
+    ret = []
+    for i in range(1, len(self.items)):
+      if self.box_list[i].isChecked():
+        ret.append(self.box_list[i].text())
+    return ret
+  def show_selected(self):
+    """
+    show selected items
+    :return:
+    """
+    self.text.clear()
+    ret = '; '.join(self.get_selected())
+    self.text.setText(ret)
+class UiMainWindow(QWidget):
+  def __init__(self):
+    super(UiMainWindow, self).__init__()
+    self.setWindowTitle('Test')
+    self.resize(600, 400)
+    combo = ComboCheckBox(["Python", "Java", "Go", "C++", "JavaScript", "PHP"])
+    layout = QVBoxLayout()
+    layout.addWidget(combo)
+    self.setLayout(layout)
+if __name__ == "__main__":
+  app = QApplication(sys.argv)
+  ui = UiMainWindow()
+  ui.show()
+  sys.exit(app.exec_())
 
 
 

@@ -1,8 +1,7 @@
-import json, os, re
+import json, os, re, shutil
 from pk import mydocx, pycmd, fileutil, sqlutil
 from threading import Thread
 from pandas import read_excel
-
 
 class Slot():
     def __init__(self):
@@ -169,12 +168,12 @@ class Slot():
             BDCDYH = getattr(i, "不动产单元代码")
             QLRXM = getattr(i, "权利人名称")
             if str(YWBH) in paper:
-                self.cmd.md(self.save_path, ZDDM + QLRXM)
-                self.cmd.copy(r"%s\%s\产权证附图.jpg" % (self.rename_pictur_path, YWBH),
+                os.makedirs(os.path.join(self.save_path, ZDDM + QLRXM))
+                shutil.copyfile(r"%s\%s\产权证附图.jpg" % (self.rename_pictur_path, YWBH),
                               r"%s\%s%s\%s产权证附图.jpg" % (self.save_path, ZDDM, QLRXM, BDCDYH))
-                self.cmd.copy(r"%s\%s\房产分户图.jpg" % (self.rename_pictur_path, YWBH),
+                shutil.copyfile(r"%s\%s\房产分户图.jpg" % (self.rename_pictur_path, YWBH),
                               r"%s\%s%s\%s登记簿附图.jpg" % (self.save_path, ZDDM, QLRXM, BDCDYH))
-                self.cmd.copy(r"%s\%s\房产分户图.jpg" % (self.rename_pictur_path, YWBH),
+                shutil.copyfile(r"%s\%s\房产分户图.jpg" % (self.rename_pictur_path, YWBH),
                               r"%s\%s%s\%s登记簿附图.jpg" % (self.save_path, ZDDM, QLRXM, ZDDM))
                 s += 1
         self.results = str(s) + "户"
@@ -192,19 +191,26 @@ class Slot():
         self.lineEdit_16Text = text
 
     # 正则搜索与复制
-    def re_search(self,REstring):
+    def re_search(self, REstring):
         file_names = os.walk(self.lineEdit_15Text, topdown=False)
         file_path = ''
         for paper__path, paper_name, file_name in file_names:
             for i in file_name:
                 searchObj = re.search(REstring, i, re.M | re.I)
                 if searchObj:
-                    file_path = paper__path + ":" +i + "\n"+file_path
+                    file_path = paper__path + "->>" + i + "\n" + file_path
         self.results = file_path
 
     # 一般查找
-    def pushbutton_11Slot(self):
-        pass
+    def pushbutton_11Slot(self, string):
+        file_names = os.walk(self.lineEdit_15Text, topdown=False)
+        file_path = ''
+        for paper__path, paper_name, file_name in file_names:
+            for i in file_name:
+                searchObj = re.search(r"(.*)" + string + "c(.*)", i, re.M | re.I)
+                if searchObj:
+                    file_path = paper__path + "->>" + i + "\n" + file_path
+        self.results = file_path
 
     # 提取所有文件名
     def pushbutton_12Slot(self):
@@ -218,8 +224,21 @@ class Slot():
     def pushbutton_14Slot(self):
         pass
 
-    def pushbutton_15Slot(self):
-        pass
+    def pushbutton_15Slot(self, string):
+        file_path = string.split("\n")
+        for folder in file_path:
+            if folder:
+                folder = folder.split("->>")
+                folder_name = os.path.split(folder[0])[1]
+                isExists = os.path.exists(self.lineEdit_16Text + "\\" + folder_name)
+                if isExists:
+                    shutil.copyfile(os.path.join(folder[0], folder[1]),
+                                    self.lineEdit_16Text + "\\" + folder_name + "\\" + folder[1])
+                else:
+                    os.makedirs(self.lineEdit_16Text + "\\" + folder_name)
+                    shutil.copyfile(os.path.join(folder[0], folder[1]),
+                                    self.lineEdit_16Text + "\\" + folder_name + "\\" + folder[1])
+        self.results = "复制成功"
 
 
 #   自定义线程
@@ -308,18 +327,18 @@ class mass_detection_slot:
 
 
 if __name__ == '__main__':
-
-    def re_search(REstring):
-        file_names = os.walk(r"D:\pythonProject\yb", topdown=False)
-        file_path = ''
-        for paper__path, paper_name, file_name in file_names:
-            for i in file_name:
-                searchObj = re.search(REstring, i, re.I)
-                if searchObj:
-                    file_path = paper__path + ":" + searchObj.group(0) + "\n" + file_path
-        results = file_path
-        return results
-
-
-    string = re_search(r"(.*)\.pyc")
-    print(string)
+    # def re_search(REstring):
+    #     file_names = os.walk(r"D:\pythonProject\yb", topdown=False)
+    #     file_path = ''
+    #     for paper__path, paper_name, file_name in file_names:
+    #         for i in file_name:
+    #             searchObj = re.search(REstring, i, re.I)
+    #             if searchObj:
+    #                 file_path = paper__path + ":" + searchObj.group(0) + "\n" + file_path
+    #     results = file_path
+    #     return results
+    #
+    #
+    # string = re_search(r"(.*)\.pyc")
+    # print(string)
+    print(os.path.split('/root/sdfcds'))

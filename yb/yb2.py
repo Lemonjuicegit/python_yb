@@ -129,18 +129,22 @@ class run:
         self.window.setevent(QLineEdit, ["lineEdit_17", "lineEdit_18", "lineEdit_19"], "textChanged")
         self.window.setevent(QPushButton, ["pushbutton_16"], "clicked")
 
-    # 渝北项目存量图片资料改名
+    #
     def input_3Slot(self):
         self.window.slotdicts["lineEdit_15"] = [self.slot.setlineEdit_15Text]
         self.window.slotdicts["lineEdit_16"] = [self.slot.setlineEdit_16Text]
         self.window.slotdicts["pushbutton_10"] = [lambda: self.slot.re_search(self.window.findChild(QPlainTextEdit,
                                                                                                     "plainTextEdit_1").toPlainText()),
                                                   self.text]
-        self.window.slotdicts["pushbutton_11"] = [self.slot.pushbutton_11Slot, self.text]
+        self.window.slotdicts["pushbutton_11"] = [lambda: self.slot.re_search(self.window.findChild(QPlainTextEdit,
+                                                                                                    "plainTextEdit_1").toPlainText()),
+                                                  self.text]
         self.window.slotdicts["pushbutton_12"] = [self.slot.pushbutton_12Slot, self.text]
         self.window.slotdicts["pushbutton_13"] = [self.slot.pushbutton_13Slot, self.text]
         self.window.slotdicts["pushbutton_14"] = [self.slot.pushbutton_14Slot, self.text]
-        self.window.slotdicts["pushbutton_15"] = [self.slot.pushbutton_15Slot, self.text]
+        self.window.slotdicts["pushbutton_15"] = [
+            lambda: self.slot.pushbutton_15Slot(self.window.findChild(QPlainTextEdit,
+                                                                      "plainTextEdit").toPlainText()), self.text]
         self.window.setevent(QLineEdit, ["lineEdit_15", "lineEdit_16"], "textChanged")
         self.window.setevent(QPushButton,
                              ["pushbutton_10", "pushbutton_11", "pushbutton_12", "pushbutton_13", "pushbutton_14",
