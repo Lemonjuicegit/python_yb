@@ -4,7 +4,6 @@ from PySide2.QtGui import QIcon, QCursor
 from PySide2.QtWidgets import *
 from pk.fileutil import read_json
 
-
 class Ui_MainWindow(QMainWindow):
     def __init__(self):
         super().__init__()
@@ -28,10 +27,12 @@ class Ui_MainWindow(QMainWindow):
 
         self.frame_1 = QFrame(self)
         self.frame_1.setObjectName(u"frame_1")
-        sizePolicy_1 = QSizePolicy(QSizePolicy.Preferred, QSizePolicy.Preferred)
+        sizePolicy_1 = QSizePolicy(
+            QSizePolicy.Preferred, QSizePolicy.Preferred)
         sizePolicy_1.setHorizontalStretch(3)
         sizePolicy_1.setVerticalStretch(0)
-        sizePolicy_1.setHeightForWidth(self.frame_1.sizePolicy().hasHeightForWidth())
+        sizePolicy_1.setHeightForWidth(
+            self.frame_1.sizePolicy().hasHeightForWidth())
         self.frame_1.setSizePolicy(sizePolicy_1)
         self.horizontalLayout_1 = QHBoxLayout(self.centralwidget)
         self.horizontalLayout_1.setObjectName(u"horizontalLayout_1")
@@ -53,8 +54,10 @@ class Ui_MainWindow(QMainWindow):
             menu.setObjectName("menu_" + str(menujsonObjectName))
             for actionjson in self.collocation["menubar"][menubarjson].keys():
                 if self.collocation["menubar"][menubarjson][actionjson] != {}:
-                    action = QAction(QIcon(self.collocation["menubar"][menubarjson][actionjson]), actionjson, self)
-                    action.setObjectName("menu_%saction_%s" % (actionjsonObjectName, actionjsonObjectName))
+                    action = QAction(
+                        QIcon(self.collocation["menubar"][menubarjson][actionjson]), actionjson, self)
+                    action.setObjectName("menu_%saction_%s" % (
+                        actionjsonObjectName, actionjsonObjectName))
                     menu.addAction(action)
 
         # 工具栏
@@ -66,10 +69,12 @@ class Ui_MainWindow(QMainWindow):
         self.settrees(self.tree, self.treedict)
 
         # 尺寸策略
-        sizePolicy_2 = QSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
+        sizePolicy_2 = QSizePolicy(
+            QSizePolicy.Expanding, QSizePolicy.Expanding)
         sizePolicy_2.setHorizontalStretch(1)
         sizePolicy_2.setVerticalStretch(0)
-        sizePolicy_2.setHeightForWidth(self.tree.sizePolicy().hasHeightForWidth())
+        sizePolicy_2.setHeightForWidth(
+            self.tree.sizePolicy().hasHeightForWidth())
         self.tree.setSizePolicy(sizePolicy_2)
 
         self.tree.clicked.connect(self.treeslot)  # 事件
@@ -278,7 +283,7 @@ class Ui_MainWindow(QMainWindow):
         self.gridLayout_2.addWidget(pushbutton_7, 0, 2, 1, 1)
         self.gridLayout_1.addLayout(self.gridLayout_2, 0, 0, 1, 1)
 
-    #提取文件名和文件夹名
+    # 提取文件名和文件夹名
     def file_name(self):
         for i in range(self.gridLayout_2.count()):
             self.gridLayout_2.itemAt(i).widget().deleteLater()
@@ -333,22 +338,30 @@ class Ui_MainWindow(QMainWindow):
         label_12.setText("拷贝到：")
         lineEdit_16 = QLineEdit(self.frame_1)
         lineEdit_16.setObjectName(u"lineEdit_16")
+        pushbutton_17 = QPushButton(self.frame_1)
+        pushbutton_17.setObjectName("pushbutton_17")
+        pushbutton_17.setText("删除文件夹")
+        pushbutton_18 = QPushButton(self.frame_1)
+        pushbutton_18.setObjectName("pushbutton_18")
+        pushbutton_18.setText("删除文件")
 
         plainTextEdit_1 = QPlainTextEdit(self.frame_1)
         plainTextEdit_1.setObjectName(u"plainTextEdit_1")
-        plainTextEdit_1.setPlainText("请输入正则表达式.....")
+        plainTextEdit_1.setPlainText("请输入查找内容或正则表达式.....")
 
         self.gridLayout_2.addWidget(pushbutton_10, 0, 0, 1, 1)
         self.gridLayout_2.addWidget(pushbutton_11, 0, 1, 1, 1)
         self.gridLayout_2.addWidget(pushbutton_12, 0, 2, 1, 1)
         self.gridLayout_2.addWidget(pushbutton_13, 0, 3, 1, 1)
         self.gridLayout_2.addWidget(pushbutton_14, 0, 4, 1, 1)
+        self.gridLayout_2.addWidget(pushbutton_17, 0, 5, 1, 1)
+        self.gridLayout_2.addWidget(pushbutton_18, 0, 6, 1, 1)
         self.gridLayout_2.addWidget(label_11, 1, 0, 1, 1)
-        self.gridLayout_2.addWidget(lineEdit_15, 1, 1, 1, 4)
+        self.gridLayout_2.addWidget(lineEdit_15, 1, 1, 1, 6)
         self.gridLayout_2.addWidget(label_12, 2, 0, 1, 1)
-        self.gridLayout_2.addWidget(lineEdit_16, 2, 1, 1, 3)
-        self.gridLayout_2.addWidget(pushbutton_15, 2, 4, 1, 1)
-        self.gridLayout_2.addWidget(plainTextEdit_1, 3, 0, 1, 5)
+        self.gridLayout_2.addWidget(lineEdit_16, 2, 1, 1, 5)
+        self.gridLayout_2.addWidget(pushbutton_15, 2, 6, 1, 1)
+        self.gridLayout_2.addWidget(plainTextEdit_1, 3, 0, 1, 7)
 
         self.gridLayout_1.addLayout(self.gridLayout_2, 0, 0, 1, 1)
 
@@ -384,6 +397,46 @@ class Ui_MainWindow(QMainWindow):
 
         self.gridLayout_1.addLayout(self.gridLayout_2, 0, 0, 1, 1)
 
+    #台账与矢量图框检查
+    def input_4(self):
+        for i in range(self.gridLayout_2.count()):
+            self.gridLayout_2.itemAt(i).widget().deleteLater()
+        label_16 = QLabel(self.frame_1)
+        label_16.setObjectName("label_16")
+        label_16 .setText("台账：")
+        lineEdit_20 = QLineEdit(self.frame_1)
+        lineEdit_20.setObjectName(u"lineEdit_20")
+        label_17 = QLabel(self.frame_1)
+        label_17.setObjectName("label_17")
+        label_17.setText("shp数据表：")
+        lineEdit_21 = QLineEdit(self.frame_1)
+        lineEdit_21.setObjectName(u"lineEdit_21")
+        label_18 = QLabel(self.frame_1)
+        label_18.setObjectName("label_18")
+        label_18.setText("原始台账：")
+        lineEdit_22 = QLineEdit(self.frame_1)
+        lineEdit_22.setObjectName(u"lineEdit_22")
+        label_19 = QLabel(self.frame_1)
+        label_19.setObjectName("label_19")
+        label_19.setText("错误结果保存到：")
+        lineEdit_23 = QLineEdit(self.frame_1)
+        lineEdit_23.setObjectName(u"lineEdit_23")
+        pushbutton_17 = QPushButton(self.frame_1)
+        pushbutton_17.setObjectName("pushbutton_17")
+        pushbutton_17.setText("开始检查")
+
+        self.gridLayout_2.addWidget(pushbutton_17, 0, 0, 1, 1)
+        self.gridLayout_2.addWidget(label_16, 1, 0, 1, 1)
+        self.gridLayout_2.addWidget(label_17, 2, 0, 1, 1)
+        self.gridLayout_2.addWidget(label_18,3, 0, 1, 1)
+        self.gridLayout_2.addWidget(label_19,4, 0, 1, 1)
+        self.gridLayout_2.addWidget(lineEdit_20,1, 1, 1, 5)
+        self.gridLayout_2.addWidget(lineEdit_21,2, 1, 1, 5)
+        self.gridLayout_2.addWidget(lineEdit_22,3, 1, 1, 5)
+        self.gridLayout_2.addWidget(lineEdit_23,4, 1, 1, 5)
+
+        self.gridLayout_1.addLayout(self.gridLayout_2, 0, 0, 1, 1)
+
     #   事件生成器
     def setevent(self, widget, widgetobjectname, signal):
         """
@@ -406,7 +459,8 @@ class Ui_MainWindow(QMainWindow):
         elif signal == "customContextMenuRequested":  # tabelwidget鼠标右击事件
             for j in widgetobjectname:
                 for i in self.slotdicts[j]:
-                    self.findChild(widget, j).customContextMenuRequested.connect(i)
+                    self.findChild(
+                        widget, j).customContextMenuRequested.connect(i)
         elif signal == "currentIndexChanged":  # QComboBox控件选中事件
             for j in widgetobjectname:
                 for i in self.slotdicts[j]:
@@ -486,7 +540,6 @@ class Ui_MainWindow(QMainWindow):
 if __name__ == '__main__':
     def a():
         print("dianjile")
-
 
     app = QApplication(sys.argv)
     window = Ui_MainWindow()
