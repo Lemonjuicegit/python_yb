@@ -4,6 +4,7 @@ from PySide2.QtGui import QIcon, QCursor
 from PySide2.QtWidgets import *
 from pk.fileutil import read_json
 
+
 class Ui_MainWindow(QMainWindow):
     def __init__(self):
         super().__init__()
@@ -42,7 +43,7 @@ class Ui_MainWindow(QMainWindow):
         self.gridLayout_1.setObjectName(u"gridLayout_1")
         self.gridLayout_1.setContentsMargins(0, 0, 0, 0)
 
-        self.gridLayout_2 = QGridLayout(self.frame_1)
+        self.gridLayout_2 = QGridLayout()
         self.gridLayout_2.setObjectName(u"gridLayout_2")
 
         # 菜单栏
@@ -77,7 +78,7 @@ class Ui_MainWindow(QMainWindow):
             self.tree.sizePolicy().hasHeightForWidth())
         self.tree.setSizePolicy(sizePolicy_2)
 
-        self.tree.clicked.connect(self.treeslot)  # 事件
+        self.tree.clicked.connect(self.treeslot)  # 树节点点击事件
         self.horizontalLayout_1.addWidget(self.tree)
 
         line_1 = QFrame(self)
@@ -106,7 +107,7 @@ class Ui_MainWindow(QMainWindow):
         self.setStatusBar(self.statusbar)
 
         self.setWindowTitle(
-            QCoreApplication.translate("MainWindow", "hahahahah", None))
+            QCoreApplication.translate("MainWindow", "PDM", None))
 
         QMetaObject.connectSlotsByName(self)
 
@@ -397,7 +398,7 @@ class Ui_MainWindow(QMainWindow):
 
         self.gridLayout_1.addLayout(self.gridLayout_2, 0, 0, 1, 1)
 
-    #台账与矢量图框检查
+    # 台账与矢量图框检查
     def input_4(self):
         for i in range(self.gridLayout_2.count()):
             self.gridLayout_2.itemAt(i).widget().deleteLater()
@@ -421,21 +422,57 @@ class Ui_MainWindow(QMainWindow):
         label_19.setText("错误结果保存到：")
         lineEdit_23 = QLineEdit(self.frame_1)
         lineEdit_23.setObjectName(u"lineEdit_23")
-        pushbutton_17 = QPushButton(self.frame_1)
-        pushbutton_17.setObjectName("pushbutton_17")
-        pushbutton_17.setText("开始检查")
+        pushbutton_19 = QPushButton(self.frame_1)
+        pushbutton_19.setObjectName("pushbutton_19")
+        pushbutton_19.setText("开始检查")
 
-        self.gridLayout_2.addWidget(pushbutton_17, 0, 0, 1, 1)
+        self.gridLayout_2.addWidget(pushbutton_19, 0, 0, 1, 1)
         self.gridLayout_2.addWidget(label_16, 1, 0, 1, 1)
         self.gridLayout_2.addWidget(label_17, 2, 0, 1, 1)
-        self.gridLayout_2.addWidget(label_18,3, 0, 1, 1)
-        self.gridLayout_2.addWidget(label_19,4, 0, 1, 1)
-        self.gridLayout_2.addWidget(lineEdit_20,1, 1, 1, 5)
-        self.gridLayout_2.addWidget(lineEdit_21,2, 1, 1, 5)
-        self.gridLayout_2.addWidget(lineEdit_22,3, 1, 1, 5)
-        self.gridLayout_2.addWidget(lineEdit_23,4, 1, 1, 5)
+        self.gridLayout_2.addWidget(label_18, 3, 0, 1, 1)
+        self.gridLayout_2.addWidget(label_19, 4, 0, 1, 1)
+        self.gridLayout_2.addWidget(lineEdit_20, 1, 1, 1, 5)
+        self.gridLayout_2.addWidget(lineEdit_21, 2, 1, 1, 5)
+        self.gridLayout_2.addWidget(lineEdit_22, 3, 1, 1, 5)
+        self.gridLayout_2.addWidget(lineEdit_23, 4, 1, 1, 5)
 
         self.gridLayout_1.addLayout(self.gridLayout_2, 0, 0, 1, 1)
+
+    # execl表格合并
+    def execlMerge(self):
+        for i in range(self.gridLayout_2.count()):
+            self.gridLayout_2.itemAt(i).widget().deleteLater()
+        plainTextEdit_2 = QPlainTextEdit(self.frame_1)
+        plainTextEdit_2.setObjectName(u"plainTextEdit_2")
+        plainTextEdit_2.setPlainText("请输入需要合并表格的路径，多个路径请换行.....")
+        pushbutton_20 = QPushButton(self.frame_1)
+        pushbutton_20.setObjectName("pushbutton_20")
+        pushbutton_20.setText("工作簿合并")
+        pushbutton_21 = QPushButton(self.frame_1)
+        pushbutton_21.setObjectName("pushbutton_21")
+        pushbutton_21.setText("工作表合并")
+        pushbutton_22 = QPushButton(self.frame_1)
+        pushbutton_22.setObjectName("pushbutton_22")
+        pushbutton_22.setText("拆分成工作表")
+        pushbutton_23 = QPushButton(self.frame_1)
+        pushbutton_23.setObjectName("pushbutton_23")
+        pushbutton_23.setText("拆分成工作簿")
+        label_19 = QLabel(self.frame_1)
+        label_19.setObjectName("label_19")
+        label_19.setText("保存到：")
+        lineEdit_24 = QLineEdit(self.frame_1)
+        lineEdit_24.setObjectName(u"lineEdit_24")
+
+        self.gridLayout_2.addWidget(pushbutton_20, 0, 0, 1, 1)
+        self.gridLayout_2.addWidget(pushbutton_21, 0, 1, 1, 1)
+        self.gridLayout_2.addWidget(pushbutton_22, 0, 2, 1, 1)
+        self.gridLayout_2.addWidget(pushbutton_23, 0, 3, 1, 1)
+        self.gridLayout_2.addWidget(plainTextEdit_2, 1, 0, 1, 6)
+        self.gridLayout_2.addWidget(label_19, 2, 0, 1, 1)
+        self.gridLayout_2.addWidget(lineEdit_24, 2, 1, 1, 5)
+
+        self.gridLayout_1.addLayout(self.gridLayout_2, 0, 0, 1, 1)
+
 
     #   事件生成器
     def setevent(self, widget, widgetobjectname, signal):

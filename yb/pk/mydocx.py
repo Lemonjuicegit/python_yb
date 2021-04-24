@@ -108,8 +108,6 @@ class DocxUtil():
             self.addtablevalue(self.sms_templet, 4, 24, 7, 0, value[17])
             jj_path = r"%s\%s%s\近景.jpg" % (save_path, value[0], value[2])
             yj_path = r"%s\%s%s\远景.jpg" % (save_path, value[0], value[2])
-            print(jj_path)
-            print(yj_path)
             self.sms_templet.paragraphs[119].add_run().add_picture(jj_path, width=Cm(14))
             self.sms_templet.add_picture(yj_path, width=Cm(14))
             self.sms_templet.save(r"%s\%s%s\%s房产面积测算说明书.doc" % (save_path, value[0], value[2], value[0]))

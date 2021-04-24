@@ -1,0 +1,23 @@
+{
+	// Example:
+	// "Print to console": {
+	// 	"scope": "javascript,typescript",
+	// 	"prefix": "log",
+	// 	"body": [
+	// 		"console.log('$1');",
+	// 		"$2"
+	// 	],
+	// 	"description": "Log output to console"
+	// }
+	"try": {
+			"scope": "python",
+			"prefix": "try",
+			"body": [
+				"try:",
+				"    ${1:code}",
+				"except ${2:Exception} as ${3:e}:",
+				"    ${4:code}"
+			],
+			"description": "Log output to console"
+		}
+}

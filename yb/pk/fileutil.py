@@ -69,10 +69,7 @@ def read_exf(path):
     datafrom = DataFrame(value2)
     return datafrom
 
-
 """path文件路径，i修改第几行，string需要修改的内容参数,该方法按行修改内容,并将修改后的内容返回"""
-
-
 def revise_file(string, i, file_path):
     b = 0
     try:
@@ -97,7 +94,6 @@ def revise_file(string, i, file_path):
         print("请检查文件路径是否正确")
 
     return file_str
-
 
 # 创建一个新的文件，path:需要创建文件的路径，string（可选）:创建文件时需要写入的文本内容
 def new_file_str(path, string=None):
