@@ -431,7 +431,6 @@ class mass_detection_slot:
     #     data = read_excel(self.data_path)
     #     tz = read_excel(self.tz_path)
 
-
 class TZcheck:
     def __init__(self, TZ_path, YSTZ_path, SHP_zd_path, savePath):
         """[初始化三表]
@@ -499,10 +498,24 @@ class TZcheck:
                 else:
                     try:
                         shp_zd_index = self.SHP_zd_zddm.index(self.TZ_zddm[i])
-                    except ValueError as e:
-                        temp.append("台账宗地代码在图形中找不到")
+                        shp_zrz_index = self.SHP_zrz_zddm.index(self.TZ_zddm[i])
                         if not (self.TZ_zdmj[i] == self.SHP_zd_zdmj[shp_zd_index]):
                             temp.append("台账宗地面积与图形宗地面积不同")
+                        if not (self.SHP_zrz_zdID[shp_zrz_index] == self.SHP_zd_ID[shp_zd_index]):
+                            temp.append("房屋外框的宗地Id与宗地图层不一致")
+                        if not (self.SHP_zd_ywbh[shp_zd_index] == self.TZ_ywbh[i]):
+                            temp.append("宗地外框业务编号与台账业务编号不一致")
+                        if not (self.SHP_zrz_ywbh[shp_zrz_index] == self.TZ_ywbh[i]):
+                            temp.append("房屋外框业务编号与台账业务编号不一致")
+                        if not (self.SHP_zrz_zcs[shp_zrz_index] == self.TZ_zcs[i]):
+                            temp.append("宗地外框总层数与台账总层数不一致")
+                        if not (self.SHP_zd_qlr[shp_zd_index] == self.TZ_qlr[i]):
+                            temp.append("台账的权利人姓名与宗地不一致")
+                        if not (self.SHP_zd_zddm[shp_zd_index][-4:19] == self.SHP_zd_djh[shp_zd_index][8:12]):
+                            temp.append("宗地图框地籍号与宗地代码后四位不一致")
+                    except ValueError:
+                        temp.append("台账宗地代码在图形中找不到")
+                
                     if not (self.TZ_zddm[i] in list(self.SHP_zd["F_PARCEL_N"])):
                         temp.append("台账宗地代码在图形中找不到")
                     if self.TZ_ywbh[i] == "nan":
@@ -550,28 +563,15 @@ class TZcheck:
         for i in range(len(self.SHP_zd_zddm) - 1):
             temp = []
             try:
-                zrz_index = self.SHP_zrz_zddm.index(self.SHP_zd_zddm[i])
+                self.SHP_zrz_zddm.index(self.SHP_zd_zddm[i])
             except ValueError:
                 temp.append("宗地代码在房屋图框中找不到")
                 continue
             try:
-                TZ_index = self.TZ_zddm.index(self.SHP_zd_zddm[i])
+                TZ_index=self.TZ_zddm.index(self.SHP_zd_zddm[i])
             except ValueError:
                 temp.append("宗地代码在台账中找不到")
                 continue
-
-            if not (self.SHP_zrz_zdID[zrz_index] == self.SHP_zd_ID[i]):
-                temp.append("房屋外框的宗地Id与宗地图层不一致")
-            if not (self.SHP_zd_ywbh[i] == self.TZ_ywbh[TZ_index][:10]):
-                temp.append("宗地外框业务编号与台账业务编号不一致")
-            if not (self.SHP_zrz_ywbh[zrz_index] == self.TZ_ywbh[TZ_index][:10]):
-                temp.append("房屋外框业务编号与台账业务编号不一致")
-            if not (self.SHP_zrz_zcs[zrz_index] == self.TZ_zcs[TZ_index]):
-                temp.append("宗地外框总层数与台账总层数不一致")
-            if not (self.SHP_zd_qlr[i] == self.TZ_qlr[TZ_index]):
-                temp.append("台账的权利人姓名与宗地不一致")
-            if not (self.SHP_zd_zddm[i][-4:19] == self.SHP_zd_djh[i][8:12]):
-                temp.append("宗地图框地籍号与宗地代码后四位不一致")
 
             if temp:
                 self.resultsDict["业务编号"].append(self.SHP_zd_ywbh[i])

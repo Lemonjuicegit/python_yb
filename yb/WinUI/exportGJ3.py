@@ -107,7 +107,7 @@ class Ui_MainWindow(QMainWindow):
         self.setStatusBar(self.statusbar)
 
         self.setWindowTitle(
-            QCoreApplication.translate("MainWindow", "PDM", None))
+            QCoreApplication.translate("MainWindow", "DPT", None))
 
         QMetaObject.connectSlotsByName(self)
 
