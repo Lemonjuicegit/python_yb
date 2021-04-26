@@ -449,7 +449,7 @@ class TZcheck:
                          "一户多宅,需拆分", "迁建", "其他", "已转移"]
 
     def getFied_value(self):
-        self.TZ_zddm = list(self.TZ["宗地代码"])
+        self.TZ_zddm = [str(i) for i in list(self.TZ["宗地代码"])]
         self.TZ_ywbh = [str(i)[:10] for i in list(self.TZ["业务编号"])]
         self.TZ_zcs = [str(i)[0] for i in list(self.TZ["总层数"])]
         self.TZ_zzc = [str(i)[0] for i in list(self.TZ["所在终止层"])]
@@ -494,8 +494,11 @@ class TZcheck:
 
         for i in range(len(self.TZ) - 1):
             temp = []
-            if self.TZ_zddm == "nan" and self.TZ_zddm == "" and self.TZ_zdzt[i] =="0" and self.TZ_bdcdyh[i]=="nan" and self.TZ_bdcdyh[i]=="":
-                temp.append("台账宗地代码为空")
+            if (self.TZ_zddm[i] == "nan" or self.TZ_zddm[i] == "") and self.TZ_zdzt[i] =="0" and (self.TZ_bdcdyh[i]=="nan" or self.TZ_bdcdyh[i]==""):
+                if not (self.TZ_biz[i] in ["转移", "已征收"]):
+                    temp.append("房屋标注错误")
+                if self.TZ_zdzt[i] != "0":
+                    temp.append("宗地状态错误")
             else:
                 if not (len(self.TZ_zddm[i]) == 19):
                     temp.append("台账宗地代码错误")
@@ -523,7 +526,7 @@ class TZcheck:
                         temp.append("房屋外框总层数与台账总层数不一致")
                     if not (self.SHP_zd_qlr[shp_zd_index] == self.TZ_qlr[i]):
                         temp.append("台账的权利人姓名与宗地不一致")
-                    if not (self.SHP_zd_zddm[shp_zd_index] ==19):
+                    if not (len(self.SHP_zd_zddm[shp_zd_index]) ==19):
                         temp.append("宗地图框宗地代码错误")
                     else:
                         if not (self.SHP_zd_zddm[shp_zd_index][-4:19] == self.SHP_zd_djh[shp_zd_index][8:12]):
@@ -567,18 +570,13 @@ class TZcheck:
                         temp.append("宗地状态错误")
                 if self.TZ_zdcmj_notnull[i]:
                     if self.TZ_biz[i] != "超占建房":
-                        temp.append("房屋标注错误")
+                        temp.append("未备注超占建房")
                 if self.TZ_jzcmj_notnull[i] and (not self.TZ_zdcmj_notnull[i]):
                     if self.TZ_biz[i] != "超规划建房":
-                        temp.append("房屋标注错误")
+                        temp.append("未备注超规划建房")
                 if self.TZ_D == "" or self.TZ_B == "" or self.TZ_X == "" or self.TZ_B == "" or self.TZ_D == nan or self.TZ_B == nan or self.TZ_X == nan or self.TZ_B == nan:
                         temp.append("四至为空")
-
-            
-            if not (self.TZ_biz[i] in ["转移", "已征收"]):
-                temp.append("房屋标注错误")
-            if not (self.TZ_zdzt[i] in ["1","0"]):
-                        temp.append("宗地状态错误")
+           
 
             if temp:
                 self.resultsDict["业务编号"].append(self.TZ_ywbh[i][:10])
