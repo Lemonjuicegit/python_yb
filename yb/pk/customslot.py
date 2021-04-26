@@ -6,6 +6,7 @@ from time import time
 from pk import mydocx, pycmd, fileutil, sqlutil, decoratorsFunc
 from threading import Thread
 from pandas import read_excel, DataFrame, concat
+from numpy import nan
 
 
 class Slot():
@@ -418,18 +419,13 @@ class mass_detection_slot:
         self.results = comparison_d
         del comparison_d
 
-    # def TZqualitychecking(self):
-    #     data = read_excel(r"D:\pythonProject\yb\测试数据\有效台账.xlsx")
-    #     self.tzdata = read_excel(r"D:\pythonProject\yb\测试数据\有效台账.xlsx")
-    #     for i in self.tzdata:
-    #         self.tzdata[self.tzdata["宗地代码"].isin(getattr(i, "宗地代码"))["宗地代码"]]
-
     # def tz_exf_gis(self):
     #     comparison_tz_exf_gis = fileutil.read_json("data.json")["comparison_tz_exf_gis"]
     #     file_path = fileutil.getfilepath(self.paper_path, r".exf")
     #     exfdata = fileutil.read_exf(file_path)
     #     data = read_excel(self.data_path)
     #     tz = read_excel(self.tz_path)
+
 
 class TZcheck:
     def __init__(self, TZ_path, YSTZ_path, SHP_zd_path, savePath):
@@ -440,18 +436,24 @@ class TZcheck:
             SHP_zd_path ([路径]): [复制出来SHP_zd数据表]]
         """
         self.TZ = read_excel(TZ_path)
+        self.TZ.replace('\s+', '', regex=True, inplace=True)
         self.YSTZ = read_excel(YSTZ_path)
         self.SHP_zd = read_excel(SHP_zd_path, sheet_name="Sheet1")
+        self.SHP_zd.replace('\s+', '', regex=True, inplace=True)
         self.SHP_zrz = read_excel(SHP_zd_path, sheet_name="Sheet2")
+        self.SHP_zrz.replace('\s+', '', regex=True, inplace=True)
         self.savePath = savePath
         self.resultsDict = {"业务编号": [], "宗地代码": [], "不动产单元代码": [], "问题": []}
+        self.__BZLIST = ["正常", "灭失", "拆留", "复垦", "已征收",
+                         "一户多宅，需拆分", "一户多宅，需拆分",
+                         "一户多宅,需拆分", "迁建", "其他", "已转移"]
 
     def getFied_value(self):
         self.TZ_zddm = list(self.TZ["宗地代码"])
         self.TZ_ywbh = [str(i)[:10] for i in list(self.TZ["业务编号"])]
-        self.TZ_zcs = [str(i) for i in list(self.TZ["总层数"])]
-        self.TZ_zzc = [str(i) for i in list(self.TZ["所在终止层"])]
-        self.TZ_qsc = [str(i) for i in list(self.TZ["所在起始层"])]
+        self.TZ_zcs = [str(i)[0] for i in list(self.TZ["总层数"])]
+        self.TZ_zzc = [str(i)[0] for i in list(self.TZ["所在终止层"])]
+        self.TZ_qsc = [str(i)[0] for i in list(self.TZ["所在起始层"])]
         self.TZ_myc = [str(i) for i in list(self.TZ["名义层"])]
         self.TZ_bdcdyh = [str(i) for i in list(self.TZ["不动产单元代码"])]
         self.TZ_bz = list(self.TZ["备注2"])
@@ -460,17 +462,20 @@ class TZcheck:
         self.TZ_qlr = list(self.TZ["权利人名称"])
         self.TZ_fh = [str(i) for i in list(self.TZ["房号"])]
         self.TZ_djh = list(self.TZ["旧地籍号"])
-        self.TZ_zdzt = [str(i) for i in list(self.TZ["宗地状态"])]
+        self.TZ_zdzt = [str(i)[0] for i in list(self.TZ["宗地状态"])]
         self.TZ_biz = list(self.TZ["标注"])
         self.TZ_jzcmj_notnull = list(self.TZ["房屋超建说明"].notnull())
         self.TZ_zdcmj_notnull = list(self.TZ["宗地超占说明"].notnull())
+        self.TZ_D = list(self.TZ["东"])
+        self.TZ_N = list(self.TZ["南"])
+        self.TZ_X = list(self.TZ["西"])
+        self.TZ_B = list(self.TZ["北"])
 
         self.YSTZ_ywbh = [str(i) for i in list(self.YSTZ["业务编号"])]
         self.YSTZ_qzh = [str(i) for i in list(self.YSTZ["权证号"])]
 
         self.SHP_zd_zddm = list(self.SHP_zd["F_PARCEL_N"])
-        self.SHP_zd_ywbh = [str(i)[:10]
-                            for i in list(self.SHP_zd["F_SERIAL_N"])]
+        self.SHP_zd_ywbh = [str(i)[:10] for i in list(self.SHP_zd["F_SERIAL_N"])]
         self.SHP_zd_zdmj = list(self.SHP_zd["F_CALCULAT"])
         self.SHP_zd_ID = [str(i) for i in list(self.SHP_zd["F_CODE_ID"])]
         self.SHP_zd_qlr = list(self.SHP_zd["F_INDB_RIG"])
@@ -479,7 +484,7 @@ class TZcheck:
         self.SHP_zrz_zcs = [str(i) for i in list(self.SHP_zrz["F_BUILDING"])]
         self.SHP_zrz_zdID = [str(i) for i in list(self.SHP_zrz["F_PARCEL_I"])]
         self.SHP_zrz_ID = [str(i) for i in list(self.SHP_zrz["F_CODE_ID"])]
-        self.SHP_zrz_zcs = [str(i) for i in list(self.SHP_zrz["F_BUILDING"])]
+        self.SHP_zrz_zcs = [str(i)[0] for i in list(self.SHP_zrz["F_BUILDING"])]
         self.SHP_zrz_zddm = list(self.SHP_zrz["F_UNDER_PA"])
         self.SHP_zrz_ywbh = [str(i)[:10]
                              for i in list(self.SHP_zrz["F_SERIAL_N"])]
@@ -489,71 +494,92 @@ class TZcheck:
 
         for i in range(len(self.TZ) - 1):
             temp = []
-            if self.TZ_zddm == "nan":
+            if self.TZ_zddm == "nan" and self.TZ_zddm == "" and self.TZ_zdzt[i] =="0" and self.TZ_bdcdyh[i]=="nan" and self.TZ_bdcdyh[i]=="":
                 temp.append("台账宗地代码为空")
             else:
-                
-                if self.TZ_bdcdyh[i] == "nan":
-                    temp.append("台账不动产单元号为空")
+                if not (len(self.TZ_zddm[i]) == 19):
+                    temp.append("台账宗地代码错误")
+                elif not (len(self.TZ_bdcdyh[i]) == 28):
+                    temp.append("台账不动产单元号错误")
                 else:
-                    try:
-                        shp_zd_index = self.SHP_zd_zddm.index(self.TZ_zddm[i])
-                        shp_zrz_index = self.SHP_zrz_zddm.index(self.TZ_zddm[i])
-                        if not (self.TZ_zdmj[i] == self.SHP_zd_zdmj[shp_zd_index]):
-                            temp.append("台账宗地面积与图形宗地面积不同")
-                        if not (self.SHP_zrz_zdID[shp_zrz_index] == self.SHP_zd_ID[shp_zd_index]):
-                            temp.append("房屋外框的宗地Id与宗地图层不一致")
-                        if not (self.SHP_zd_ywbh[shp_zd_index] == self.TZ_ywbh[i]):
-                            temp.append("宗地外框业务编号与台账业务编号不一致")
-                        if not (self.SHP_zrz_ywbh[shp_zrz_index] == self.TZ_ywbh[i]):
-                            temp.append("房屋外框业务编号与台账业务编号不一致")
-                        if not (self.SHP_zrz_zcs[shp_zrz_index] == self.TZ_zcs[i]):
-                            temp.append("宗地外框总层数与台账总层数不一致")
-                        if not (self.SHP_zd_qlr[shp_zd_index] == self.TZ_qlr[i]):
-                            temp.append("台账的权利人姓名与宗地不一致")
-                        if not (self.SHP_zd_zddm[shp_zd_index][-4:19] == self.SHP_zd_djh[shp_zd_index][8:12]):
-                            temp.append("宗地图框地籍号与宗地代码后四位不一致")
-                    except ValueError:
-                        temp.append("台账宗地代码在图形中找不到")
-                
-                    if not (self.TZ_zddm[i] in list(self.SHP_zd["F_PARCEL_N"])):
-                        temp.append("台账宗地代码在图形中找不到")
-                    if self.TZ_ywbh[i] == "nan":
-                        temp.append("台账业务编号为空")
-                    else:
-                        if not ((self.TZ_ywbh[i][:10] == self.SHP_zd_ywbh[shp_zd_index])):
-                            temp.append("台账业务编号在图形中找不到：%s" % (self.TZ_bz[i]), )
-                    if not (self.TZ_zcs[i] == self.TZ_zzc[i]):
-                        temp.append("总层数与终止层不一致")
-                    if not ((self.TZ_qsc[i][0] + "-" + self.TZ_zzc[i][0]) == self.TZ_myc[i]):
-                        temp.append("名义层不一致")   
-                    if self.TZ_zddm.count(self.TZ_zddm[i]) > 1:
-                        temp.append("台账中宗地代码重复")
-                    if self.TZ_ywbh.count(self.TZ_ywbh[i]) > 1:
-                        temp.append("台账业务编号重复")
-                    try:
-                        ystz_index = self.YSTZ_ywbh.index(self.TZ_ywbh[i][:10])
-                        if not (self.TZ_qzh[i] == self.YSTZ_qzh[ystz_index]):
-                            temp.append("台账权证号进行了修改")
-                    except ValueError:
-                        temp.append("台账业务编号在原始台账中找不到")
-
-                    if not (self.TZ_fh[i][0] == self.TZ_bdcdyh[i][-1]):
-                        temp.append("房号错误")
                     if not (self.TZ_zddm[i][-4:19] == self.TZ_djh[i][8:12]):
-                        temp.append("台账地籍号与宗地代码后四位不一致")
-                    if self.TZ_zdzt[i] in ["正常", "拆留", "改建"]:
-                        if self.TZ_biz[i] != "1":
-                            temp.append("宗地状态错误")
-                    if self.TZ_zdzt[i] in ["复垦", "已征收"]:
-                        if self.TZ_biz[i] != "0":
-                            temp.append("宗地状态错误")
-                    if self.TZ_zdcmj_notnull[i]:
-                        if self.TZ_biz[i] != "超占建房":
-                            temp.append("房屋标注错误")
-                    if self.TZ_jzcmj_notnull[i] and (not self.TZ_zdcmj_notnull[i]):
-                        if self.TZ_biz[i] != "超规划建房":
-                            temp.append("房屋标注错误")
+                            temp.append("台账地籍号与宗地代码后四位不一致")
+                if not (self.TZ_biz[i] in self.__BZLIST):
+                    temp.append("标注错误")
+                try:
+                    shp_zd_index = self.SHP_zd_zddm.index(
+                        self.TZ_zddm[i])
+                    shp_zrz_index = self.SHP_zrz_zddm.index(
+                        self.TZ_zddm[i])
+                    if not (self.TZ_zdmj[i] == self.SHP_zd_zdmj[shp_zd_index]):
+                        temp.append("台账宗地面积与图形宗地面积不同")
+                    if not (self.SHP_zrz_zdID[shp_zrz_index] == self.SHP_zd_ID[shp_zd_index]):
+                        temp.append("房屋外框的宗地Id与宗地图层不一致")
+                    if not (self.SHP_zd_ywbh[shp_zd_index] == self.TZ_ywbh[i]):
+                        temp.append("宗地外框业务编号与台账业务编号不一致")
+                    if not (self.SHP_zrz_ywbh[shp_zrz_index] == self.TZ_ywbh[i]):
+                        temp.append("房屋外框业务编号与台账业务编号不一致")
+                    if not (self.SHP_zrz_zcs[shp_zrz_index] == self.TZ_zcs[i]):
+                        temp.append("房屋外框总层数与台账总层数不一致")
+                    if not (self.SHP_zd_qlr[shp_zd_index] == self.TZ_qlr[i]):
+                        temp.append("台账的权利人姓名与宗地不一致")
+                    if not (self.SHP_zd_zddm[shp_zd_index] ==19):
+                        temp.append("宗地图框宗地代码错误")
+                    else:
+                        if not (self.SHP_zd_zddm[shp_zd_index][-4:19] == self.SHP_zd_djh[shp_zd_index][8:12]):
+                            temp.append("宗地图框地籍号与宗地代码后四位不一致")  
+
+                except ValueError:
+                    temp.append("台账宗地代码在图形中找不到")
+
+                if not (self.TZ_zddm[i] in list(self.SHP_zd["F_PARCEL_N"])):
+                    temp.append("台账宗地代码在图形中找不到")
+                if self.TZ_ywbh[i] == "nan":
+                    temp.append("台账业务编号为空")
+                else:
+                    if not ((self.TZ_ywbh[i][:10] == self.SHP_zd_ywbh[shp_zd_index])):
+                        temp.append("台账业务编号在图形中找不到：%s" %
+                                    (self.TZ_bz[i]), )
+                if not (self.TZ_zcs[i] == self.TZ_zzc[i]):
+                    temp.append("总层数与终止层不一致")
+                if not ((self.TZ_qsc[i][0] + "-" + self.TZ_zzc[i][0]) == self.TZ_myc[i]):
+                    temp.append("名义层不一致")
+                if self.TZ_zddm.count(self.TZ_zddm[i]) > 1:
+                    temp.append("台账中宗地代码重复")
+                if self.TZ_ywbh.count(self.TZ_ywbh[i]) > 1:
+                    temp.append("台账业务编号重复")
+                try:
+                    ystz_index = self.YSTZ_ywbh.index(
+                        self.TZ_ywbh[i][:10])
+                    if not (self.TZ_qzh[i] == self.YSTZ_qzh[ystz_index]):
+                        temp.append("台账权证号进行了修改")
+                except ValueError:
+                    temp.append("台账业务编号在原始台账中找不到")
+
+                if not (self.TZ_fh[i][0] == self.TZ_bdcdyh[i][-1]):
+                    temp.append("房号错误")
+
+                if self.TZ_zdzt[i] in ["正常", "拆留", "改建"]:
+                    if self.TZ_biz[i] != "1":
+                        temp.append("宗地状态错误")
+                if self.TZ_zdzt[i] in ["复垦", "已征收"]:
+                    if self.TZ_biz[i] != "0":
+                        temp.append("宗地状态错误")
+                if self.TZ_zdcmj_notnull[i]:
+                    if self.TZ_biz[i] != "超占建房":
+                        temp.append("房屋标注错误")
+                if self.TZ_jzcmj_notnull[i] and (not self.TZ_zdcmj_notnull[i]):
+                    if self.TZ_biz[i] != "超规划建房":
+                        temp.append("房屋标注错误")
+                if self.TZ_D == "" or self.TZ_B == "" or self.TZ_X == "" or self.TZ_B == "" or self.TZ_D == nan or self.TZ_B == nan or self.TZ_X == nan or self.TZ_B == nan:
+                        temp.append("四至为空")
+
+            
+            if not (self.TZ_biz[i] in ["转移", "已征收"]):
+                temp.append("房屋标注错误")
+            if not (self.TZ_zdzt[i] in ["1","0"]):
+                        temp.append("宗地状态错误")
+
             if temp:
                 self.resultsDict["业务编号"].append(self.TZ_ywbh[i][:10])
                 self.resultsDict["不动产单元代码"].append(self.TZ_bdcdyh[i])
@@ -568,7 +594,7 @@ class TZcheck:
                 temp.append("宗地代码在房屋图框中找不到")
                 continue
             try:
-                TZ_index=self.TZ_zddm.index(self.SHP_zd_zddm[i])
+                TZ_index = self.TZ_zddm.index(self.SHP_zd_zddm[i])
             except ValueError:
                 temp.append("宗地代码在台账中找不到")
                 continue
